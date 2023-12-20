@@ -1,32 +1,22 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
-import { CalendarBar } from "./Components/Calendar/Calendar";
+import { Calendar, useCalendar } from "./Components/Calendar/Calendar";
 import { ToolBar } from "./Components/ToolBar";
 import { NavBar } from "./Components/NavBar";
 
 export default function Home() {
-  const todayRef = useRef(null);
-
-  useEffect(() => {
-    if (!todayRef.current) return;
-    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "instant" });
-  }, []);
-
-  function handleOnTodayClicked() {
-    if (!todayRef.current) return;
-    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
-  }
+  const calendar = useCalendar();
 
   return (
     <div className="flex flex-col items-stretch h-screen">
       <NavBar />
 
-      <ToolBar onTodayClicked={handleOnTodayClicked} />
+      <ToolBar onTodayClicked={calendar.goToToday} />
 
       <div className="grow overflow-hidden flex flex-row items-stretch">
-        <CalendarBar todayRef={todayRef} />
+        <Calendar controller={calendar} />
 
         <div className="grow" />
       </div>

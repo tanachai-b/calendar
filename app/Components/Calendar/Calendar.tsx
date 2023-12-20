@@ -1,33 +1,88 @@
-import React, { MutableRefObject, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { CalendarYear } from "./CalendarYear";
 
-export function CalendarBar({
-  todayRef,
+export function useCalendar() {
+  const todayRef = useRef(null);
+
+  const initYearList = [
+    new Date().getFullYear() - 1,
+    new Date().getFullYear(),
+    new Date().getFullYear() + 1,
+    new Date().getFullYear() + 2,
+  ];
+
+  const [yearList, setYearList] = useState<number[]>(initYearList);
+
+  async function goToToday() {
+    setYearList(initYearList);
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    if (!todayRef.current) return;
+    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+  }
+
+  return { todayRef, yearList, setYearList, goToToday };
+}
+
+export function Calendar({
+  controller,
 }: {
-  todayRef: MutableRefObject<null>;
+  controller: ReturnType<typeof useCalendar>;
 }) {
+  const { todayRef, yearList, setYearList } = controller;
   const scrollRef = useRef(null);
+
+  const [x, setX] = useState<number>(0);
+
+  useEffect(() => {
+    if (!todayRef.current) return;
+    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "instant" });
+  }, []);
 
   useEffect(() => {
     if (!scrollRef.current) return;
     (scrollRef.current as HTMLElement).addEventListener("scroll", handleScroll);
-  }, []);
 
-  function handleScroll(e: Event): void {
-    const { isAtFirstChild, isAtLastChild } = getScrollInfo(e);
-    console.log("scroll", isAtFirstChild, isAtLastChild);
+    return () => {
+      if (!scrollRef.current) return;
+      (scrollRef.current as HTMLElement).removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
+  }, [handleScroll]);
+
+  function handleScroll(e: Event) {
+    const { scrollTopChild, isAtFirstChild, isAtLastChild } = getScrollInfo(e);
+
+    const scrollYear = yearList[scrollTopChild];
+    if (x !== scrollYear) {
+      console.log("xx", scrollYear);
+
+      setX(scrollYear);
+
+      if (isAtFirstChild) {
+        setYearList([yearList[0] - 1, ...yearList].slice(0, 4));
+      } else if (isAtLastChild) {
+        setYearList([...yearList, yearList[yearList.length - 1] + 1].slice(-4));
+      }
+    }
   }
 
   return (
-    <div
-      ref={scrollRef}
-      className="flex flex-col overflow-y-auto snap-y scroll-p-[44px] hide-scroll border-r border-border"
-    >
-      <CalendarYear year={2023} todayRef={todayRef} />
-
-      <CalendarYear year={2024} todayRef={todayRef} />
-    </div>
+    <>
+      <div
+        ref={scrollRef}
+        className="flex flex-col overflow-y-auto snap-y scroll-p-[44px] hide-scroll border-r border-border"
+      >
+        {yearList.map((y) => (
+          <CalendarYear key={y} year={y} todayRef={todayRef} />
+        ))}
+      </div>
+      {yearList.toString()}
+    </>
   );
 }
 
@@ -53,5 +108,5 @@ function getScrollInfo(e: Event) {
 
   const isAtFirstChild = scrollTopChild === 0;
   const isAtLastChild = scrollBottomChild >= childCount - 1;
-  return { isAtFirstChild, isAtLastChild };
+  return { scrollTopChild, isAtFirstChild, isAtLastChild };
 }
