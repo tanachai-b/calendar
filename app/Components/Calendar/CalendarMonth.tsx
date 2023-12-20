@@ -2,7 +2,7 @@ import React, { MutableRefObject } from "react";
 
 import { CalendarDay } from "./CalendarDay";
 
-export const monthNames = [
+const monthNames = [
   "January",
   "February",
   "March",

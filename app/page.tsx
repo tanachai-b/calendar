@@ -2,9 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 
-import { IconButton } from "./Components/IconButton";
-import { Icons } from "./Components/Icons";
-import { LeftBar } from "./Components/LeftBar/LeftBar";
+import { CalendarBar } from "./Components/Calendar/Calendar";
+import { MenuBar } from "./Components/MenuBar";
 
 export default function Home() {
   const todayRef = useRef(null);
@@ -24,25 +23,10 @@ export default function Home() {
       <MenuBar onTodayClicked={handleOnTodayClicked} onEditClicked={() => {}} />
 
       <div className="grow overflow-hidden flex flex-row items-stretch">
-        <LeftBar todayRef={todayRef} />
+        <CalendarBar todayRef={todayRef} />
 
         <div className="grow"></div>
       </div>
-    </div>
-  );
-}
-
-function MenuBar({
-  onTodayClicked,
-  onEditClicked,
-}: {
-  onTodayClicked: () => void;
-  onEditClicked: () => void;
-}) {
-  return (
-    <div className="flex flex-row border-b border-yellow px-3">
-      <IconButton icon={Icons.calendar} text="Today" onClick={onTodayClicked} />
-      <IconButton icon={Icons.edit} text="Edit" onClick={onEditClicked} />
     </div>
   );
 }

@@ -13,6 +13,6 @@
   scrollbar-width: none; /* Firefox */
 }
 
-.left-over-height {
+.scroll-left-over-height {
   min-height: calc(100% - 288px - 44px);
 }
