@@ -37,7 +37,7 @@ export function CalendarMonth({
 
   return (
     <div className="snap-start flex flex-col" ref={todayRef}>
-      <div className="sticky top-[44px] bg-bg text-center text-base font-light text-text_grey p-2 pb-0">
+      <div className="sticky top-[44px] bg-bg text-center text-base font-light text-text_grey px-2">
         {monthNames[month - 1]}
       </div>
 

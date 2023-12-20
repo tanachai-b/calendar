@@ -14,5 +14,5 @@
 }
 
 .scroll-left-over-height {
-  min-height: calc(100% - 288px - 44px);
+  min-height: calc(100% - 280px - 44px);
 }

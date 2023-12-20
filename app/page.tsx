@@ -3,7 +3,8 @@
 import React, { useEffect, useRef } from "react";
 
 import { CalendarBar } from "./Components/Calendar/Calendar";
-import { MenuBar } from "./Components/MenuBar";
+import { ToolBar } from "./Components/ToolBar";
+import { NavBar } from "./Components/NavBar";
 
 export default function Home() {
   const todayRef = useRef(null);
@@ -20,12 +21,14 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-stretch h-screen">
-      <MenuBar onTodayClicked={handleOnTodayClicked} onEditClicked={() => {}} />
+      <NavBar />
+
+      <ToolBar onTodayClicked={handleOnTodayClicked} />
 
       <div className="grow overflow-hidden flex flex-row items-stretch">
         <CalendarBar todayRef={todayRef} />
 
-        <div className="grow"></div>
+        <div className="grow" />
       </div>
     </div>
   );
