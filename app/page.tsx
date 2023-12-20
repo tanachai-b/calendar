@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!todayRef.current) return;
-    (todayRef.current as HTMLElement).scrollIntoView();
+    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "instant" });
   }, []);
 
   function handleOnTodayClicked() {

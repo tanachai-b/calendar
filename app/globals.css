@@ -12,7 +12,3 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
-.scroll-left-over-height {
-  min-height: calc(100% - 280px - 44px);
-}
