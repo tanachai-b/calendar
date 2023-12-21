@@ -11,9 +11,11 @@ function isCurrentMonth(year: number, month: number) {
 
 export function CalendarYear({
   year,
+  months,
   todayRef,
 }: {
   year: number;
+  months: number[];
   todayRef: MutableRefObject<null>;
 }) {
   return (
@@ -22,12 +24,12 @@ export function CalendarYear({
         {year}
       </div>
 
-      {Array.from({ length: 12 }, (_value, index) => (
+      {months.map((month) => (
         <CalendarMonth
-          key={index}
+          key={`${year}-${month}`}
           year={year}
-          month={index + 1}
-          todayRef={isCurrentMonth(year, index + 1) ? todayRef : undefined}
+          month={month}
+          todayRef={isCurrentMonth(year, month) ? todayRef : undefined}
         />
       ))}
     </div>

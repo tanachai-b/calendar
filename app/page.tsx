@@ -9,17 +9,11 @@ import { ToolBar } from "./Components/ToolBar";
 export default function Home() {
   const calendar = useCalendar();
 
-  const x = [{ year: 2023, month: 1 }];
+  const calendarRawData = [{ year: 2023, month: 1 }];
 
-  const y: Parameters<typeof Calendar>[0]["data"] = [
-    { type: "year", year: 2023 },
-    { type: "month", year: 2023, month: 1 },
-    { type: "month", year: 2023, month: 2 },
-    { type: "year", year: 2024 },
-    { type: "month", year: 2024, month: 1 },
-    { type: "month", year: 2024, month: 2 },
-    { type: "month", year: 2024, month: 3 },
-    { type: "month", year: 2024, month: 4 },
+  const calendarData = [
+    { year: 2023, months: [11, 12] },
+    { year: 2024, months: [1, 2, 3, 4] },
   ];
 
   return (
@@ -32,7 +26,7 @@ export default function Home() {
         <Calendar
           className="border-r border-border"
           controller={calendar}
-          data={y}
+          data={calendarData}
         />
 
         <Diary className="grow" />

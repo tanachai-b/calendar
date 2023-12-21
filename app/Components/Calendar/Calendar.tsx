@@ -6,20 +6,12 @@ import { CalendarMonth } from "./CalendarMonth";
 export function useCalendar() {
   const todayRef = useRef(null);
 
-  const initYearList = [2022, 2023, 2024, 2025];
-
-  const [yearList, setYearList] = useState<number[]>(initYearList);
-
   async function goToToday() {
-    setYearList(initYearList);
-
-    await new Promise((resolve) => setTimeout(resolve, 10));
-
     if (!todayRef.current) return;
     (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
   }
 
-  return { todayRef, yearList, setYearList, goToToday };
+  return { todayRef, goToToday };
 }
 
 export function Calendar({
@@ -29,12 +21,9 @@ export function Calendar({
 }: {
   controller: ReturnType<typeof useCalendar>;
   className: string;
-  data: (
-    | { type: "year"; year: number }
-    | { type: "month"; year: number; month: number }
-  )[];
+  data: { year: number; months: number[] }[];
 }) {
-  const { todayRef, yearList, setYearList } = controller;
+  const { todayRef } = controller;
 
   const scrollRef = useRef(null);
 
@@ -94,21 +83,13 @@ export function Calendar({
       ref={scrollRef}
       className={`flex flex-col overflow-y-auto snxap-y scroll-p-[46px] hide-scroll ${className}`}
     >
-      {/* {yearList.map((year) => (
-        <CalendarYear key={year} year={year} todayRef={todayRef} />
-      ))} */}
-      {data.map((value) => (
-        <>
-          {value.type === "year" ? (
-            <div className="sticky top-0 bg-bg z-50 text-center text-3xl font-extralight text-text_white p-2.5 pb-0">
-              {value.year}
-            </div>
-          ) : value.type === "month" ? (
-            <CalendarMonth year={value.year} month={value.month} />
-          ) : (
-            <></>
-          )}
-        </>
+      {data.map(({ year, months }) => (
+        <CalendarYear
+          key={year}
+          year={year}
+          months={months}
+          todayRef={todayRef}
+        />
       ))}
     </div>
   );
