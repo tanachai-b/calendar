@@ -15,8 +15,13 @@ export function DiaryYear({
         {year}
       </div>
 
-      {months.map(({ month, days }, index) => (
-        <DiaryMonth key={index} year={year} month={month} days={days} />
+      {months.map(({ month, days }) => (
+        <DiaryMonth
+          key={`${year}-${month}`}
+          year={year}
+          month={month}
+          days={days}
+        />
       ))}
     </div>
   );

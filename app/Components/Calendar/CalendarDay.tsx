@@ -1,11 +1,11 @@
 import React from "react";
 
 export function CalendarDay({
-  date,
+  day,
   isSunday,
   isToday,
 }: {
-  date: number;
+  day: number;
   isSunday: boolean;
   isToday: boolean;
 }) {
@@ -20,7 +20,7 @@ export function CalendarDay({
           isToday ? "bg-highlight_yellow font-medium" : ""
         }`}
       >
-        {date}
+        {day}
       </div>
     </div>
   );

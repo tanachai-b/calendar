@@ -38,8 +38,8 @@ export function CalendarMonth({
 
           {Array.from({ length: daysInMonth }, (_value, index) => (
             <CalendarDay
-              key={index}
-              date={index + 1}
+              key={`${year}-${month}-${index + 1}`}
+              day={index + 1}
               isSunday={(index + firstWeekDay) % 7 === 0}
               isToday={isToday(year, month, index + 1)}
             />

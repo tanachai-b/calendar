@@ -4,6 +4,7 @@ import { CalendarYear } from "./CalendarYear";
 
 export function useCalendarController() {
   const todayRef = useRef(null);
+
   const [disableScrollHandler, setDisableScrollHandler] =
     useState<boolean>(false);
 
@@ -139,9 +140,10 @@ function combineYear(data: { year: number; month: number }[]) {
 function getScrollInfo(target: HTMLElement) {
   const superChildren = Array.from(target.children);
 
-  const children = superChildren.reduce<Element[]>((prev, curr) => {
-    return [...prev, ...Array.from(curr.children)];
-  }, []);
+  const children = superChildren.reduce<Element[]>(
+    (prev, curr) => [...prev, ...Array.from(curr.children)],
+    []
+  );
   const childHeights = children.map(({ clientHeight }) => clientHeight);
   const childPositions = childHeights
     .reduce((prev, curr, index) => [...prev, prev[index] + curr], [0])
