@@ -121,13 +121,14 @@ export function Calendar({
 
 function combineYear(data: { year: number; month: number }[]) {
   return data.reduce<{ year: number; months: number[] }[]>((prev, curr) => {
+    const lastYear = prev[prev.length - 1];
+
     if (prev.length === 0) {
       return [{ year: curr.year, months: [curr.month] }];
-    } else if (prev[prev.length - 1].year === curr.year) {
-      const latest = prev[prev.length - 1];
+    } else if (lastYear.year === curr.year) {
       return [
         ...prev.slice(0, -1),
-        { year: latest.year, months: [...latest.months, curr.month] },
+        { year: lastYear.year, months: [...lastYear.months, curr.month] },
       ];
     } else {
       return [...prev, { year: curr.year, months: [curr.month] }];

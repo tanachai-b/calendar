@@ -1,66 +1,119 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { DiaryDay } from "./DiaryDay";
 import { monthNames } from "../../constants";
 
-export function Diary({ className }: { className: string }) {
+export function Diary({
+  className,
+  data,
+}: {
+  className: string;
+  data: { year: number; month: number; day: number }[];
+}) {
+  const dataCombinedYear = useMemo(
+    () => combineYear(combineMonth(data)),
+    [data]
+  );
+
   return (
-    <div className={`overflow-auto ${className}`}>
-      {[2023, 2024].map((year) => (
-        <DiaryYear key={year} year={year} />
+    <div className={`overflow-y-auto scroll-pt-[46px] ${className}`}>
+      {dataCombinedYear.map(({ year, months }) => (
+        <DiaryYear key={year} year={year} months={months} />
       ))}
     </div>
   );
 }
 
-function DiaryYear({ year }: { year: number }) {
+function DiaryYear({
+  year,
+  months,
+}: {
+  year: number;
+  months: { month: number; days: { day: number }[] }[];
+}) {
   return (
-    <>
+    <div>
       <div className="sticky top-0 bg-bg z-50 text-center text-3xl font-extralight text-text_white p-2.5 pb-0">
         {year}
       </div>
 
-      {Array.from({ length: 12 }, (_value, index) => (
-        <DiaryMonth key={index} year={year} month={index + 1} />
+      {months.map(({ month, days }, index) => (
+        <DiaryMonth key={index} year={year} month={month} days={days} />
       ))}
-    </>
+    </div>
   );
 }
 
-function DiaryMonth({ year, month }: { year: number; month: number }) {
-  const daysInMonth = new Date(year, month, 0).getDate();
-
+function DiaryMonth({
+  year,
+  month,
+  days,
+}: {
+  year: number;
+  month: number;
+  days: { day: number }[];
+}) {
   return (
     <div>
       <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_white p-2.5 pb-0">
         {monthNames[month - 1]}
       </div>
 
-      {Array.from({ length: daysInMonth }, (_value, index) => {
-        const x = Math.random();
-
-        return (
-          <DiaryDay
-            key={index}
-            day={index + 1}
-            weekday={new Date(year, month - 1, index + 1).getDay()}
-            {...(x < 0
-              ? {
-                  keypoints: [
-                    "went to office",
-                    "had dinner with colleagues",
-                    "went on a trip",
-                  ],
-                  notes: [
-                    { time: "9:00", note: "leave home \n leave a bit late" },
-                    { time: "10:00", note: "arrive at office" },
-                    { time: "15:00", note: "went on a trip \n have fun" },
-                  ],
-                }
-              : {})}
-          />
-        );
-      })}
+      {days.map(({ day }, index) => (
+        <DiaryDay
+          key={index}
+          day={day}
+          weekday={getWeekdayName(year, month, day)}
+        />
+      ))}
     </div>
   );
+}
+
+function combineMonth(data: { year: number; month: number; day: number }[]) {
+  return data.reduce<
+    { year: number; month: number; days: { day: number }[] }[]
+  >((prev, { year, month, day }) => {
+    const lastMonth = prev[prev.length - 1];
+
+    if (prev.length === 0) {
+      return [{ year, month, days: [{ day }] }];
+    } else if (lastMonth.year === year && lastMonth.month === month) {
+      return [
+        ...prev.slice(0, -1),
+        {
+          year: lastMonth.year,
+          month: lastMonth.month,
+          days: [...lastMonth.days, { day }],
+        },
+      ];
+    } else {
+      return [...prev, { year, month, days: [{ day }] }];
+    }
+  }, []);
+}
+
+function combineYear(
+  data: { year: number; month: number; days: { day: number }[] }[]
+) {
+  return data.reduce<
+    { year: number; months: { month: number; days: { day: number }[] }[] }[]
+  >((prev, { year, month, days }) => {
+    const lastYear = prev[prev.length - 1];
+
+    if (prev.length === 0) {
+      return [{ year, months: [{ month, days }] }];
+    } else if (lastYear.year === year) {
+      return [
+        ...prev.slice(0, -1),
+        { year: lastYear.year, months: [...lastYear.months, { month, days }] },
+      ];
+    } else {
+      return [...prev, { year, months: [{ month, days }] }];
+    }
+  }, []);
+}
+
+function getWeekdayName(year: number, month: number, day: number): number {
+  return new Date(year, month - 1, day).getDay();
 }
