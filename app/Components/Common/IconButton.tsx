@@ -13,8 +13,8 @@ export function IconButton({
 }) {
   return (
     <button
-      className={`flex flex-row items-center p-2 gap-1 text-xs text-text_grey hover:text-text active:text-yellow ${
-        active ? "text-yellow font-bold" : ""
+      className={`flex flex-row items-center p-2.5 gap-1 text-xs hover:text-text_white active:text-highlight_yellow ${
+        active ? "text-highlight_yellow font-bold" : "text-text_grey"
       }`}
       onClick={onClick}
     >

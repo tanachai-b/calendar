@@ -18,7 +18,7 @@ export function CalendarYear({
 }) {
   return (
     <div>
-      <div className="sticky top-0 bg-bg z-50 text-center text-3xl font-extralight p-2 pb-0">
+      <div className="sticky top-0 bg-bg z-50 text-center text-3xl font-extralight text-text_white p-2.5 pb-0">
         {year}
       </div>
 

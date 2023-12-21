@@ -28,8 +28,10 @@ export function useCalendar() {
 
 export function Calendar({
   controller,
+  className,
 }: {
   controller: ReturnType<typeof useCalendar>;
+  className: string;
 }) {
   const { todayRef, yearList, setYearList } = controller;
 
@@ -89,7 +91,7 @@ export function Calendar({
   return (
     <div
       ref={scrollRef}
-      className="flex flex-col overflow-y-auto snxap-y scroll-p-[44px] hide-scroll border-r border-border"
+      className={`flex flex-col overflow-y-auto snxap-y scroll-p-[46px] hide-scroll ${className}`}
     >
       {yearList.map((y) => (
         <CalendarYear key={y} year={y} todayRef={todayRef} />

@@ -1,10 +1,10 @@
 "use client";
-
 import React from "react";
 
 import { Calendar, useCalendar } from "./Components/Calendar/Calendar";
-import { ToolBar } from "./Components/ToolBar";
+import { Diary } from "./Components/Diary";
 import { NavBar } from "./Components/NavBar";
+import { ToolBar } from "./Components/ToolBar";
 
 export default function Home() {
   const calendar = useCalendar();
@@ -16,9 +16,9 @@ export default function Home() {
       <ToolBar onTodayClicked={calendar.goToToday} />
 
       <div className="grow overflow-hidden flex flex-row items-stretch">
-        <Calendar controller={calendar} />
+        <Calendar controller={calendar} className="border-r border-border" />
 
-        <div className="grow" />
+        <Diary className="grow" />
       </div>
     </div>
   );

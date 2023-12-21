@@ -5,7 +5,7 @@ import { Icons } from "./Common/Icons";
 
 export function NavBar() {
   return (
-    <div className="flex flex-row px-2">
+    <div className="flex flex-row px-2.5">
       <IconButton
         icon={Icons.diary_large}
         text="Diary"

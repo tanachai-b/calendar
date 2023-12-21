@@ -17,7 +17,7 @@ export function CalendarDay({
     >
       <div
         className={`w-4 h-4 rounded text-center leading-4 ${
-          isToday ? "bg-yellow" : ""
+          isToday ? "bg-highlight_yellow font-medium" : ""
         }`}
       >
         {date}

@@ -37,11 +37,11 @@ export function CalendarMonth({
 
   return (
     <div className="snap-start flex flex-col" ref={todayRef}>
-      <div className="sticky top-[44px] bg-bg text-center text-base font-light text-text_grey px-2">
+      <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_grey px-2.5">
         {monthNames[month - 1]}
       </div>
 
-      <div className="grid grid-cols-7 grid-rows-6 text-xs p-2">
+      <div className="grid grid-cols-7 grid-rows-6 text-xs p-2.5">
         {Array.from({ length: firstWeekDay }).map((_, index) => (
           <div className="w-10 h-10" key={index} />
         ))}

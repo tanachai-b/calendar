@@ -16,10 +16,10 @@ const config: Config = {
       colors: {
         bg: "#101010",
         border: "#303030",
-        text: "#f0f0f0",
+        text_white: "#f0f0f0",
         text_grey: "#808080",
         text_red: "#ff0000",
-        yellow: "#ffc000",
+        highlight_yellow: "#ffc000",
       },
     },
   },
