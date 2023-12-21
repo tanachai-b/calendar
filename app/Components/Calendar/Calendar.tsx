@@ -34,9 +34,12 @@ export function Calendar({
     controller;
 
   const scrollRef = useRef(null);
+  const nearestRef = useRef(null);
 
   const [topChild, setTopChild] = useState<number>(-1);
   const [bottomChild, setBottomChild] = useState<number>(-1);
+
+  const [scrollSnapper, setScrollSnapper] = useState<NodeJS.Timeout>();
 
   useEffect(() => {
     setTimeout(() => {
@@ -63,11 +66,10 @@ export function Calendar({
       scrollCurrent.removeEventListener("scroll", handleScroll);
       scrollCurrent.removeEventListener("scrollend", handleScrollEnd);
     };
-  }, [handleScroll]);
+  }, [handleScroll, handleScrollEnd]);
 
   function handleScroll() {
     if (disableScrollHandler) return;
-
     if (!scrollRef.current) return;
 
     const { childCount, scrollTopChild, scrollBottomChild } = getScrollInfo(
@@ -88,6 +90,19 @@ export function Calendar({
   function handleScrollEnd() {
     if (!scrollRef.current) return;
     setDisableScrollHandler(false);
+
+    console.log(onGetNearestDate(data, topChild));
+
+    clearTimeout(scrollSnapper);
+    setScrollSnapper(
+      setTimeout(() => {
+        if (!nearestRef.current) return;
+
+        (nearestRef.current as HTMLElement).scrollIntoView({
+          behavior: "smooth",
+        });
+      }, 500)
+    );
   }
 
   return (
@@ -101,6 +116,7 @@ export function Calendar({
           year={year}
           months={months}
           todayRef={todayRef}
+          nearestRef={{ ref: nearestRef, ...onGetNearestDate(data, topChild) }}
         />
       ))}
     </div>
@@ -130,4 +146,19 @@ function getScrollInfo(target: HTMLElement) {
   );
 
   return { childCount, scrollTopChild, scrollBottomChild };
+}
+
+function onGetNearestDate(
+  data: { year: number; months: number[] }[],
+  topChild: number
+) {
+  const flatChildList = data.reduce<{ year: number; month: number }[]>(
+    (prev, { year, months }) => [
+      ...prev,
+      { year, month: months[0] },
+      ...months.map((month) => ({ year, month })),
+    ],
+    []
+  );
+  return flatChildList[topChild];
 }

@@ -23,7 +23,6 @@ export default function Home() {
 
   function handleTodayClicked() {
     setCalendarRawData(defaultRawData);
-
     setTimeout(() => calendar.goToToday(), 10);
   }
 

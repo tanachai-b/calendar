@@ -13,10 +13,12 @@ export function CalendarYear({
   year,
   months,
   todayRef,
+  nearestRef,
 }: {
   year: number;
   months: number[];
   todayRef: MutableRefObject<null>;
+  nearestRef: { ref: MutableRefObject<null>; year: number; month: number };
 }) {
   return (
     <div>
@@ -30,6 +32,11 @@ export function CalendarYear({
           year={year}
           month={month}
           todayRef={isCurrentMonth(year, month) ? todayRef : undefined}
+          nearestRef={
+            nearestRef.year === year && nearestRef.month === month
+              ? nearestRef.ref
+              : undefined
+          }
         />
       ))}
     </div>
