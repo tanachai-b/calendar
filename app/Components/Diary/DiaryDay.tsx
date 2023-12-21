@@ -1,15 +1,8 @@
 "use client";
+
 import React from "react";
 
-const weekdayNames = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+import { weekdayNames } from "../../constants";
 
 export function DiaryDay({
   day,

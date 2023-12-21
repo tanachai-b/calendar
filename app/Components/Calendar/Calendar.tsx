@@ -5,12 +5,7 @@ import { CalendarYear } from "./CalendarYear";
 export function useCalendar() {
   const todayRef = useRef(null);
 
-  const initYearList = [
-    new Date().getFullYear() - 1,
-    new Date().getFullYear(),
-    new Date().getFullYear() + 1,
-    new Date().getFullYear() + 2,
-  ];
+  const initYearList = [2022, 2023, 2024, 2025];
 
   const [yearList, setYearList] = useState<number[]>(initYearList);
 

@@ -3,7 +3,7 @@
 import React from "react";
 
 import { DiaryDay } from "./DiaryDay";
-import { monthNames } from "../Calendar/CalendarMonth";
+import { monthNames } from "../../constants";
 
 export function Diary({ className }: { className: string }) {
   return (
@@ -46,7 +46,7 @@ function DiaryMonth({ year, month }: { year: number; month: number }) {
             key={index}
             day={index + 1}
             weekday={new Date(year, month - 1, index + 1).getDay()}
-            {...(x < 0.2
+            {...(x < 0
               ? {
                   keypoints: [
                     "went to office",

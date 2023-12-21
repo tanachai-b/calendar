@@ -1,21 +1,7 @@
 import React, { MutableRefObject } from "react";
 
 import { CalendarDay } from "./CalendarDay";
-
-export const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { monthNames } from "../../constants";
 
 function isToday(year: number, month: number, day: number) {
   const date = new Date(year, month - 1, day);
