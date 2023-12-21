@@ -1,87 +1,99 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { CalendarYear } from "./CalendarYear";
-import { CalendarMonth } from "./CalendarMonth";
 
 export function useCalendar() {
   const todayRef = useRef(null);
+  const [disableScrollHandler, setDisableScrollHandler] =
+    useState<boolean>(false);
 
   async function goToToday() {
     if (!todayRef.current) return;
+
+    setDisableScrollHandler(true);
     (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
   }
 
-  return { todayRef, goToToday };
+  return { todayRef, disableScrollHandler, setDisableScrollHandler, goToToday };
 }
 
 export function Calendar({
   controller,
   className,
   data,
+  onRequestBefore,
+  onRequestAfter,
 }: {
   controller: ReturnType<typeof useCalendar>;
   className: string;
   data: { year: number; months: number[] }[];
+  onRequestBefore: () => void;
+  onRequestAfter: () => void;
 }) {
-  const { todayRef } = controller;
+  const { todayRef, disableScrollHandler, setDisableScrollHandler } =
+    controller;
 
   const scrollRef = useRef(null);
 
-  let loading = false;
-  const [scrollTopYear, setScrollTopYear] = useState<number>(-1);
-  const [scrollBottomYear, setScrollBottomYear] = useState<number>(-1);
+  const [topChild, setTopChild] = useState<number>(-1);
+  const [bottomChild, setBottomChild] = useState<number>(-1);
 
   useEffect(() => {
-    if (!todayRef.current) return;
-    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "instant" });
+    setTimeout(() => {
+      if (!todayRef.current) return;
+
+      setDisableScrollHandler(true);
+      (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+    }, 10);
   }, []);
 
-  // useEffect(() => {
-  //   if (!scrollRef.current) return;
-  //   (scrollRef.current as HTMLElement).addEventListener("scroll", handleScroll);
+  useEffect(() => {
+    if (!scrollRef.current) return;
 
-  //   return () => {
-  //     if (!scrollRef.current) return;
-  //     (scrollRef.current as HTMLElement).removeEventListener(
-  //       "scroll",
-  //       handleScroll
-  //     );
-  //   };
-  // }, [handleScroll]);
+    const scrollCurrent = scrollRef.current as HTMLElement;
+    scrollCurrent.addEventListener("scroll", handleScroll);
+    scrollCurrent.addEventListener("scrollend", handleScrollEnd);
 
-  // async function handleScroll(e: Event) {
-  //   const { scrollTopChild, scrollBottomChild, isAtFirstChild, isAtLastChild } =
-  //     getScrollInfo(e);
+    handleScroll();
 
-  //   const newScrollTopYear = yearList[scrollTopChild];
-  //   const newScrollBottomYear = yearList[scrollBottomChild];
+    return () => {
+      if (!scrollRef.current) return;
 
-  //   if (
-  //     !loading &&
-  //     (newScrollTopYear !== scrollTopYear ||
-  //       newScrollBottomYear !== scrollBottomYear)
-  //   ) {
-  //     loading = true;
+      const scrollCurrent = scrollRef.current as HTMLElement;
+      scrollCurrent.removeEventListener("scroll", handleScroll);
+      scrollCurrent.removeEventListener("scrollend", handleScrollEnd);
+    };
+  }, [handleScroll]);
 
-  //     setScrollTopYear(newScrollTopYear);
-  //     setScrollBottomYear(newScrollBottomYear);
+  function handleScroll() {
+    if (disableScrollHandler) return;
 
-  //     if (isAtFirstChild) {
-  //       setYearList([yearList[0] - 1, ...yearList].slice(0, 4));
-  //     } else if (isAtLastChild) {
-  //       setYearList([...yearList, yearList[yearList.length - 1] + 1].slice(-4));
-  //     }
+    if (!scrollRef.current) return;
 
-  //     await new Promise((resolve) => setTimeout(resolve, 10));
+    const { childCount, scrollTopChild, scrollBottomChild } = getScrollInfo(
+      scrollRef.current
+    );
 
-  //     loading = false;
-  //   }
-  // }
+    if (scrollTopChild != topChild) {
+      setTopChild(scrollTopChild);
+      if (scrollTopChild <= 3) onRequestBefore();
+    }
+
+    if (scrollBottomChild != bottomChild) {
+      setBottomChild(scrollBottomChild);
+      if (scrollBottomChild >= childCount - 3) onRequestAfter();
+    }
+  }
+
+  function handleScrollEnd() {
+    if (!scrollRef.current) return;
+    setDisableScrollHandler(false);
+  }
 
   return (
     <div
       ref={scrollRef}
-      className={`flex flex-col overflow-y-auto snxap-y scroll-p-[46px] hide-scroll ${className}`}
+      className={`flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
     >
       {data.map(({ year, months }) => (
         <CalendarYear
@@ -95,27 +107,27 @@ export function Calendar({
   );
 }
 
-// function getScrollInfo(e: Event) {
-//   const children = Array.from((e.target as HTMLElement).children);
-//   const childHeights = children.map(({ clientHeight }) => clientHeight);
-//   const childPositions = childHeights.reduce(
-//     (prev, curr, index) => [...prev, prev[index] + curr],
-//     [0]
-//   );
+function getScrollInfo(target: HTMLElement) {
+  const superChildren = Array.from(target.children);
 
-//   const scrollTop = (e.target as HTMLElement).scrollTop;
-//   const viewportHeight = (e.target as HTMLElement).clientHeight;
+  const children = superChildren.reduce<Element[]>((prev, curr) => {
+    return [...prev, ...Array.from(curr.children)];
+  }, []);
+  const childHeights = children.map(({ clientHeight }) => clientHeight);
+  const childPositions = childHeights
+    .reduce((prev, curr, index) => [...prev, prev[index] + curr], [0])
+    .slice(0, -1);
 
-//   const scrollTopChild = childPositions.findLastIndex(
-//     (value) => scrollTop >= value
-//   );
-//   const scrollBottomChild = childPositions.findLastIndex(
-//     (value) => scrollTop + viewportHeight >= value
-//   );
+  const scrollTop = target.scrollTop + childHeights[0];
+  const scrollBottom = target.scrollTop + target.clientHeight;
 
-//   const childCount = (e.target as HTMLElement).childElementCount;
+  const childCount = children.length;
+  const scrollTopChild = childPositions.findLastIndex(
+    (value) => scrollTop >= value
+  );
+  const scrollBottomChild = childPositions.findLastIndex(
+    (value) => scrollBottom >= value
+  );
 
-//   const isAtFirstChild = scrollTopChild === 0;
-//   const isAtLastChild = scrollBottomChild >= childCount - 1;
-//   return { scrollTopChild, scrollBottomChild, isAtFirstChild, isAtLastChild };
-// }
+  return { childCount, scrollTopChild, scrollBottomChild };
+}

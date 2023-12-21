@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 import { DiaryDay } from "./DiaryDay";
@@ -7,7 +5,7 @@ import { monthNames } from "../../constants";
 
 export function Diary({ className }: { className: string }) {
   return (
-    <div className={`overflow-auto hixde-scroll ${className}`}>
+    <div className={`overflow-auto ${className}`}>
       {[2023, 2024].map((year) => (
         <DiaryYear key={year} year={year} />
       ))}
