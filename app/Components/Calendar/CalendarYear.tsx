@@ -22,7 +22,7 @@ export function CalendarYear({
         {year}
       </div>
 
-      {Array.from({ length: 12 }).map((_, index) => (
+      {Array.from({ length: 12 }, (_value, index) => (
         <CalendarMonth
           key={index}
           year={year}

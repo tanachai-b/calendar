@@ -93,8 +93,8 @@ export function Calendar({
       ref={scrollRef}
       className={`flex flex-col overflow-y-auto snxap-y scroll-p-[46px] hide-scroll ${className}`}
     >
-      {yearList.map((y) => (
-        <CalendarYear key={y} year={y} todayRef={todayRef} />
+      {yearList.map((year) => (
+        <CalendarYear key={year} year={year} todayRef={todayRef} />
       ))}
     </div>
   );
@@ -102,7 +102,7 @@ export function Calendar({
 
 function getScrollInfo(e: Event) {
   const children = Array.from((e.target as HTMLElement).children);
-  const childHeights = children.map((child) => child.clientHeight);
+  const childHeights = children.map(({ clientHeight }) => clientHeight);
   const childPositions = childHeights.reduce(
     (prev, curr, index) => [...prev, prev[index] + curr],
     [0]

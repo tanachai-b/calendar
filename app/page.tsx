@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Calendar, useCalendar } from "./Components/Calendar/Calendar";
-import { Diary } from "./Components/Diary";
+import { Diary } from "./Components/Diary/Diary";
 import { NavBar } from "./Components/NavBar";
 import { ToolBar } from "./Components/ToolBar";
 
