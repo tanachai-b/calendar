@@ -13,10 +13,16 @@ export function CalendarYear({
   year,
   months,
   todayRef,
+  onMonthClicked,
 }: {
   year: number;
   months: number[];
   todayRef: MutableRefObject<null>;
+  onMonthClicked: (
+    monthRef: MutableRefObject<null>,
+    year: number,
+    month: number
+  ) => void;
 }) {
   return (
     <div>
@@ -30,6 +36,7 @@ export function CalendarYear({
           year={year}
           month={month}
           todayRef={isCurrentMonth(year, month) ? todayRef : undefined}
+          onClick={(monthRef) => onMonthClicked(monthRef, year, month)}
         />
       ))}
     </div>

@@ -23,12 +23,14 @@ export function Calendar({
   data,
   onRequestBefore,
   onRequestAfter,
+  onMonthClicked,
 }: {
   controller: ReturnType<typeof useCalendar>;
   className: string;
   data: { year: number; months: number[] }[];
   onRequestBefore: () => void;
   onRequestAfter: () => void;
+  onMonthClicked: (year: number, month: number) => void;
 }) {
   const { todayRef, disableScrollHandler, setDisableScrollHandler } =
     controller;
@@ -89,6 +91,21 @@ export function Calendar({
     setDisableScrollHandler(false);
   }
 
+  function handleMonthClicked(
+    monthRef: React.MutableRefObject<null>,
+    year: number,
+    month: number
+  ) {
+    if (!monthRef.current) return;
+
+    setDisableScrollHandler(true);
+    (monthRef.current as HTMLElement).scrollIntoView({
+      behavior: "smooth",
+    });
+
+    onMonthClicked(year, month);
+  }
+
   return (
     <div
       ref={scrollRef}
@@ -100,6 +117,7 @@ export function Calendar({
           year={year}
           months={months}
           todayRef={todayRef}
+          onMonthClicked={handleMonthClicked}
         />
       ))}
     </div>

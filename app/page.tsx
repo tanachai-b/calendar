@@ -57,6 +57,7 @@ export default function Home() {
           data={calendarData}
           onRequestBefore={handleRequestBefore}
           onRequestAfter={handleRequestAfter}
+          onMonthClicked={() => {}}
         />
 
         <Diary className="grow" />

@@ -15,6 +15,7 @@ const config: Config = {
       },
       colors: {
         bg: "#101010",
+        bg_hover: "#181818",
         border: "#303030",
         text_white: "#f0f0f0",
         text_grey: "#808080",

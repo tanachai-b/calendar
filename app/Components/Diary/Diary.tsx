@@ -32,7 +32,7 @@ function DiaryMonth({ year, month }: { year: number; month: number }) {
 
   return (
     <div>
-      <div className="sticky top-[36px] bg-bg text-center text-base font-light text-text_white p-2.5 pb-0">
+      <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_white p-2.5 pb-0">
         {monthNames[month - 1]}
       </div>
 
