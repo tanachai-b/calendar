@@ -32,9 +32,12 @@ export function Calendar({
   controller: ReturnType<typeof useCalendar>;
 }) {
   const { todayRef, yearList, setYearList } = controller;
+
   const scrollRef = useRef(null);
 
-  const [x, setX] = useState<number>(0);
+  let loading = false;
+  const [scrollTopYear, setScrollTopYear] = useState<number>(-1);
+  const [scrollBottomYear, setScrollBottomYear] = useState<number>(-1);
 
   useEffect(() => {
     if (!todayRef.current) return;
@@ -54,35 +57,44 @@ export function Calendar({
     };
   }, [handleScroll]);
 
-  function handleScroll(e: Event) {
-    const { scrollTopChild, isAtFirstChild, isAtLastChild } = getScrollInfo(e);
+  async function handleScroll(e: Event) {
+    const { scrollTopChild, scrollBottomChild, isAtFirstChild, isAtLastChild } =
+      getScrollInfo(e);
 
-    const scrollYear = yearList[scrollTopChild];
-    if (x !== scrollYear) {
-      console.log("xx", scrollYear);
+    const newScrollTopYear = yearList[scrollTopChild];
+    const newScrollBottomYear = yearList[scrollBottomChild];
 
-      setX(scrollYear);
+    if (
+      !loading &&
+      (newScrollTopYear !== scrollTopYear ||
+        newScrollBottomYear !== scrollBottomYear)
+    ) {
+      loading = true;
+
+      setScrollTopYear(newScrollTopYear);
+      setScrollBottomYear(newScrollBottomYear);
 
       if (isAtFirstChild) {
         setYearList([yearList[0] - 1, ...yearList].slice(0, 4));
       } else if (isAtLastChild) {
         setYearList([...yearList, yearList[yearList.length - 1] + 1].slice(-4));
       }
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      loading = false;
     }
   }
 
   return (
-    <>
-      <div
-        ref={scrollRef}
-        className="flex flex-col overflow-y-auto snap-y scroll-p-[44px] hide-scroll border-r border-border"
-      >
-        {yearList.map((y) => (
-          <CalendarYear key={y} year={y} todayRef={todayRef} />
-        ))}
-      </div>
-      {yearList.toString()}
-    </>
+    <div
+      ref={scrollRef}
+      className="flex flex-col overflow-y-auto snxap-y scroll-p-[44px] hide-scroll border-r border-border"
+    >
+      {yearList.map((y) => (
+        <CalendarYear key={y} year={y} todayRef={todayRef} />
+      ))}
+    </div>
   );
 }
 
@@ -108,5 +120,5 @@ function getScrollInfo(e: Event) {
 
   const isAtFirstChild = scrollTopChild === 0;
   const isAtLastChild = scrollBottomChild >= childCount - 1;
-  return { scrollTopChild, isAtFirstChild, isAtLastChild };
+  return { scrollTopChild, scrollBottomChild, isAtFirstChild, isAtLastChild };
 }
