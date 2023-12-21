@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { CalendarYear } from "./CalendarYear";
 
-export function useCalendar() {
+export function useCalendarController() {
   const todayRef = useRef(null);
   const [disableScrollHandler, setDisableScrollHandler] =
     useState<boolean>(false);
@@ -21,32 +21,29 @@ export function Calendar({
   controller,
   className,
   data,
-  onRequestBefore,
-  onRequestAfter,
+  onRequestPrevious,
+  onRequestNext,
   onMonthClicked,
 }: {
-  controller: ReturnType<typeof useCalendar>;
+  controller: ReturnType<typeof useCalendarController>;
   className: string;
-  data: { year: number; months: number[] }[];
-  onRequestBefore: () => void;
-  onRequestAfter: () => void;
+  data: { year: number; month: number }[];
+  onRequestPrevious: () => void;
+  onRequestNext: () => void;
   onMonthClicked: (year: number, month: number) => void;
 }) {
-  const { todayRef, disableScrollHandler, setDisableScrollHandler } =
+  const { todayRef, disableScrollHandler, setDisableScrollHandler, goToToday } =
     controller;
 
   const scrollRef = useRef(null);
+
+  const dataCombinedYear = useMemo(() => combineYear(data), [data]);
 
   const [topChild, setTopChild] = useState<number>(-1);
   const [bottomChild, setBottomChild] = useState<number>(-1);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (!todayRef.current) return;
-
-      setDisableScrollHandler(true);
-      (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
-    }, 10);
+    setTimeout(goToToday, 10);
   }, []);
 
   useEffect(() => {
@@ -77,12 +74,12 @@ export function Calendar({
 
     if (scrollTopChild != topChild) {
       setTopChild(scrollTopChild);
-      if (scrollTopChild <= 3) onRequestBefore();
+      if (scrollTopChild <= 3) onRequestPrevious();
     }
 
     if (scrollBottomChild != bottomChild) {
       setBottomChild(scrollBottomChild);
-      if (scrollBottomChild >= childCount - 3) onRequestAfter();
+      if (scrollBottomChild >= childCount - 3) onRequestNext();
     }
   }
 
@@ -99,9 +96,7 @@ export function Calendar({
     if (!monthRef.current) return;
 
     setDisableScrollHandler(true);
-    (monthRef.current as HTMLElement).scrollIntoView({
-      behavior: "smooth",
-    });
+    (monthRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
 
     onMonthClicked(year, month);
   }
@@ -111,7 +106,7 @@ export function Calendar({
       ref={scrollRef}
       className={`flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
     >
-      {data.map(({ year, months }) => (
+      {dataCombinedYear.map(({ year, months }) => (
         <CalendarYear
           key={year}
           year={year}
@@ -122,6 +117,22 @@ export function Calendar({
       ))}
     </div>
   );
+}
+
+function combineYear(data: { year: number; month: number }[]) {
+  return data.reduce<{ year: number; months: number[] }[]>((prev, curr) => {
+    if (prev.length === 0) {
+      return [{ year: curr.year, months: [curr.month] }];
+    } else if (prev[prev.length - 1].year === curr.year) {
+      const latest = prev[prev.length - 1];
+      return [
+        ...prev.slice(0, -1),
+        { year: latest.year, months: [...latest.months, curr.month] },
+      ];
+    } else {
+      return [...prev, { year: curr.year, months: [curr.month] }];
+    }
+  }, []);
 }
 
 function getScrollInfo(target: HTMLElement) {
