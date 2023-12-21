@@ -2,12 +2,7 @@ import React, { MutableRefObject, useRef } from "react";
 
 import { CalendarDay } from "./CalendarDay";
 import { monthNames } from "../../constants";
-
-function isToday(year: number, month: number, day: number) {
-  const date = new Date(year, month - 1, day);
-  const today = new Date();
-  return today.toDateString() === date.toDateString();
-}
+import { isToday } from "../utils";
 
 export function CalendarMonth({
   year,

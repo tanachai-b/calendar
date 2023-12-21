@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 
-import { DiaryDay } from "./DiaryDay";
-import { monthNames } from "../../constants";
+import { DiaryYear } from "./DiaryYear";
 
 export function Diary({
   className,
@@ -19,52 +18,6 @@ export function Diary({
     <div className={`overflow-y-auto scroll-pt-[46px] ${className}`}>
       {dataCombinedYear.map(({ year, months }) => (
         <DiaryYear key={year} year={year} months={months} />
-      ))}
-    </div>
-  );
-}
-
-function DiaryYear({
-  year,
-  months,
-}: {
-  year: number;
-  months: { month: number; days: { day: number }[] }[];
-}) {
-  return (
-    <div>
-      <div className="sticky top-0 bg-bg z-50 text-center text-3xl font-extralight text-text_white p-2.5 pb-0">
-        {year}
-      </div>
-
-      {months.map(({ month, days }, index) => (
-        <DiaryMonth key={index} year={year} month={month} days={days} />
-      ))}
-    </div>
-  );
-}
-
-function DiaryMonth({
-  year,
-  month,
-  days,
-}: {
-  year: number;
-  month: number;
-  days: { day: number }[];
-}) {
-  return (
-    <div>
-      <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_white p-2.5 pb-0">
-        {monthNames[month - 1]}
-      </div>
-
-      {days.map(({ day }, index) => (
-        <DiaryDay
-          key={index}
-          day={day}
-          weekday={getWeekdayName(year, month, day)}
-        />
       ))}
     </div>
   );
@@ -112,8 +65,4 @@ function combineYear(
       return [...prev, { year, months: [{ month, days }] }];
     }
   }, []);
-}
-
-function getWeekdayName(year: number, month: number, day: number): number {
-  return new Date(year, month - 1, day).getDay();
 }

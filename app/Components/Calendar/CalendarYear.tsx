@@ -1,13 +1,7 @@
 import React, { MutableRefObject } from "react";
 
 import { CalendarMonth } from "./CalendarMonth";
-
-function isCurrentMonth(year: number, month: number) {
-  const date = new Date(year, month - 1, 1);
-  const today = new Date();
-  today.setDate(1);
-  return today.toDateString() === date.toDateString();
-}
+import { isCurrentMonth } from "../utils";
 
 export function CalendarYear({
   year,
