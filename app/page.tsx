@@ -43,9 +43,15 @@ export default function Home() {
     setCalendarData([...calendarData, ...nextData].slice(-12));
   }
 
-  const [diaryData, setDiaryData] = useState([
-    { year: 2023, month: 12, day: 22 },
-  ]);
+  const initialDiaryData = Array.from({ length: 7 }, (_value, index) =>
+    generateDiaryData(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      today.getDate() - 3 + index
+    )
+  );
+
+  const [diaryData, setDiaryData] = useState(initialDiaryData);
 
   function handleDiaryRequestPrevious() {
     const first = diaryData[0];
@@ -99,9 +105,25 @@ function generateCalendarData(year: number, month: number) {
 
 function generateDiaryData(year: number, month: number, day: number) {
   const date = new Date(year, month - 1, day);
+
+  const x = Math.random();
+  const y = Math.random();
+
   return {
     year: date.getFullYear(),
     month: date.getMonth() + 1,
     day: date.getDate(),
+    keypoints:
+      x < 0.15
+        ? ["went to office", "had dinner with colleagues", "went on a trip"]
+        : [],
+    notes:
+      y < 0.15
+        ? [
+            { time: "9:00", note: "leave home \n leave a bit late" },
+            { time: "10:00", note: "arrive at office" },
+            { time: "15:00", note: "went on a trip \n have fun" },
+          ]
+        : [],
   };
 }

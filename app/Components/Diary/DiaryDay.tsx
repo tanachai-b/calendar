@@ -6,14 +6,14 @@ export function DiaryDay({
   day,
   weekday,
   isToday,
-  keypoints = [],
-  notes = [],
+  keypoints,
+  notes,
 }: {
   day: number;
   weekday: number;
   isToday: boolean;
-  keypoints?: string[];
-  notes?: { time: string; note: string }[];
+  keypoints: string[];
+  notes: { time: string; note: string }[];
 }) {
   const isSunday = weekday === 0;
 

@@ -7,7 +7,14 @@ export function DiaryYear({
   months,
 }: {
   year: number;
-  months: { month: number; days: { day: number }[] }[];
+  months: {
+    month: number;
+    days: {
+      day: number;
+      keypoints: string[];
+      notes: { time: string; note: string }[];
+    }[];
+  }[];
 }) {
   return (
     <div>

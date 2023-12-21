@@ -9,7 +9,13 @@ export function Diary({
   onRequestNext,
 }: {
   className: string;
-  data: { year: number; month: number; day: number }[];
+  data: {
+    year: number;
+    month: number;
+    day: number;
+    keypoints?: string[];
+    notes?: { time: string; note: string }[];
+  }[];
   onRequestPrevious: () => void;
   onRequestNext: () => void;
 }) {
@@ -70,7 +76,7 @@ export function Diary({
   return (
     <div
       ref={scrollRef}
-      className={`overflow-y-auto scroll-pt-[46px] ${className}`}
+      className={`overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
     >
       {dataCombinedYear.map(({ year, months }) => (
         <DiaryYear key={year} year={year} months={months} />
@@ -79,34 +85,68 @@ export function Diary({
   );
 }
 
-function combineMonth(data: { year: number; month: number; day: number }[]) {
+function combineMonth(
+  data: {
+    year: number;
+    month: number;
+    day: number;
+    keypoints?: string[];
+    notes?: { time: string; note: string }[];
+  }[]
+) {
   return data.reduce<
-    { year: number; month: number; days: { day: number }[] }[]
-  >((prev, { year, month, day }) => {
+    {
+      year: number;
+      month: number;
+      days: {
+        day: number;
+        keypoints: string[];
+        notes: { time: string; note: string }[];
+      }[];
+    }[]
+  >((prev, { year, month, day, keypoints = [], notes = [] }) => {
     const lastMonth = prev[prev.length - 1];
 
     if (prev.length === 0) {
-      return [{ year, month, days: [{ day }] }];
+      return [{ year, month, days: [{ day, keypoints, notes }] }];
     } else if (lastMonth.year === year && lastMonth.month === month) {
       return [
         ...prev.slice(0, -1),
         {
           year: lastMonth.year,
           month: lastMonth.month,
-          days: [...lastMonth.days, { day }],
+          days: [...lastMonth.days, { day, keypoints, notes }],
         },
       ];
     } else {
-      return [...prev, { year, month, days: [{ day }] }];
+      return [...prev, { year, month, days: [{ day, keypoints, notes }] }];
     }
   }, []);
 }
 
 function combineYear(
-  data: { year: number; month: number; days: { day: number }[] }[]
+  data: {
+    year: number;
+    month: number;
+    days: {
+      day: number;
+      keypoints: string[];
+      notes: { time: string; note: string }[];
+    }[];
+  }[]
 ) {
   return data.reduce<
-    { year: number; months: { month: number; days: { day: number }[] }[] }[]
+    {
+      year: number;
+      months: {
+        month: number;
+        days: {
+          day: number;
+          keypoints: string[];
+          notes: { time: string; note: string }[];
+        }[];
+      }[];
+    }[]
   >((prev, { year, month, days }) => {
     const lastYear = prev[prev.length - 1];
 

@@ -11,7 +11,11 @@ export function DiaryMonth({
 }: {
   year: number;
   month: number;
-  days: { day: number }[];
+  days: {
+    day: number;
+    keypoints: string[];
+    notes: { time: string; note: string }[];
+  }[];
 }) {
   return (
     <div>
@@ -19,22 +23,14 @@ export function DiaryMonth({
         {monthNames[month - 1]}
       </div>
 
-      {days.map(({ day }, index) => (
+      {days.map(({ day, keypoints, notes }) => (
         <DiaryDay
           key={`${year}-${month}-${day}`}
           day={day}
           weekday={getWeekdayName(year, month, day)}
           isToday={isToday(year, month, day)}
-          keypoints={[
-            "went to office",
-            "had dinner with colleagues",
-            "went on a trip",
-          ]}
-          notes={[
-            { time: "9:00", note: "leave home \n leave a bit late" },
-            { time: "10:00", note: "arrive at office" },
-            { time: "15:00", note: "went on a trip \n have fun" },
-          ]}
+          keypoints={keypoints}
+          notes={notes}
         />
       ))}
     </div>
