@@ -43,7 +43,9 @@ export default function Home() {
           data={calendarData}
           onRequestPrevious={handleCalendarRequestPrevious}
           onRequestNext={handleCalendarRequestNext}
-          onDayClick={() => {}}
+          onDayClick={(year, month, day) => {
+            console.log("onDayClick", year, month, day);
+          }}
         />
 
         <Diary

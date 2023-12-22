@@ -32,7 +32,9 @@ export function Diary({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      <SearchBox onChange={(value) => console.log(value)} />
+      <SearchBox
+        onSubmit={(value) => console.log("SearchBox onSubmit", value)}
+      />
 
       <div
         ref={scrollRef}

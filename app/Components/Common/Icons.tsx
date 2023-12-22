@@ -19,6 +19,7 @@ export const Icons = {
   download: materialSymbol("download"),
 
   search_large: materialSymbol("search", Size.large),
+  submit_large: materialSymbol("arrow_forward", Size.large),
   clear_large: materialSymbol("close", Size.large),
 };
 
