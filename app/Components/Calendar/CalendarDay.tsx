@@ -13,7 +13,7 @@ export function CalendarDay({
 }) {
   return (
     <div
-      className={`w-10 h-10 hover:bg-bg_hover cursor-pointer flex items-center justify-center px-1 ${
+      className={`w-10 h-10 hover:bg-bg_hover cursor-pointer flex flex-col items-center p-1 gap-1 ${
         isToday ? "text-bg" : isSunday ? "text-text_red" : "text-text_grey"
       }`}
       onClick={onClick}
@@ -24,6 +24,18 @@ export function CalendarDay({
         }`}
       >
         {day}
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-0.5">
+        {Array.from(
+          { length: Math.floor(Math.random() ** 3 * 4) },
+          (_value, index) => (
+            <div
+              key={index}
+              className="w-1 h-1 rounded-full bg-highlight_yellow"
+            />
+          )
+        )}
       </div>
     </div>
   );

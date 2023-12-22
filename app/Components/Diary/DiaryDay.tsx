@@ -62,7 +62,7 @@ export function DiaryDay({
         )}
 
         {notes.length > 0 ? (
-          <div className="grid grid-cols-[2.5rem_1fr] gap-x-2.5 gap-y-1">
+          <div className="grid grid-cols-[min-content_1fr] gap-x-2.5 gap-y-1">
             {notes.map((note) => (
               <>
                 <div className="text-text_white text-right">{note.time}</div>

@@ -13,8 +13,8 @@ export function useCalendarData() {
     setCalendarData((calendarData) => {
       const first = calendarData[0];
 
-      const previousData = Array.from({ length: 1 }, (_value, index) =>
-        generateCalendarData(first.year, first.month - 1 + index)
+      const previousData = Array.from({ length: 3 }, (_value, index) =>
+        generateCalendarData(first.year, first.month - 3 + index)
       );
       return [...previousData, ...calendarData].slice(0, 12);
     });
@@ -24,7 +24,7 @@ export function useCalendarData() {
     setCalendarData((calendarData) => {
       const last = calendarData[calendarData.length - 1];
 
-      const nextData = Array.from({ length: 1 }, (_value, index) =>
+      const nextData = Array.from({ length: 3 }, (_value, index) =>
         generateCalendarData(last.year, last.month + 1 + index)
       );
       return [...calendarData, ...nextData].slice(-12);

@@ -33,7 +33,9 @@ export function SearchBox({
 
       <div className="flex flex-row w-full pointer-events-none z-50">
         <div className="p-2.5">{Icons.search_large}</div>
+
         <div className="grow" />
+
         {showClearButton ? (
           <div
             className="p-2.5 pointer-events-auto cursor-pointer"
