@@ -73,8 +73,8 @@ export function Diary({
       });
     }
 
-    if (scrollTopChild <= 9) onRequestPrevious();
-    if (scrollBottomChild >= childCount - 1) onRequestNext();
+    if (scrollTopChild <= 5) onRequestPrevious();
+    if (scrollBottomChild >= childCount - 3) onRequestNext();
   }
 
   function handleScrollEnd() {

@@ -144,7 +144,7 @@ function generateDiaryData(year: number, month: number, day: number) {
     keypoints: randomizedArray({
       array: ["go to office", "have lunch with colleagues", "go to museum"],
       memoizeKey: `${year} ${month} ${day} keypoints`,
-      probability: 1 / 14,
+      probability: 1 / 28,
     }),
     notes: randomizedArray({
       array: [
@@ -164,7 +164,7 @@ function generateDiaryData(year: number, month: number, day: number) {
         { time: "18:00", note: "go home" },
       ],
       memoizeKey: `${year} ${month} ${day} notes`,
-      probability: 1 / 14,
+      probability: 1 / 28,
     }),
   };
 }
