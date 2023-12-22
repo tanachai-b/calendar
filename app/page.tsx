@@ -3,12 +3,13 @@
 import React, { useState } from "react";
 
 import { Calendar } from "./Components/Calendar/Calendar";
-import { useDiaryController } from "./Components/Diary/Diary";
+import { Diary } from "./Components/Diary/Diary";
 import { NavBar } from "./Components/NavBar";
 import { ToolBar } from "./Components/ToolBar";
 
 export default function Home() {
   const today = new Date();
+
   const initialCalendarData = Array.from({ length: 1 }, (_value, index) =>
     generateCalendarData(today.getFullYear(), today.getMonth() + 1 + index)
   );
@@ -37,41 +38,41 @@ export default function Home() {
     });
   }
 
-  const diaryController = useDiaryController();
-
   const initialDiaryData = Array.from({ length: 7 }, (_value, index) =>
     generateDiaryData(
       today.getFullYear(),
       today.getMonth() + 1,
-      today.getDate() - 3 + index
+      today.getDate() + index
     )
   );
 
   const [diaryData, setDiaryData] = useState(initialDiaryData);
 
   function handleDiaryRequestPrevious() {
-    const first = diaryData[0];
+    setDiaryData((diaryData) => {
+      const first = diaryData[0];
 
-    const previousData = Array.from({ length: 7 }, (_value, index) =>
-      generateDiaryData(first.year, first.month, first.day - 7 + index)
-    );
-    setDiaryData([...previousData, ...diaryData].slice(0, 28));
+      const previousData = Array.from({ length: 7 }, (_value, index) =>
+        generateDiaryData(first.year, first.month, first.day - 7 + index)
+      );
+      return [...previousData, ...diaryData].slice(0, 28);
+    });
   }
 
   function handleDiaryRequestNext() {
-    const last = diaryData[diaryData.length - 1];
+    setDiaryData((diaryData) => {
+      const last = diaryData[diaryData.length - 1];
 
-    const nextData = Array.from({ length: 7 }, (_value, index) =>
-      generateDiaryData(last.year, last.month, last.day + 1 + index)
-    );
-    setDiaryData([...diaryData, ...nextData].slice(-28));
+      const nextData = Array.from({ length: 7 }, (_value, index) =>
+        generateDiaryData(last.year, last.month, last.day + 1 + index)
+      );
+      return [...diaryData, ...nextData].slice(-28);
+    });
   }
 
   function handleTodayClicked() {
     setCalendarData(initialCalendarData);
-
     setDiaryData(initialDiaryData);
-    setTimeout(diaryController.goToToday, 1000);
   }
 
   return (
@@ -89,13 +90,12 @@ export default function Home() {
           onDayClick={() => {}}
         />
 
-        {/* <Diary
+        <Diary
           className="grow"
-          controller={diaryController}
           data={diaryData}
           onRequestPrevious={handleDiaryRequestPrevious}
           onRequestNext={handleDiaryRequestNext}
-        /> */}
+        />
       </div>
     </div>
   );

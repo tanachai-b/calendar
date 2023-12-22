@@ -26,22 +26,18 @@ export function Calendar({
     useState<boolean>(false);
 
   useEffect(() => {
-    if (intialized) return;
-    intialized = true;
-
-    if (!scrollRef.current) return;
-
-    (scrollRef.current as HTMLElement).scrollTo({
-      top: (scrollRef.current as HTMLElement).clientHeight,
-      behavior: "instant",
-    });
-  }, []);
-
-  useEffect(() => {
     if (!scrollRef.current) return;
     const scrollCurrent = scrollRef.current as HTMLElement;
     scrollCurrent.addEventListener("scroll", handleScroll);
     scrollCurrent.addEventListener("scrollend", handleScrollEnd);
+
+    if (!intialized) {
+      intialized = true;
+      (scrollRef.current as HTMLElement).scrollTo({
+        top: (scrollRef.current as HTMLElement).clientHeight,
+        behavior: "instant",
+      });
+    }
 
     return () => {
       if (!scrollRef.current) return;
@@ -49,7 +45,7 @@ export function Calendar({
       scrollCurrent.removeEventListener("scroll", handleScroll);
       scrollCurrent.removeEventListener("scrollend", handleScrollEnd);
     };
-  }, [handleScroll]);
+  }, []);
 
   function handleScroll() {
     if (disableScrollHandler) return;
@@ -63,9 +59,7 @@ export function Calendar({
         top: (scrollRef.current as HTMLElement).clientHeight,
         behavior: "instant",
       });
-    }
-
-    if (scrollTopChild === childCount - 1) {
+    } else if (scrollTopChild === childCount - 1) {
       (scrollRef.current as HTMLElement).scrollBy({
         top: -overscroll,
         behavior: "instant",
@@ -158,7 +152,6 @@ function getScrollInfo(target: HTMLElement) {
     ...spread(superChildren.slice(1, -1)),
     superChildren[superChildren.length - 1],
   ];
-
   const childHeights = children.map(({ clientHeight }) => clientHeight);
   const childPositions = childHeights
     .reduce((prev, curr, index) => [...prev, prev[index] + curr], [0])
@@ -177,10 +170,5 @@ function getScrollInfo(target: HTMLElement) {
 
   const overscroll = scrollBottom - childPositions[childPositions.length - 1];
 
-  return {
-    childCount,
-    scrollTopChild,
-    scrollBottomChild,
-    overscroll,
-  };
+  return { childCount, scrollTopChild, scrollBottomChild, overscroll };
 }

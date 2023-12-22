@@ -2,30 +2,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { DiaryYear } from "./DiaryYear";
 
-export function useDiaryController() {
-  const todayRef = useRef(null);
-
-  const [disableScrollHandler, setDisableScrollHandler] =
-    useState<boolean>(false);
-
-  async function goToToday() {
-    if (!todayRef.current) return;
-
-    setDisableScrollHandler(true);
-    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
-  }
-
-  return { todayRef, disableScrollHandler, setDisableScrollHandler, goToToday };
-}
-
 export function Diary({
-  controller,
   className,
   data,
   onRequestPrevious,
   onRequestNext,
 }: {
-  controller: ReturnType<typeof useDiaryController>;
   className: string;
   data: {
     year: number;
@@ -37,73 +19,89 @@ export function Diary({
   onRequestPrevious: () => void;
   onRequestNext: () => void;
 }) {
-  const { todayRef, disableScrollHandler, setDisableScrollHandler, goToToday } =
-    controller;
-
   const scrollRef = useRef(null);
+  const todayRef = useRef(null);
+
+  let intialized = false;
 
   const dataCombinedYear = useMemo(
     () => combineYear(combineMonth(data)),
     [data]
   );
 
-  const [topChild, setTopChild] = useState<number>(-1);
-  const [bottomChild, setBottomChild] = useState<number>(-1);
-
-  useEffect(() => {
-    setTimeout(goToToday, 1000);
-  }, []);
+  const [disableScrollHandler, setDisableScrollHandler] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (!scrollRef.current) return;
-
     const scrollCurrent = scrollRef.current as HTMLElement;
     scrollCurrent.addEventListener("scroll", handleScroll);
     scrollCurrent.addEventListener("scrollend", handleScrollEnd);
 
-    handleScroll();
+    if (!intialized) {
+      intialized = true;
+      (scrollRef.current as HTMLElement).scrollTo({
+        top: (scrollRef.current as HTMLElement).clientHeight,
+        behavior: "instant",
+      });
+    }
 
     return () => {
       if (!scrollRef.current) return;
-
       const scrollCurrent = scrollRef.current as HTMLElement;
       scrollCurrent.removeEventListener("scroll", handleScroll);
       scrollCurrent.removeEventListener("scrollend", handleScrollEnd);
     };
-  }, [handleScroll, handleScrollEnd]);
+  }, []);
 
   function handleScroll() {
     if (disableScrollHandler) return;
     if (!scrollRef.current) return;
 
-    const { childCount, scrollTopChild, scrollBottomChild } = getScrollInfo(
-      scrollRef.current
-    );
+    const { childCount, scrollTopChild, scrollBottomChild, overscroll } =
+      getScrollInfo(scrollRef.current);
 
-    if (scrollTopChild != topChild) {
-      setTopChild(scrollTopChild);
-      if (scrollTopChild <= 3) onRequestPrevious();
+    if (scrollTopChild === 0) {
+      (scrollRef.current as HTMLElement).scrollTo({
+        top: (scrollRef.current as HTMLElement).clientHeight,
+        behavior: "instant",
+      });
+    } else if (scrollTopChild === childCount - 1) {
+      (scrollRef.current as HTMLElement).scrollBy({
+        top: -overscroll,
+        behavior: "instant",
+      });
     }
 
-    if (scrollBottomChild != bottomChild) {
-      setBottomChild(scrollBottomChild);
-      if (scrollBottomChild >= childCount - 3) onRequestNext();
-    }
+    if (scrollTopChild <= 9) onRequestPrevious();
+    if (scrollBottomChild >= childCount - 1) onRequestNext();
   }
 
   function handleScrollEnd() {
-    if (!scrollRef.current) return;
-    setDisableScrollHandler(false);
+    if (disableScrollHandler) {
+      setDisableScrollHandler(false);
+
+      if (!scrollRef.current) return;
+
+      (scrollRef.current as HTMLElement).scrollBy({
+        top: 1,
+        behavior: "instant",
+      });
+    }
   }
 
   return (
     <div
       ref={scrollRef}
-      className={`flex flex-col overflow-y-auto scroll-pt-[460px] hide-scroll ${className}`}
+      className={`flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
     >
+      <div className="shrink-0 h-full" />
+
       {dataCombinedYear.map(({ year, months }) => (
         <DiaryYear key={year} year={year} months={months} todayRef={todayRef} />
       ))}
+
+      <div className="shrink-0 h-full" />
     </div>
   );
 }
@@ -189,27 +187,37 @@ function combineYear(
 function getScrollInfo(target: HTMLElement) {
   const superChildren = Array.from(target.children);
 
-  function spread(target: Element) {
-    return Array.from(target.children).reduce<Element[]>(
-      (prev, curr, index) => {
-        if (index === 0) {
-          return [...prev, curr];
-        } else {
-          return [...prev, ...Array.from(curr.children)];
-        }
-      },
+  function spreadMonths(superChildren: Element[]) {
+    return superChildren.reduce<Element[]>(
+      (prev, curr) => [...prev, ...Array.from(curr.children)],
       []
     );
   }
-  const children = superChildren.reduce<Element[]>((prev, curr) => {
-    return [...prev, ...spread(curr)];
-  }, []);
+
+  function spreadYears(superChildren: Element[]) {
+    return superChildren.reduce<Element[]>((prev, curr) => {
+      const yearChildren = Array.from(curr.children);
+      const spreadedMonths = [
+        yearChildren[0],
+        ...spreadMonths(yearChildren.slice(1)),
+      ];
+      return [...prev, ...spreadedMonths];
+    }, []);
+  }
+
+  const spreadedYears = spreadYears(superChildren.slice(1, -1));
+
+  const children = [
+    superChildren[0],
+    ...spreadedYears,
+    superChildren[superChildren.length - 1],
+  ];
   const childHeights = children.map(({ clientHeight }) => clientHeight);
   const childPositions = childHeights
     .reduce((prev, curr, index) => [...prev, prev[index] + curr], [0])
     .slice(0, -1);
 
-  const scrollTop = target.scrollTop + childHeights[0];
+  const scrollTop = target.scrollTop + childHeights[1] + childHeights[2];
   const scrollBottom = target.scrollTop + target.clientHeight;
 
   const childCount = children.length;
@@ -220,5 +228,7 @@ function getScrollInfo(target: HTMLElement) {
     (value) => scrollBottom >= value
   );
 
-  return { childCount, scrollTopChild, scrollBottomChild };
+  const overscroll = scrollBottom - childPositions[childPositions.length - 1];
+
+  return { childCount, scrollTopChild, scrollBottomChild, overscroll };
 }
