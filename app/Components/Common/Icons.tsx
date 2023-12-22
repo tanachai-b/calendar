@@ -17,6 +17,9 @@ export const Icons = {
   today: materialSymbol("today"),
   edit: materialSymbol("edit"),
   download: materialSymbol("download"),
+
+  search_large: materialSymbol("search", Size.large),
+  clear_large: materialSymbol("close", Size.large),
 };
 
 function materialSymbol(iconName: string, size: Size = Size.small) {
@@ -27,8 +30,8 @@ function materialSymbol(iconName: string, size: Size = Size.small) {
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
       />
       <span
-        className={`material-symbols-rounded ${
-          size === Size.small ? "!text-lg !leading-5" : "!text-2xl !leading-6"
+        className={`material-symbols-rounded align-middle !leading-none ${
+          size === Size.large ? "!text-xl" : "!text-base"
         }`}
       >
         {iconName}

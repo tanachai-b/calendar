@@ -2,6 +2,7 @@ import React, { useMemo, useRef } from "react";
 
 import { DiaryYear } from "./DiaryYear";
 import { useDiaryScroll } from "./useDiaryScroll";
+import { SearchBox } from "../Common/SearchBox";
 
 export function Diary({
   className,
@@ -30,17 +31,26 @@ export function Diary({
   const { scrollRef } = useDiaryScroll(onRequestPrevious, onRequestNext);
 
   return (
-    <div
-      ref={scrollRef}
-      className={`flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
-    >
-      <div className="shrink-0 h-full" />
+    <div className={`flex flex-col ${className}`}>
+      <SearchBox onChange={(value) => console.log(value)} />
 
-      {dataCombinedYear.map(({ year, months }) => (
-        <DiaryYear key={year} year={year} months={months} todayRef={todayRef} />
-      ))}
+      <div
+        ref={scrollRef}
+        className="flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll"
+      >
+        <div className="shrink-0 h-full" />
 
-      <div className="shrink-0 h-full" />
+        {dataCombinedYear.map(({ year, months }) => (
+          <DiaryYear
+            key={year}
+            year={year}
+            months={months}
+            todayRef={todayRef}
+          />
+        ))}
+
+        <div className="shrink-0 h-full" />
+      </div>
     </div>
   );
 }

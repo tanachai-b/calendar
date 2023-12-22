@@ -34,6 +34,7 @@ export function DiaryDay({
           {day}
         </div>
       </div>
+
       <div
         className={`flex items-center ${
           weekday === 0 ? "text-text_red" : "text-text_grey"
@@ -43,6 +44,7 @@ export function DiaryDay({
       </div>
 
       <div />
+
       <div className="flex flex-col gap-2.5">
         {keypoints.length > 0 ? (
           <div className="flex flex-wrap gap-1">
@@ -64,6 +66,7 @@ export function DiaryDay({
             {notes.map((note) => (
               <>
                 <div className="text-text_white text-right">{note.time}</div>
+
                 <div className="text-text_white whitespace-pre-line">
                   {note.note}
                 </div>
