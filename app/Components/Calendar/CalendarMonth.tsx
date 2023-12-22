@@ -13,7 +13,7 @@ export function CalendarMonth({
   year: number;
   month: number;
   todayRef?: MutableRefObject<null>;
-  onDayClick: (monthRef: MutableRefObject<null>) => void;
+  onDayClick: (day: number, monthRef: MutableRefObject<null>) => void;
 }) {
   const monthRef = useRef(null);
 
@@ -38,7 +38,7 @@ export function CalendarMonth({
               day={index + 1}
               isSunday={(index + firstWeekDay) % 7 === 0}
               isToday={isToday(year, month, index + 1)}
-              onClick={() => onDayClick(monthRef)}
+              onClick={() => onDayClick(index + 1, monthRef)}
             />
           ))}
         </div>
