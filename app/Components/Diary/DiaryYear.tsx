@@ -1,10 +1,11 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 
 import { DiaryMonth } from "./DiaryMonth";
 
 export function DiaryYear({
   year,
   months,
+  todayRef,
 }: {
   year: number;
   months: {
@@ -15,6 +16,7 @@ export function DiaryYear({
       notes: { time: string; note: string }[];
     }[];
   }[];
+  todayRef: MutableRefObject<null>;
 }) {
   return (
     <div>
@@ -28,6 +30,7 @@ export function DiaryYear({
           year={year}
           month={month}
           days={days}
+          todayRef={todayRef}
         />
       ))}
     </div>

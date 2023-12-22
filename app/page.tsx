@@ -6,7 +6,7 @@ import {
   Calendar,
   useCalendarController,
 } from "./Components/Calendar/Calendar";
-import { Diary } from "./Components/Diary/Diary";
+import { Diary, useDiaryController } from "./Components/Diary/Diary";
 import { NavBar } from "./Components/NavBar";
 import { ToolBar } from "./Components/ToolBar";
 
@@ -19,11 +19,6 @@ export default function Home() {
   );
 
   const [calendarData, setCalendarData] = useState(initialCalendarData);
-
-  function handleTodayClicked() {
-    setCalendarData(initialCalendarData);
-    setTimeout(calendarController.goToToday, 10);
-  }
 
   function handleCalendarRequestPrevious() {
     const first = calendarData[0];
@@ -42,6 +37,8 @@ export default function Home() {
     );
     setCalendarData([...calendarData, ...nextData].slice(-12));
   }
+
+  const diaryController = useDiaryController();
 
   const initialDiaryData = Array.from({ length: 7 }, (_value, index) =>
     generateDiaryData(
@@ -71,6 +68,14 @@ export default function Home() {
     setDiaryData([...diaryData, ...nextData].slice(-28));
   }
 
+  function handleTodayClicked() {
+    setCalendarData(initialCalendarData);
+    setTimeout(calendarController.goToToday, 10);
+
+    setDiaryData(initialDiaryData);
+    setTimeout(diaryController.goToToday, 1000);
+  }
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <NavBar />
@@ -89,6 +94,7 @@ export default function Home() {
 
         <Diary
           className="grow"
+          controller={diaryController}
           data={diaryData}
           onRequestPrevious={handleDiaryRequestPrevious}
           onRequestNext={handleDiaryRequestNext}

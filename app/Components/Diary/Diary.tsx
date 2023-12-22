@@ -2,12 +2,30 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { DiaryYear } from "./DiaryYear";
 
+export function useDiaryController() {
+  const todayRef = useRef(null);
+
+  const [disableScrollHandler, setDisableScrollHandler] =
+    useState<boolean>(false);
+
+  async function goToToday() {
+    if (!todayRef.current) return;
+
+    setDisableScrollHandler(true);
+    (todayRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+  }
+
+  return { todayRef, disableScrollHandler, setDisableScrollHandler, goToToday };
+}
+
 export function Diary({
+  controller,
   className,
   data,
   onRequestPrevious,
   onRequestNext,
 }: {
+  controller: ReturnType<typeof useDiaryController>;
   className: string;
   data: {
     year: number;
@@ -19,6 +37,9 @@ export function Diary({
   onRequestPrevious: () => void;
   onRequestNext: () => void;
 }) {
+  const { todayRef, disableScrollHandler, setDisableScrollHandler, goToToday } =
+    controller;
+
   const scrollRef = useRef(null);
 
   const dataCombinedYear = useMemo(
@@ -26,10 +47,12 @@ export function Diary({
     [data]
   );
 
-  const [disableScrollHandler, setDisableScrollHandler] =
-    useState<boolean>(false);
   const [topChild, setTopChild] = useState<number>(-1);
   const [bottomChild, setBottomChild] = useState<number>(-1);
+
+  useEffect(() => {
+    setTimeout(goToToday, 1000);
+  }, []);
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -76,10 +99,10 @@ export function Diary({
   return (
     <div
       ref={scrollRef}
-      className={`overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
+      className={`flex flex-col overflow-y-auto scroll-pt-[460px] hide-scroll ${className}`}
     >
       {dataCombinedYear.map(({ year, months }) => (
-        <DiaryYear key={year} year={year} months={months} />
+        <DiaryYear key={year} year={year} months={months} todayRef={todayRef} />
       ))}
     </div>
   );

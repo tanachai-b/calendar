@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 
 import { weekdayNames } from "../../constants";
 
@@ -8,17 +8,22 @@ export function DiaryDay({
   isToday,
   keypoints,
   notes,
+  todayRef,
 }: {
   day: number;
   weekday: number;
   isToday: boolean;
   keypoints: string[];
   notes: { time: string; note: string }[];
+  todayRef: MutableRefObject<null>;
 }) {
   const isSunday = weekday === 0;
 
   return (
-    <div className="p-2.5 grid grid-cols-[2.5rem_1fr] gap-x-2.5 gap-y-1">
+    <div
+      className="p-2.5 grid grid-cols-[2.5rem_1fr] gap-x-2.5 gap-y-1"
+      ref={todayRef}
+    >
       <div className={`flex flex-row justify-end`}>
         <div
           className={`rounded w-full px-1 text-right text-xl font-extralight tabular-nums ${
