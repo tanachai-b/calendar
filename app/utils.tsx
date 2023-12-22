@@ -1,8 +1,8 @@
-const randomMemo = new Map();
+const randomMemo = new Map<string, number>();
 
 export function memoizedRandom(key: string) {
   const value = randomMemo.get(key);
-  if (value != null) return randomMemo.get(key);
+  if (value != null) return value;
 
   const random = Math.random();
   randomMemo.set(key, random);

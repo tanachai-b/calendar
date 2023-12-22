@@ -11,7 +11,11 @@ export function Calendar({
   onDayClick,
 }: {
   className: string;
-  data: { year: number; month: number }[];
+  data: {
+    year: number;
+    month: number;
+    days: { day: number; keypointCount: number }[];
+  }[];
   onRequestPrevious: () => void;
   onRequestNext: () => void;
   onDayClick: (year: number, month: number, day: number) => void;
@@ -63,19 +67,47 @@ export function Calendar({
   );
 }
 
-function combineYear(data: { year: number; month: number }[]) {
-  return data.reduce<{ year: number; months: number[] }[]>((prev, curr) => {
+function combineYear(
+  data: {
+    year: number;
+    month: number;
+    days: { day: number; keypointCount: number }[];
+  }[]
+) {
+  return data.reduce<
+    {
+      year: number;
+      months: {
+        month: number;
+        days: { day: number; keypointCount: number }[];
+      }[];
+    }[]
+  >((prev, curr) => {
     const lastYear = prev[prev.length - 1];
 
     if (prev.length === 0) {
-      return [{ year: curr.year, months: [curr.month] }];
+      return [
+        {
+          year: curr.year,
+          months: [{ month: curr.month, days: curr.days }],
+        },
+      ];
     } else if (lastYear.year === curr.year) {
       return [
         ...prev.slice(0, -1),
-        { year: lastYear.year, months: [...lastYear.months, curr.month] },
+        {
+          year: lastYear.year,
+          months: [...lastYear.months, { month: curr.month, days: curr.days }],
+        },
       ];
     } else {
-      return [...prev, { year: curr.year, months: [curr.month] }];
+      return [
+        ...prev,
+        {
+          year: curr.year,
+          months: [{ month: curr.month, days: curr.days }],
+        },
+      ];
     }
   }, []);
 }

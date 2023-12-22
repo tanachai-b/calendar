@@ -4,11 +4,13 @@ export function CalendarDay({
   day,
   isSunday,
   isToday,
+  keypointCount,
   onClick,
 }: {
   day: number;
   isSunday: boolean;
   isToday: boolean;
+  keypointCount: number;
   onClick: () => void;
 }) {
   return (
@@ -27,15 +29,12 @@ export function CalendarDay({
       </div>
 
       <div className="flex flex-wrap justify-center gap-0.5">
-        {Array.from(
-          { length: Math.floor(Math.random() ** 3 * 4) },
-          (_value, index) => (
-            <div
-              key={index}
-              className="w-1 h-1 rounded-full bg-highlight_yellow"
-            />
-          )
-        )}
+        {Array.from({ length: keypointCount }, (_value, index) => (
+          <div
+            key={index}
+            className="w-1 h-1 rounded-full bg-highlight_yellow"
+          />
+        ))}
       </div>
     </div>
   );

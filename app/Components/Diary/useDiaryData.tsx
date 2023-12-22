@@ -39,14 +39,17 @@ export function useDiaryData() {
 
   function generateDiaryData(year: number, month: number, day: number) {
     const date = new Date(year, month - 1, day);
+    const properYear = date.getFullYear();
+    const properMonth = date.getMonth() + 1;
+    const properDay = date.getDate();
 
     return {
-      year: date.getFullYear(),
-      month: date.getMonth() + 1,
-      day: date.getDate(),
+      year: properYear,
+      month: properMonth,
+      day: properDay,
       keypoints: randomizedArray({
         array: ["go to office", "have lunch with colleagues", "go to museum"],
-        memoizeKey: `${year} ${month} ${day} keypoints`,
+        memoizeKey: `${properYear} ${properMonth} ${properDay} keypoints`,
         probability: 1 / 14,
       }),
       notes: randomizedArray({
@@ -66,7 +69,7 @@ export function useDiaryData() {
           },
           { time: "18:00", note: "go home" },
         ],
-        memoizeKey: `${year} ${month} ${day} notes`,
+        memoizeKey: `${properYear} ${properMonth} ${properDay} notes`,
         probability: 1 / 14,
       }),
     };

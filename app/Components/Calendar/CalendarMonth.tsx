@@ -7,11 +7,13 @@ import { isToday } from "../../utils";
 export function CalendarMonth({
   year,
   month,
+  days,
   todayRef,
   onDayClick,
 }: {
   year: number;
   month: number;
+  days: { day: number; keypointCount: number }[];
   todayRef?: MutableRefObject<null>;
   onDayClick: (day: number, monthRef: MutableRefObject<null>) => void;
 }) {
@@ -36,6 +38,9 @@ export function CalendarMonth({
             <CalendarDay
               key={`${year}-${month}-${index + 1}`}
               day={index + 1}
+              keypointCount={
+                days.find(({ day }) => day === index + 1)?.keypointCount ?? 0
+              }
               isSunday={(index + firstWeekDay) % 7 === 0}
               isToday={isToday(year, month, index + 1)}
               onClick={() => onDayClick(index + 1, monthRef)}

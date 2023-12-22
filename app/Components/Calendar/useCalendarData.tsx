@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { memoizedRandom } from "@/app/utils";
+
 export function useCalendarData() {
   const today = new Date();
 
@@ -33,7 +35,34 @@ export function useCalendarData() {
 
   function generateCalendarData(year: number, month: number) {
     const date = new Date(year, month - 1);
-    return { year: date.getFullYear(), month: date.getMonth() + 1 };
+    const properYear = date.getFullYear();
+    const properMonth = date.getMonth() + 1;
+
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    return {
+      year: properYear,
+      month: properMonth,
+      days: [
+        ...Array.from({ length: daysInMonth }, (_value, index) => {
+          const date = new Date(year, month - 1, index + 1);
+          const properYear = date.getFullYear();
+          const properMonth = date.getMonth() + 1;
+          const properDay = date.getDate();
+
+          return {
+            day: properDay,
+            keypointCount: Math.floor(
+              memoizedRandom(
+                `${properYear} ${properMonth} ${properDay} keypointCount`
+              ) **
+                3 *
+                4
+            ),
+          };
+        }),
+      ],
+    };
   }
 
   return {
