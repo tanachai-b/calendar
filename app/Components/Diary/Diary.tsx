@@ -13,8 +13,8 @@ export function Diary({
     year: number;
     month: number;
     day: number;
-    keypoints?: string[];
-    notes?: { time: string; note: string }[];
+    keypoints: string[];
+    notes: { time: string; note: string }[];
   }[];
   onRequestPrevious: () => void;
   onRequestNext: () => void;
@@ -111,8 +111,8 @@ function combineMonth(
     year: number;
     month: number;
     day: number;
-    keypoints?: string[];
-    notes?: { time: string; note: string }[];
+    keypoints: string[];
+    notes: { time: string; note: string }[];
   }[]
 ) {
   return data.reduce<
@@ -125,7 +125,7 @@ function combineMonth(
         notes: { time: string; note: string }[];
       }[];
     }[]
-  >((prev, { year, month, day, keypoints = [], notes = [] }) => {
+  >((prev, { year, month, day, keypoints, notes }) => {
     const lastMonth = prev[prev.length - 1];
 
     if (prev.length === 0) {

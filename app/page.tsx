@@ -109,23 +109,31 @@ function generateCalendarData(year: number, month: number) {
 function generateDiaryData(year: number, month: number, day: number) {
   const date = new Date(year, month - 1, day);
 
-  const x = Math.random();
-  const y = Math.random();
-
   return {
     year: date.getFullYear(),
     month: date.getMonth() + 1,
     day: date.getDate(),
     keypoints:
-      x < 0.15
-        ? ["went to office", "had dinner with colleagues", "went on a trip"]
+      Math.random() < 0.15
+        ? ["go to office", "have lunch with colleagues", "go to museum"]
         : [],
     notes:
-      y < 0.15
+      Math.random() < 0.15
         ? [
-            { time: "9:00", note: "leave home \n leave a bit late" },
+            {
+              time: "9:00",
+              note: "leave home for office \n leave a bit late + traffic jam",
+            },
             { time: "10:00", note: "arrive at office" },
-            { time: "15:00", note: "went on a trip \n have fun" },
+            {
+              time: "12:00",
+              note: "have lunch with colleague at department store \n continue with ice cream",
+            },
+            {
+              time: "15:00",
+              note: "leave office early, went to the museum \n have dinner at museum food court",
+            },
+            { time: "18:00", note: "go home" },
           ]
         : [],
   };
