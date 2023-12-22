@@ -2,40 +2,39 @@
 
 import React, { useState } from "react";
 
-import {
-  Calendar,
-  useCalendarController,
-} from "./Components/Calendar/Calendar";
-import { Diary, useDiaryController } from "./Components/Diary/Diary";
+import { Calendar } from "./Components/Calendar/Calendar";
+import { useDiaryController } from "./Components/Diary/Diary";
 import { NavBar } from "./Components/NavBar";
 import { ToolBar } from "./Components/ToolBar";
 
 export default function Home() {
-  const calendarController = useCalendarController();
-
   const today = new Date();
-  const initialCalendarData = Array.from({ length: 3 }, (_value, index) =>
-    generateCalendarData(today.getFullYear(), today.getMonth() + index)
+  const initialCalendarData = Array.from({ length: 1 }, (_value, index) =>
+    generateCalendarData(today.getFullYear(), today.getMonth() + 1 + index)
   );
 
   const [calendarData, setCalendarData] = useState(initialCalendarData);
 
   function handleCalendarRequestPrevious() {
-    const first = calendarData[0];
+    setCalendarData((calendarData) => {
+      const first = calendarData[0];
 
-    const previousData = Array.from({ length: 3 }, (_value, index) =>
-      generateCalendarData(first.year, first.month - 3 + index)
-    );
-    setCalendarData([...previousData, ...calendarData].slice(0, 12));
+      const previousData = Array.from({ length: 1 }, (_value, index) =>
+        generateCalendarData(first.year, first.month - 1 + index)
+      );
+      return [...previousData, ...calendarData].slice(0, 12);
+    });
   }
 
   function handleCalendarRequestNext() {
-    const last = calendarData[calendarData.length - 1];
+    setCalendarData((calendarData) => {
+      const last = calendarData[calendarData.length - 1];
 
-    const nextData = Array.from({ length: 3 }, (_value, index) =>
-      generateCalendarData(last.year, last.month + 1 + index)
-    );
-    setCalendarData([...calendarData, ...nextData].slice(-12));
+      const nextData = Array.from({ length: 1 }, (_value, index) =>
+        generateCalendarData(last.year, last.month + 1 + index)
+      );
+      return [...calendarData, ...nextData].slice(-12);
+    });
   }
 
   const diaryController = useDiaryController();
@@ -70,7 +69,6 @@ export default function Home() {
 
   function handleTodayClicked() {
     setCalendarData(initialCalendarData);
-    setTimeout(calendarController.goToToday, 10);
 
     setDiaryData(initialDiaryData);
     setTimeout(diaryController.goToToday, 1000);
@@ -85,20 +83,19 @@ export default function Home() {
       <div className="grow flex flex-row overflow-hidden">
         <Calendar
           className="shrink-0 border-r border-border"
-          controller={calendarController}
           data={calendarData}
           onRequestPrevious={handleCalendarRequestPrevious}
           onRequestNext={handleCalendarRequestNext}
-          onMonthClicked={() => {}}
+          onDayClick={() => {}}
         />
 
-        <Diary
+        {/* <Diary
           className="grow"
           controller={diaryController}
           data={diaryData}
           onRequestPrevious={handleDiaryRequestPrevious}
           onRequestNext={handleDiaryRequestNext}
-        />
+        /> */}
       </div>
     </div>
   );
