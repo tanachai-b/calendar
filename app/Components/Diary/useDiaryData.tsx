@@ -1,16 +1,12 @@
 import { useState } from "react";
 
-import { randomizedArray } from "../../utils";
+import { getToday, getDate, randomizedArray } from "../../utils";
 
 export function useDiaryData() {
-  const today = new Date();
+  const { year, month, day } = getToday();
 
   const initialDiaryData = Array.from({ length: 7 }, (_value, index) =>
-    generateDiaryData(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      today.getDate() + index
-    )
+    generateDiaryData(year, month, day + index)
   );
 
   const [diaryData, setDiaryData] = useState(initialDiaryData);
@@ -38,18 +34,15 @@ export function useDiaryData() {
   }
 
   function generateDiaryData(year: number, month: number, day: number) {
-    const date = new Date(year, month - 1, day);
-    const properYear = date.getFullYear();
-    const properMonth = date.getMonth() + 1;
-    const properDay = date.getDate();
+    const date = getDate(year, month, day);
 
     return {
-      year: properYear,
-      month: properMonth,
-      day: properDay,
+      year: date.year,
+      month: date.month,
+      day: date.day,
       keypoints: randomizedArray({
         array: ["go to office", "have lunch with colleagues", "go to museum"],
-        memoizeKey: `${properYear} ${properMonth} ${properDay} keypoints`,
+        memoizeKey: `${date.year} ${date.month} ${date.day} keypoints`,
         probability: 1 / 14,
       }),
       notes: randomizedArray({
@@ -69,7 +62,7 @@ export function useDiaryData() {
           },
           { time: "18:00", note: "go home" },
         ],
-        memoizeKey: `${properYear} ${properMonth} ${properDay} notes`,
+        memoizeKey: `${date.year} ${date.month} ${date.day} notes`,
         probability: 1 / 14,
       }),
     };

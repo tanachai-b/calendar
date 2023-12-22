@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import { memoizedRandom } from "@/app/utils";
+import { memoizedRandom, getToday, getDate } from "@/app/utils";
 
 export function useCalendarData() {
-  const today = new Date();
+  const { year, month } = getToday();
 
-  const initialCalendarData = Array.from({ length: 1 }, (_value, index) =>
-    generateCalendarData(today.getFullYear(), today.getMonth() + 1 + index)
+  const initialCalendarData = Array.from({ length: 3 }, (_value, index) =>
+    generateCalendarData(year, month + index)
   );
 
   const [calendarData, setCalendarData] = useState(initialCalendarData);
@@ -34,27 +34,21 @@ export function useCalendarData() {
   }
 
   function generateCalendarData(year: number, month: number) {
-    const date = new Date(year, month - 1);
-    const properYear = date.getFullYear();
-    const properMonth = date.getMonth() + 1;
-
-    const daysInMonth = new Date(year, month, 0).getDate();
+    const date = getDate(year, month, 1);
+    const daysInMonth = getDate(year, month + 1, 0).day;
 
     return {
-      year: properYear,
-      month: properMonth,
+      year: date.year,
+      month: date.month,
       days: [
         ...Array.from({ length: daysInMonth }, (_value, index) => {
-          const date = new Date(year, month - 1, index + 1);
-          const properYear = date.getFullYear();
-          const properMonth = date.getMonth() + 1;
-          const properDay = date.getDate();
+          const date = getDate(year, month, index + 1);
 
           return {
-            day: properDay,
+            day: date.day,
             keypointCount: Math.floor(
               memoizedRandom(
-                `${properYear} ${properMonth} ${properDay} keypointCount`
+                `${date.year} ${date.month} ${date.day} keypointCount`
               ) **
                 3 *
                 4

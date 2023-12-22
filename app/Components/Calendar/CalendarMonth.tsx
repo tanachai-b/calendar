@@ -2,7 +2,7 @@ import React, { MutableRefObject, useRef } from "react";
 
 import { CalendarDay } from "./CalendarDay";
 import { monthNames } from "../../constants";
-import { isToday } from "../../utils";
+import { isToday, getDate } from "../../utils";
 
 export function CalendarMonth({
   year,
@@ -19,8 +19,8 @@ export function CalendarMonth({
 }) {
   const monthRef = useRef(null);
 
-  const firstWeekDay = new Date(year, month - 1).getDay();
-  const daysInMonth = new Date(year, month, 0).getDate();
+  const firstWeekDay = getDate(year, month, 1).weekday;
+  const daysInMonth = getDate(year, month + 1, 0).day;
 
   return (
     <div ref={monthRef}>
