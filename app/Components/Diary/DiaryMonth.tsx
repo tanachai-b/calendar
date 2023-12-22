@@ -2,7 +2,7 @@ import React, { MutableRefObject } from "react";
 
 import { monthNames } from "../../constants";
 import { DiaryDay } from "./DiaryDay";
-import { getWeekdayName, isToday } from "../utils";
+import { getWeekday, isToday } from "../../utils";
 
 export function DiaryMonth({
   year,
@@ -29,7 +29,7 @@ export function DiaryMonth({
         <DiaryDay
           key={`${year}-${month}-${day}`}
           day={day}
-          weekday={getWeekdayName(year, month, day)}
+          weekday={getWeekday(year, month, day)}
           isToday={isToday(year, month, day)}
           keypoints={keypoints}
           notes={notes}

@@ -6,8 +6,57 @@ import { Calendar } from "./Components/Calendar/Calendar";
 import { Diary } from "./Components/Diary/Diary";
 import { NavBar } from "./Components/NavBar";
 import { ToolBar } from "./Components/ToolBar";
+import { randomizedArray } from "./utils";
 
 export default function Home() {
+  const {
+    initialCalendarData,
+    calendarData,
+    setCalendarData,
+    handleCalendarRequestPrevious,
+    handleCalendarRequestNext,
+  } = useCalendar();
+
+  const {
+    initialDiaryData,
+    diaryData,
+    setDiaryData,
+    handleDiaryRequestPrevious,
+    handleDiaryRequestNext,
+  } = useDiary();
+
+  function handleTodayClicked() {
+    setCalendarData(initialCalendarData);
+    setDiaryData(initialDiaryData);
+  }
+
+  return (
+    <div className="flex flex-col h-screen overflow-hidden">
+      <NavBar />
+
+      <ToolBar onTodayClicked={handleTodayClicked} />
+
+      <div className="grow flex flex-row overflow-hidden">
+        <Calendar
+          className="shrink-0 border-r border-border"
+          data={calendarData}
+          onRequestPrevious={handleCalendarRequestPrevious}
+          onRequestNext={handleCalendarRequestNext}
+          onDayClick={() => {}}
+        />
+
+        <Diary
+          className="grow"
+          data={diaryData}
+          onRequestPrevious={handleDiaryRequestPrevious}
+          onRequestNext={handleDiaryRequestNext}
+        />
+      </div>
+    </div>
+  );
+}
+
+function useCalendar() {
   const today = new Date();
 
   const initialCalendarData = Array.from({ length: 1 }, (_value, index) =>
@@ -37,6 +86,23 @@ export default function Home() {
       return [...calendarData, ...nextData].slice(-12);
     });
   }
+
+  function generateCalendarData(year: number, month: number) {
+    const date = new Date(year, month - 1);
+    return { year: date.getFullYear(), month: date.getMonth() + 1 };
+  }
+
+  return {
+    initialCalendarData,
+    calendarData,
+    setCalendarData,
+    handleCalendarRequestPrevious,
+    handleCalendarRequestNext,
+  };
+}
+
+function useDiary() {
+  const today = new Date();
 
   const initialDiaryData = Array.from({ length: 7 }, (_value, index) =>
     generateDiaryData(
@@ -70,101 +136,46 @@ export default function Home() {
     });
   }
 
-  function handleTodayClicked() {
-    setCalendarData(initialCalendarData);
-    setDiaryData(initialDiaryData);
+  function generateDiaryData(year: number, month: number, day: number) {
+    const date = new Date(year, month - 1, day);
+
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+      keypoints: randomizedArray({
+        array: ["go to office", "have lunch with colleagues", "go to museum"],
+        memoizeKey: `${year} ${month} ${day} keypoints`,
+        probability: 1 / 28,
+      }),
+      notes: randomizedArray({
+        array: [
+          {
+            time: "9:00",
+            note: "leave home for office \n leave a bit late + traffic jam",
+          },
+          { time: "10:00", note: "arrive at office" },
+          {
+            time: "12:00",
+            note: "have lunch with colleague at department store \n continue with ice cream",
+          },
+          {
+            time: "15:00",
+            note: "leave office early, went to the museum \n have dinner at museum food court",
+          },
+          { time: "18:00", note: "go home" },
+        ],
+        memoizeKey: `${year} ${month} ${day} notes`,
+        probability: 1 / 28,
+      }),
+    };
   }
 
-  return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <NavBar />
-
-      <ToolBar onTodayClicked={handleTodayClicked} />
-
-      <div className="grow flex flex-row overflow-hidden">
-        <Calendar
-          className="shrink-0 border-r border-border"
-          data={calendarData}
-          onRequestPrevious={handleCalendarRequestPrevious}
-          onRequestNext={handleCalendarRequestNext}
-          onDayClick={() => {}}
-        />
-
-        <Diary
-          className="grow"
-          data={diaryData}
-          onRequestPrevious={handleDiaryRequestPrevious}
-          onRequestNext={handleDiaryRequestNext}
-        />
-      </div>
-    </div>
-  );
-}
-
-function generateCalendarData(year: number, month: number) {
-  const date = new Date(year, month - 1);
-  return { year: date.getFullYear(), month: date.getMonth() + 1 };
-}
-
-const randomMemo = new Map();
-
-function memoizedRandom(key: string) {
-  const value = randomMemo.get(key);
-  if (value != null) return randomMemo.get(key);
-
-  const random = Math.random();
-  randomMemo.set(key, random);
-  return random;
-}
-
-function randomizedArray<T>({
-  array,
-  memoizeKey,
-  probability,
-}: {
-  array: T[];
-  memoizeKey: string;
-  probability: number;
-}) {
-  return array.reduce<T[]>((prev, curr, index) => {
-    return [
-      ...prev,
-      ...(memoizedRandom(`${memoizeKey} ${index}`) < probability ? [curr] : []),
-    ];
-  }, []);
-}
-
-function generateDiaryData(year: number, month: number, day: number) {
-  const date = new Date(year, month - 1, day);
-
   return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate(),
-    keypoints: randomizedArray({
-      array: ["go to office", "have lunch with colleagues", "go to museum"],
-      memoizeKey: `${year} ${month} ${day} keypoints`,
-      probability: 1 / 28,
-    }),
-    notes: randomizedArray({
-      array: [
-        {
-          time: "9:00",
-          note: "leave home for office \n leave a bit late + traffic jam",
-        },
-        { time: "10:00", note: "arrive at office" },
-        {
-          time: "12:00",
-          note: "have lunch with colleague at department store \n continue with ice cream",
-        },
-        {
-          time: "15:00",
-          note: "leave office early, went to the museum \n have dinner at museum food court",
-        },
-        { time: "18:00", note: "go home" },
-      ],
-      memoizeKey: `${year} ${month} ${day} notes`,
-      probability: 1 / 28,
-    }),
+    initialDiaryData,
+    diaryData,
+    setDiaryData,
+    handleDiaryRequestPrevious,
+    handleDiaryRequestNext,
   };
 }

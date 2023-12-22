@@ -2,7 +2,7 @@ import React, { MutableRefObject, useRef } from "react";
 
 import { CalendarDay } from "./CalendarDay";
 import { monthNames } from "../../constants";
-import { isToday } from "../utils";
+import { isToday } from "../../utils";
 
 export function CalendarMonth({
   year,

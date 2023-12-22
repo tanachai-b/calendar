@@ -1,7 +1,7 @@
 import React, { MutableRefObject } from "react";
 
 import { CalendarMonth } from "./CalendarMonth";
-import { isCurrentMonth } from "../utils";
+import { isCurrentMonth } from "../../utils";
 
 export function CalendarYear({
   year,
