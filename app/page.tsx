@@ -106,6 +106,34 @@ function generateCalendarData(year: number, month: number) {
   return { year: date.getFullYear(), month: date.getMonth() + 1 };
 }
 
+const randomMemo = new Map();
+
+function memoizedRandom(key: string) {
+  const value = randomMemo.get(key);
+  if (value != null) return randomMemo.get(key);
+
+  const random = Math.random();
+  randomMemo.set(key, random);
+  return random;
+}
+
+function randomizedArray<T>({
+  array,
+  memoizeKey,
+  probability,
+}: {
+  array: T[];
+  memoizeKey: string;
+  probability: number;
+}) {
+  return array.reduce<T[]>((prev, curr, index) => {
+    return [
+      ...prev,
+      ...(memoizedRandom(`${memoizeKey} ${index}`) < probability ? [curr] : []),
+    ];
+  }, []);
+}
+
 function generateDiaryData(year: number, month: number, day: number) {
   const date = new Date(year, month - 1, day);
 
@@ -113,28 +141,30 @@ function generateDiaryData(year: number, month: number, day: number) {
     year: date.getFullYear(),
     month: date.getMonth() + 1,
     day: date.getDate(),
-    keypoints:
-      Math.random() < 0.15
-        ? ["go to office", "have lunch with colleagues", "go to museum"]
-        : [],
-    notes:
-      Math.random() < 0.15
-        ? [
-            {
-              time: "9:00",
-              note: "leave home for office \n leave a bit late + traffic jam",
-            },
-            { time: "10:00", note: "arrive at office" },
-            {
-              time: "12:00",
-              note: "have lunch with colleague at department store \n continue with ice cream",
-            },
-            {
-              time: "15:00",
-              note: "leave office early, went to the museum \n have dinner at museum food court",
-            },
-            { time: "18:00", note: "go home" },
-          ]
-        : [],
+    keypoints: randomizedArray({
+      array: ["go to office", "have lunch with colleagues", "go to museum"],
+      memoizeKey: `${year} ${month} ${day} keypoints`,
+      probability: 1 / 14,
+    }),
+    notes: randomizedArray({
+      array: [
+        {
+          time: "9:00",
+          note: "leave home for office \n leave a bit late + traffic jam",
+        },
+        { time: "10:00", note: "arrive at office" },
+        {
+          time: "12:00",
+          note: "have lunch with colleague at department store \n continue with ice cream",
+        },
+        {
+          time: "15:00",
+          note: "leave office early, went to the museum \n have dinner at museum food court",
+        },
+        { time: "18:00", note: "go home" },
+      ],
+      memoizeKey: `${year} ${month} ${day} notes`,
+      probability: 1 / 14,
+    }),
   };
 }
