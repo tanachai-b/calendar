@@ -39,7 +39,7 @@ export function DiaryDay({
       </div>
 
       <div />
-      <div className="flex flex-row gap-1">
+      <div className="flex flex-wrap gap-1">
         {keypoints.map((keypoint, index) => (
           <div
             key={index}

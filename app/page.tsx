@@ -72,14 +72,14 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-stretch h-screen">
+    <div className="flex flex-col h-screen overflow-hidden">
       <NavBar />
 
       <ToolBar onTodayClicked={handleTodayClicked} />
 
-      <div className="grow overflow-hidden flex flex-row items-stretch">
+      <div className="grow flex flex-row overflow-hidden">
         <Calendar
-          className="border-r border-border"
+          className="shrink-0 border-r border-border"
           controller={calendarController}
           data={calendarData}
           onRequestPrevious={handleCalendarRequestPrevious}
