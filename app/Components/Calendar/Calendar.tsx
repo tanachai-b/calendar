@@ -89,10 +89,10 @@ export function Calendar({
     setDisableScrollHandler(false);
   }
 
-  function handleMonthClicked(
-    monthRef: React.MutableRefObject<null>,
+  function handleDayClick(
     year: number,
-    month: number
+    month: number,
+    monthRef: React.MutableRefObject<null>
   ) {
     if (!monthRef.current) return;
 
@@ -113,7 +113,9 @@ export function Calendar({
           year={year}
           months={months}
           todayRef={todayRef}
-          onMonthClicked={handleMonthClicked}
+          onDayClick={(month, monthRef) =>
+            handleDayClick(year, month, monthRef)
+          }
         />
       ))}
     </div>

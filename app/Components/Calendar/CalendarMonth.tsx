@@ -8,12 +8,12 @@ export function CalendarMonth({
   year,
   month,
   todayRef,
-  onClick,
+  onDayClick,
 }: {
   year: number;
   month: number;
   todayRef?: MutableRefObject<null>;
-  onClick: (monthRef: MutableRefObject<null>) => void;
+  onDayClick: (monthRef: MutableRefObject<null>) => void;
 }) {
   const monthRef = useRef(null);
 
@@ -21,13 +21,9 @@ export function CalendarMonth({
   const daysInMonth = new Date(year, month, 0).getDate();
 
   return (
-    <div
-      className="group hover:bg-bg_hover cursor-pointer"
-      ref={monthRef}
-      onClick={() => onClick(monthRef)}
-    >
+    <div ref={monthRef}>
       <div className="flex flex-col" ref={todayRef}>
-        <div className="sticky top-[46px] bg-bg group-hover:bg-bg_hover text-center text-base font-light text-text_grey p-2.5 pb-0">
+        <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_grey p-2.5 pb-0">
           {monthNames[month - 1]}
         </div>
 
@@ -42,6 +38,7 @@ export function CalendarMonth({
               day={index + 1}
               isSunday={(index + firstWeekDay) % 7 === 0}
               isToday={isToday(year, month, index + 1)}
+              onClick={() => onDayClick(monthRef)}
             />
           ))}
         </div>
