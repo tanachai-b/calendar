@@ -21,7 +21,7 @@ export function DiaryMonth({
 }) {
   return (
     <div>
-      <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_white p-2.5 pb-0">
+      <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_grey p-2.5 pb-0">
         {monthNames[month - 1]}
       </div>
 

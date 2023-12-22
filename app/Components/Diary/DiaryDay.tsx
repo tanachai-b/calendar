@@ -31,34 +31,42 @@ export function DiaryDay({
               ? "bg-highlight_yellow text-bg font-light"
               : isSunday
               ? "text-text_red"
-              : "text-text_white"
+              : "text-text_grey"
           } `}
         >
           {day}
         </div>
       </div>
       <div
-        className={`flex items-center ${weekday === 0 ? "text-text_red" : ""}`}
+        className={`flex items-center ${
+          weekday === 0 ? "text-text_red" : "text-text_grey"
+        }`}
       >
         {weekdayNames[weekday]}
       </div>
 
-      <div />
-      <div className="flex flex-wrap gap-1">
-        {keypoints.map((keypoint, index) => (
-          <div
-            key={index}
-            className="rounded px-1 bg-highlight_yellow text-bg font-medium"
-          >
-            {keypoint}
+      {keypoints.length > 0 ? (
+        <>
+          <div />
+          <div className="flex flex-wrap gap-1">
+            {keypoints.map((keypoint, index) => (
+              <div
+                key={index}
+                className="rounded px-1 bg-highlight_yellow text-bg font-medium"
+              >
+                {keypoint}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <></>
+      )}
 
       {notes.map((note) => (
         <>
-          <div className="text-right">{note.time}</div>
-          <div className="whitespace-pre-line">{note.note}</div>
+          <div className="text-text_white text-right">{note.time}</div>
+          <div className="text-text_white whitespace-pre-line">{note.note}</div>
         </>
       ))}
     </div>
