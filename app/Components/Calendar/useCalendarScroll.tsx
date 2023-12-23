@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useCalendarScroll(
-  data: {
-    year: number;
-    month: number;
-    days: { day: number; keypointCount: number }[];
-  }[],
+export function useCalendarScroll<T>(
+  data: T,
   onRequestPrevious: () => void,
   onRemovePrevious: () => void,
   onRequestNext: () => void,
@@ -83,7 +79,7 @@ export function useCalendarScroll(
     if (!ref.current) return;
 
     setBlockHandler(true);
-    (ref.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+    (ref.current as HTMLElement).scrollIntoView();
   }
 
   function resetScroll() {

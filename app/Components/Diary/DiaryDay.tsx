@@ -15,7 +15,7 @@ export function DiaryDay({
   isToday: boolean;
   keypoints: string[];
   notes: { time: string; note: string }[];
-  todayRef: MutableRefObject<null>;
+  todayRef?: MutableRefObject<null>;
 }) {
   const isSunday = weekday === 0;
 

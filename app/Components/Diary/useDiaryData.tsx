@@ -5,7 +5,7 @@ import { getToday, getDate, randomizedArray } from "../../utils";
 export function useDiaryData() {
   const { year, month, day } = getToday();
 
-  const initialDiaryData = Array.from({ length: 7 }, (_value, index) =>
+  const initialDiaryData = Array.from({ length: 1 }, (_value, index) =>
     generateDiaryData(year, month, day + index)
   );
 
@@ -13,24 +13,36 @@ export function useDiaryData() {
 
   function handleDiaryRequestPrevious() {
     setDiaryData((diaryData) => {
+      if (diaryData.length === 0) return diaryData;
+
       const first = diaryData[0];
 
-      const previousData = Array.from({ length: 7 }, (_value, index) =>
-        generateDiaryData(first.year, first.month, first.day - 7 + index)
+      const previousData = Array.from({ length: 1 }, (_value, index) =>
+        generateDiaryData(first.year, first.month, first.day - 1 + index)
       );
-      return [...previousData, ...diaryData].slice(0, 28);
+      return [...previousData, ...diaryData];
     });
+  }
+
+  function handleDiaryRemovePrevious() {
+    setDiaryData((diaryData) => diaryData.slice(1));
   }
 
   function handleDiaryRequestNext() {
     setDiaryData((diaryData) => {
+      if (diaryData.length === 0) return diaryData;
+
       const last = diaryData[diaryData.length - 1];
 
-      const nextData = Array.from({ length: 7 }, (_value, index) =>
+      const nextData = Array.from({ length: 1 }, (_value, index) =>
         generateDiaryData(last.year, last.month, last.day + 1 + index)
       );
-      return [...diaryData, ...nextData].slice(-28);
+      return [...diaryData, ...nextData];
     });
+  }
+
+  function handleDiaryRemoveNext() {
+    setDiaryData((diaryData) => diaryData.slice(0, -1));
   }
 
   function generateDiaryData(year: number, month: number, day: number) {
@@ -73,6 +85,8 @@ export function useDiaryData() {
     diaryData,
     setDiaryData,
     handleDiaryRequestPrevious,
+    handleDiaryRemovePrevious,
     handleDiaryRequestNext,
+    handleDiaryRemoveNext,
   };
 }

@@ -1,16 +1,16 @@
 import React, { useMemo, useRef } from "react";
 
 import { DiaryYear } from "./DiaryYear";
-import { useDiaryScroll } from "./useDiaryScroll";
 import { SearchBox } from "../Common/SearchBox";
+import { useCalendarScroll } from "../Calendar/useCalendarScroll";
 
-export function Diary({
-  className,
+export function useDiaryController({
   data,
   onRequestPrevious,
+  onRemovePrevious,
   onRequestNext,
+  onRemoveNext,
 }: {
-  className: string;
   data: {
     year: number;
     month: number;
@@ -19,16 +19,45 @@ export function Diary({
     notes: { time: string; note: string }[];
   }[];
   onRequestPrevious: () => void;
+  onRemovePrevious: () => void;
   onRequestNext: () => void;
+  onRemoveNext: () => void;
 }) {
+  const { scrollRef, scrollTo, resetScroll } = useCalendarScroll(
+    data,
+    onRequestPrevious,
+    onRemovePrevious,
+    onRequestNext,
+    onRemoveNext
+  );
+
   const todayRef = useRef(null);
+
+  function scrollToToday(actionIfNoData: () => void) {
+    if (todayRef.current) {
+      scrollTo(todayRef);
+    } else {
+      actionIfNoData();
+      resetScroll();
+    }
+  }
+
+  return { data, scrollRef, todayRef, scrollTo, scrollToToday };
+}
+
+export function Diary({
+  className,
+  controller,
+}: {
+  className: string;
+  controller: ReturnType<typeof useDiaryController>;
+}) {
+  const { data, scrollRef, todayRef, scrollTo } = controller;
 
   const dataCombinedYear = useMemo(
     () => combineYear(combineMonth(data)),
     [data]
   );
-
-  const { scrollRef } = useDiaryScroll(onRequestPrevious, onRequestNext);
 
   return (
     <div className={`flex flex-col ${className}`}>
@@ -38,10 +67,8 @@ export function Diary({
 
       <div
         ref={scrollRef}
-        className="flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll"
+        className="flex flex-col overflow-y-auto scroll-pt-[80px] hide-scroll"
       >
-        <div className="shrink-0 h-full" />
-
         {dataCombinedYear.map(({ year, months }) => (
           <DiaryYear
             key={year}

@@ -33,7 +33,7 @@ export function DiaryMonth({
           isToday={isToday(year, month, day)}
           keypoints={keypoints}
           notes={notes}
-          todayRef={todayRef}
+          todayRef={isToday(year, month, day) ? todayRef : undefined}
         />
       ))}
     </div>

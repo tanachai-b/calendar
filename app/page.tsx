@@ -7,7 +7,7 @@ import {
   useCalendarController,
 } from "./Components/Calendar/Calendar";
 import { useCalendarData } from "./Components/Calendar/useCalendarData";
-import { Diary } from "./Components/Diary/Diary";
+import { Diary, useDiaryController } from "./Components/Diary/Diary";
 import { useDiaryData } from "./Components/Diary/useDiaryData";
 import { NavBar } from "./Components/NavBar";
 import { ToolBar } from "./Components/ToolBar";
@@ -36,15 +36,25 @@ export default function Home() {
     diaryData,
     setDiaryData,
     handleDiaryRequestPrevious,
+    handleDiaryRemovePrevious,
     handleDiaryRequestNext,
+    handleDiaryRemoveNext,
   } = useDiaryData();
 
-  function handleTodayClicked() {
+  const diaryController = useDiaryController({
+    data: diaryData,
+    onRequestPrevious: handleDiaryRequestPrevious,
+    onRemovePrevious: handleDiaryRemovePrevious,
+    onRequestNext: handleDiaryRequestNext,
+    onRemoveNext: handleDiaryRemoveNext,
+  });
+
+  async function handleTodayClicked() {
     calendarController.scrollToToday(() =>
       setCalendarData(initialCalendarData)
     );
 
-    setDiaryData(initialDiaryData);
+    diaryController.scrollToToday(() => setDiaryData(initialDiaryData));
   }
 
   return (
@@ -62,12 +72,7 @@ export default function Home() {
           }}
         />
 
-        <Diary
-          className="grow"
-          data={diaryData}
-          onRequestPrevious={handleDiaryRequestPrevious}
-          onRequestNext={handleDiaryRequestNext}
-        />
+        <Diary className="grow" controller={diaryController} />
       </div>
     </div>
   );

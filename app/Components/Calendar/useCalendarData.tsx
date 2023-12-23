@@ -12,8 +12,6 @@ export function useCalendarData() {
   const [calendarData, setCalendarData] = useState(initialCalendarData);
 
   function handleCalendarRequestPrevious() {
-    console.log("handleCalendarRequestPrevious");
-
     setCalendarData((calendarData) => {
       if (calendarData.length === 0) return calendarData;
 
@@ -27,14 +25,10 @@ export function useCalendarData() {
   }
 
   function handleCalendarRemovePrevious() {
-    console.log("handleCalendarRemovePrevious");
-
     setCalendarData((calendarData) => calendarData.slice(1));
   }
 
   function handleCalendarRequestNext() {
-    console.log("handleCalendarRequestNext");
-
     setCalendarData((calendarData) => {
       if (calendarData.length === 0) return calendarData;
 
@@ -48,8 +42,6 @@ export function useCalendarData() {
   }
 
   function handleCalendarRemoveNext() {
-    console.log("handleCalendarRemoveNext");
-
     setCalendarData((calendarData) => calendarData.slice(0, -1));
   }
 
