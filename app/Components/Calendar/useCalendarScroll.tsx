@@ -1,3 +1,4 @@
+import { Black_Han_Sans } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 
 export function useCalendarScroll(
@@ -15,12 +16,14 @@ export function useCalendarScroll(
 
   let initialized = false;
 
+  const [blockHandler, setBlockHandler] = useState<boolean>(false);
+
   useEffect(() => {
     if (initialized) return;
     initialized = true;
 
     if (!scrollRef.current) return;
-    (scrollRef.current as HTMLElement).scrollTo({ top: 10 });
+    (scrollRef.current as HTMLElement).scrollTo({ top: 1 });
 
     checkContent();
   }, []);
@@ -30,6 +33,10 @@ export function useCalendarScroll(
   useEffect(() => {
     if (!scrollRef.current) return;
     (scrollRef.current as HTMLElement).addEventListener("scroll", handleScroll);
+    (scrollRef.current as HTMLElement).addEventListener(
+      "scrollend",
+      handleScrollEnd
+    );
 
     return () => {
       if (!scrollRef.current) return;
@@ -37,18 +44,31 @@ export function useCalendarScroll(
         "scroll",
         handleScroll
       );
+      (scrollRef.current as HTMLElement).removeEventListener(
+        "scrollend",
+        handleScrollEnd
+      );
     };
-  }, []);
+  }, [handleScroll, handleScrollEnd]);
 
   function handleScroll() {
+    if (blockHandler) return;
+
     if (!scrollRef.current) return;
     const scroll = scrollRef.current as HTMLElement;
 
-    if (scroll.scrollTop === 0) scroll.scrollTo({ top: 10 });
+    if (scroll.scrollTop === 0) scroll.scrollTo({ top: 1 });
     if (scroll.scrollTop + scroll.clientHeight === scroll.scrollHeight)
-      scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 10 });
+      scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 50 });
 
     checkContent();
+  }
+
+  function handleScrollEnd() {
+    if (blockHandler) {
+      setBlockHandler(false);
+      checkContent();
+    }
   }
 
   function checkContent() {
@@ -67,5 +87,12 @@ export function useCalendarScroll(
     if (contentBottom > scroll.clientHeight) onRemoveNext();
   }
 
-  return { scrollRef };
+  function scrollTo(monthRef: React.MutableRefObject<null>) {
+    if (!monthRef.current) return;
+
+    setBlockHandler(true);
+    (monthRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+  }
+
+  return { scrollRef, scrollTo };
 }

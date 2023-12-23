@@ -28,7 +28,7 @@ export function Calendar({
 
   const dataCombinedYear = useMemo(() => combineYear(data), [data]);
 
-  const { scrollRef } = useCalendarScroll(
+  const { scrollRef, scrollTo } = useCalendarScroll(
     data,
     onRequestPrevious,
     onRemovePrevious,
@@ -42,16 +42,14 @@ export function Calendar({
     day: number,
     monthRef: React.MutableRefObject<null>
   ) {
-    if (!monthRef.current) return;
-
-    (monthRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+    scrollTo(monthRef);
     onDayClick(year, month, day);
   }
 
   return (
     <div
       ref={scrollRef}
-      className={`flex flex-col overflow-y-auto xscroll-pt-[46px] hide-scroll ${className}`}
+      className={`flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
     >
       {dataCombinedYear.map(({ year, months }) => (
         <CalendarYear
