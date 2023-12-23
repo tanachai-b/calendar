@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef } from "react";
+import React from "react";
 
 import { CalendarDay } from "./CalendarDay";
 import { monthNames } from "../../constants";
@@ -8,23 +8,19 @@ export function CalendarMonth({
   year,
   month,
   days,
-  todayRef,
   onDayClick,
 }: {
   year: number;
   month: number;
   days: { day: number; keypointCount: number }[];
-  todayRef?: MutableRefObject<null>;
-  onDayClick: (day: number, monthRef: MutableRefObject<null>) => void;
+  onDayClick: (day: number) => void;
 }) {
-  const monthRef = useRef(null);
-
   const firstWeekDay = getDate(year, month, 1).weekday;
   const daysInMonth = getDate(year, month + 1, 0).day;
 
   return (
-    <div ref={monthRef}>
-      <div className="flex flex-col" ref={todayRef}>
+    <div>
+      <div className="flex flex-col">
         <div className="sticky top-[46px] bg-bg text-center text-base font-light text-text_grey p-2.5 pb-0">
           {monthNames[month - 1]}
         </div>
@@ -43,7 +39,7 @@ export function CalendarMonth({
               }
               isSunday={(index + firstWeekDay) % 7 === 0}
               isToday={isToday(year, month, index + 1)}
-              onClick={() => onDayClick(index + 1, monthRef)}
+              onClick={() => onDayClick(index + 1)}
             />
           ))}
         </div>

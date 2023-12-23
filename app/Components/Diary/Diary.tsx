@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 
 import { DiaryYear } from "./DiaryYear";
 import { SearchBox } from "../Common/SearchBox";
@@ -23,16 +23,13 @@ export function useDiaryController({
   onRequestNext: () => void;
   onRemoveNext: () => void;
 }) {
-  const { scrollRef, scrollTo, resetScroll, setBlockCheckContent } =
-    useCalendarScroll(
-      data,
-      onRequestPrevious,
-      onRemovePrevious,
-      onRequestNext,
-      onRemoveNext
-    );
-
-  const todayRef = useRef(null);
+  const { scrollRef, setBlockCheckContent, resetScroll } = useCalendarScroll(
+    data,
+    onRequestPrevious,
+    onRemovePrevious,
+    onRequestNext,
+    onRemoveNext
+  );
 
   async function setData(setData: () => void) {
     setBlockCheckContent(true);
@@ -47,7 +44,7 @@ export function useDiaryController({
     resetScroll();
   }
 
-  return { data, scrollRef, todayRef, scrollTo, setData };
+  return { scrollRef, data, setData };
 }
 
 export function Diary({
@@ -57,7 +54,7 @@ export function Diary({
   className: string;
   controller: ReturnType<typeof useDiaryController>;
 }) {
-  const { data, scrollRef, todayRef, scrollTo } = controller;
+  const { scrollRef, data } = controller;
 
   const dataCombinedYear = useMemo(
     () => combineYear(combineMonth(data)),
@@ -75,12 +72,7 @@ export function Diary({
         className="grow flex flex-col overflow-y-auto scroll-pt-[80px] hide-scroll"
       >
         {dataCombinedYear.map(({ year, months }) => (
-          <DiaryYear
-            key={year}
-            year={year}
-            months={months}
-            todayRef={todayRef}
-          />
+          <DiaryYear key={year} year={year} months={months} />
         ))}
 
         <div className="shrink-0 h-full" />

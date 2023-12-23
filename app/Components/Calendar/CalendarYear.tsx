@@ -1,22 +1,15 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 
 import { CalendarMonth } from "./CalendarMonth";
-import { isCurrentMonth } from "../../utils";
 
 export function CalendarYear({
   year,
   months,
-  todayRef,
   onDayClick,
 }: {
   year: number;
   months: { month: number; days: { day: number; keypointCount: number }[] }[];
-  todayRef: MutableRefObject<null>;
-  onDayClick: (
-    month: number,
-    day: number,
-    monthRef: MutableRefObject<null>
-  ) => void;
+  onDayClick: (month: number, day: number) => void;
 }) {
   return (
     <div>
@@ -30,8 +23,7 @@ export function CalendarYear({
           year={year}
           month={month}
           days={days}
-          todayRef={isCurrentMonth(year, month) ? todayRef : undefined}
-          onDayClick={(day, monthRef) => onDayClick(month, day, monthRef)}
+          onDayClick={(day) => onDayClick(month, day)}
         />
       ))}
     </div>

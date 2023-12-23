@@ -64,11 +64,6 @@ export function useCalendarScroll<T>(
     if (contentBottom > scroll.clientHeight) onRemoveNext();
   }
 
-  function scrollTo(ref: React.MutableRefObject<null>) {
-    if (!ref.current) return;
-    (ref.current as HTMLElement).scrollIntoView();
-  }
-
   function resetScroll() {
     if (!scrollRef.current) return;
     (scrollRef.current as HTMLElement).scrollTo({ top: 1 });
@@ -76,8 +71,7 @@ export function useCalendarScroll<T>(
 
   return {
     scrollRef,
-    scrollTo,
-    resetScroll,
     setBlockCheckContent,
+    resetScroll,
   };
 }

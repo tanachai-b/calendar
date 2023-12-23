@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 
 import { CalendarYear } from "./CalendarYear";
 import { useCalendarScroll } from "./useCalendarScroll";
@@ -20,16 +20,13 @@ export function useCalendarController({
   onRequestNext: () => void;
   onRemoveNext: () => void;
 }) {
-  const { scrollRef, scrollTo, resetScroll, setBlockCheckContent } =
-    useCalendarScroll(
-      data,
-      onRequestPrevious,
-      onRemovePrevious,
-      onRequestNext,
-      onRemoveNext
-    );
-
-  const todayRef = useRef(null);
+  const { scrollRef, setBlockCheckContent, resetScroll } = useCalendarScroll(
+    data,
+    onRequestPrevious,
+    onRemovePrevious,
+    onRequestNext,
+    onRemoveNext
+  );
 
   async function setData(setData: () => void) {
     setBlockCheckContent(true);
@@ -44,7 +41,7 @@ export function useCalendarController({
     resetScroll();
   }
 
-  return { data, scrollRef, todayRef, scrollTo, setData };
+  return { scrollRef, data, setData };
 }
 
 export function Calendar({
@@ -56,19 +53,9 @@ export function Calendar({
   controller: ReturnType<typeof useCalendarController>;
   onDayClick: (year: number, month: number, day: number) => void;
 }) {
-  const { data, scrollRef, todayRef, scrollTo } = controller;
+  const { scrollRef, data } = controller;
 
   const dataCombinedYear = useMemo(() => combineYear(data), [data]);
-
-  function handleDayClick(
-    year: number,
-    month: number,
-    day: number,
-    monthRef: React.MutableRefObject<null>
-  ) {
-    // scrollTo(monthRef);
-    onDayClick(year, month, day);
-  }
 
   return (
     <div
@@ -80,10 +67,7 @@ export function Calendar({
           key={year}
           year={year}
           months={months}
-          todayRef={todayRef}
-          onDayClick={(month, day, monthRef) =>
-            handleDayClick(year, month, day, monthRef)
-          }
+          onDayClick={(month, day) => onDayClick(year, month, day)}
         />
       ))}
 
