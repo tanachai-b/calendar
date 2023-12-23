@@ -11,7 +11,7 @@ export function useCalendarScroll<T>(
 
   let initialized = false;
 
-  const [blockHandler, setBlockHandler] = useState<boolean>(false);
+  const [blockCheckContent, setBlockCheckContent] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialized) return;
@@ -19,8 +19,6 @@ export function useCalendarScroll<T>(
 
     if (!scrollRef.current) return;
     (scrollRef.current as HTMLElement).scrollTo({ top: 1 });
-
-    checkContent();
   }, []);
 
   useEffect(() => checkContent(), [data]);
@@ -30,14 +28,12 @@ export function useCalendarScroll<T>(
     const scroll = scrollRef.current as HTMLElement;
 
     scroll.addEventListener("scroll", handleScroll);
-    scroll.addEventListener("scrollend", handleScrollEnd);
 
     return () => {
       if (!scrollRef.current) return;
       scroll.removeEventListener("scroll", handleScroll);
-      scroll.removeEventListener("scrollend", handleScrollEnd);
     };
-  }, [handleScroll, handleScrollEnd]);
+  }, [handleScroll]);
 
   function handleScroll() {
     if (!scrollRef.current) return;
@@ -45,21 +41,14 @@ export function useCalendarScroll<T>(
 
     if (scroll.scrollTop === 0) scroll.scrollTo({ top: 1 });
     if (scroll.scrollTop + scroll.clientHeight === scroll.scrollHeight)
-      scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 50 });
-
-    if (blockHandler) return;
+      scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 90 });
 
     checkContent();
   }
 
-  function handleScrollEnd() {
-    if (blockHandler) {
-      setBlockHandler(false);
-      checkContent();
-    }
-  }
-
   function checkContent() {
+    if (blockCheckContent) return;
+
     if (!scrollRef.current) return;
     const scroll = scrollRef.current as HTMLElement;
 
@@ -77,17 +66,18 @@ export function useCalendarScroll<T>(
 
   function scrollTo(ref: React.MutableRefObject<null>) {
     if (!ref.current) return;
-
-    setBlockHandler(true);
     (ref.current as HTMLElement).scrollIntoView();
   }
 
   function resetScroll() {
     if (!scrollRef.current) return;
-
-    setBlockHandler(true);
     (scrollRef.current as HTMLElement).scrollTo({ top: 1 });
   }
 
-  return { scrollRef, scrollTo, resetScroll };
+  return {
+    scrollRef,
+    scrollTo,
+    resetScroll,
+    setBlockCheckContent,
+  };
 }

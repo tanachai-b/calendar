@@ -21,6 +21,7 @@ export default function Home() {
     handleCalendarRemovePrevious,
     handleCalendarRequestNext,
     handleCalendarRemoveNext,
+    generateCalendarData,
   } = useCalendarData();
 
   const calendarController = useCalendarController({
@@ -39,6 +40,7 @@ export default function Home() {
     handleDiaryRemovePrevious,
     handleDiaryRequestNext,
     handleDiaryRemoveNext,
+    generateDiaryData,
   } = useDiaryData();
 
   const diaryController = useDiaryController({
@@ -50,12 +52,24 @@ export default function Home() {
   });
 
   async function handleTodayClicked() {
-    calendarController.scrollToToday(() =>
-      setCalendarData(initialCalendarData)
-    );
+    setCalendarData([]);
+    calendarController.setData(() => setCalendarData(initialCalendarData));
 
-    diaryController.scrollToToday(() => setDiaryData(initialDiaryData));
+    setDiaryData([]);
+    diaryController.setData(() => setDiaryData(initialDiaryData));
   }
+
+  const handleDayClick = (year: number, month: number, day: number): void => {
+    // setCalendarData([]);
+    // calendarController.setData(() =>
+    //   setCalendarData([generateCalendarData(year, month)])
+    // );
+
+    setDiaryData([]);
+    diaryController.setData(() =>
+      setDiaryData([generateDiaryData(year, month, day)])
+    );
+  };
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -67,9 +81,7 @@ export default function Home() {
         <Calendar
           className="shrink-0 border-r border-border"
           controller={calendarController}
-          onDayClick={(year, month, day) => {
-            console.log("onDayClick", year, month, day);
-          }}
+          onDayClick={handleDayClick}
         />
 
         <Diary className="grow" controller={diaryController} />

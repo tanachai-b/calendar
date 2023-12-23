@@ -23,26 +23,31 @@ export function useDiaryController({
   onRequestNext: () => void;
   onRemoveNext: () => void;
 }) {
-  const { scrollRef, scrollTo, resetScroll } = useCalendarScroll(
-    data,
-    onRequestPrevious,
-    onRemovePrevious,
-    onRequestNext,
-    onRemoveNext
-  );
+  const { scrollRef, scrollTo, resetScroll, setBlockCheckContent } =
+    useCalendarScroll(
+      data,
+      onRequestPrevious,
+      onRemovePrevious,
+      onRequestNext,
+      onRemoveNext
+    );
 
   const todayRef = useRef(null);
 
-  function scrollToToday(actionIfNoData: () => void) {
-    if (todayRef.current) {
-      scrollTo(todayRef);
-    } else {
-      actionIfNoData();
-      resetScroll();
-    }
+  async function setData(setData: () => void) {
+    setBlockCheckContent(true);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    setData();
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    setBlockCheckContent(false);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    resetScroll();
   }
 
-  return { data, scrollRef, todayRef, scrollTo, scrollToToday };
+  return { data, scrollRef, todayRef, scrollTo, setData };
 }
 
 export function Diary({
@@ -67,7 +72,7 @@ export function Diary({
 
       <div
         ref={scrollRef}
-        className="flex flex-col overflow-y-auto scroll-pt-[80px] hide-scroll"
+        className="grow flex flex-col overflow-y-auto scroll-pt-[80px] hide-scroll"
       >
         {dataCombinedYear.map(({ year, months }) => (
           <DiaryYear

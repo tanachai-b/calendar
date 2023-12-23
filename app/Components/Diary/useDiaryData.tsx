@@ -5,9 +5,7 @@ import { getToday, getDate, randomizedArray } from "../../utils";
 export function useDiaryData() {
   const { year, month, day } = getToday();
 
-  const initialDiaryData = Array.from({ length: 1 }, (_value, index) =>
-    generateDiaryData(year, month, day + index)
-  );
+  const initialDiaryData = [generateDiaryData(year, month, day)];
 
   const [diaryData, setDiaryData] = useState(initialDiaryData);
 
@@ -16,11 +14,12 @@ export function useDiaryData() {
       if (diaryData.length === 0) return diaryData;
 
       const first = diaryData[0];
-
-      const previousData = Array.from({ length: 1 }, (_value, index) =>
-        generateDiaryData(first.year, first.month, first.day - 1 + index)
+      const previousData = generateDiaryData(
+        first.year,
+        first.month,
+        first.day - 1
       );
-      return [...previousData, ...diaryData];
+      return [previousData, ...diaryData];
     });
   }
 
@@ -33,11 +32,8 @@ export function useDiaryData() {
       if (diaryData.length === 0) return diaryData;
 
       const last = diaryData[diaryData.length - 1];
-
-      const nextData = Array.from({ length: 1 }, (_value, index) =>
-        generateDiaryData(last.year, last.month, last.day + 1 + index)
-      );
-      return [...diaryData, ...nextData];
+      const nextData = generateDiaryData(last.year, last.month, last.day + 1);
+      return [...diaryData, nextData];
     });
   }
 
@@ -88,5 +84,6 @@ export function useDiaryData() {
     handleDiaryRemovePrevious,
     handleDiaryRequestNext,
     handleDiaryRemoveNext,
+    generateDiaryData,
   };
 }

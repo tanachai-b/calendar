@@ -20,26 +20,31 @@ export function useCalendarController({
   onRequestNext: () => void;
   onRemoveNext: () => void;
 }) {
-  const { scrollRef, scrollTo, resetScroll } = useCalendarScroll(
-    data,
-    onRequestPrevious,
-    onRemovePrevious,
-    onRequestNext,
-    onRemoveNext
-  );
+  const { scrollRef, scrollTo, resetScroll, setBlockCheckContent } =
+    useCalendarScroll(
+      data,
+      onRequestPrevious,
+      onRemovePrevious,
+      onRequestNext,
+      onRemoveNext
+    );
 
   const todayRef = useRef(null);
 
-  function scrollToToday(actionIfNoData: () => void) {
-    if (todayRef.current) {
-      scrollTo(todayRef);
-    } else {
-      actionIfNoData();
-      resetScroll();
-    }
+  async function setData(setData: () => void) {
+    setBlockCheckContent(true);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    setData();
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    setBlockCheckContent(false);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    resetScroll();
   }
 
-  return { data, scrollRef, todayRef, scrollTo, scrollToToday };
+  return { data, scrollRef, todayRef, scrollTo, setData };
 }
 
 export function Calendar({
@@ -61,7 +66,7 @@ export function Calendar({
     day: number,
     monthRef: React.MutableRefObject<null>
   ) {
-    scrollTo(monthRef);
+    // scrollTo(monthRef);
     onDayClick(year, month, day);
   }
 
@@ -82,7 +87,7 @@ export function Calendar({
         />
       ))}
 
-      <div className="shrink-0 h-full" />
+      <div className="shrink-0 h-full w-[300px]" />
     </div>
   );
 }

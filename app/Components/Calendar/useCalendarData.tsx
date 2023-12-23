@@ -5,9 +5,7 @@ import { memoizedRandom, getToday, getDate } from "@/app/utils";
 export function useCalendarData() {
   const { year, month } = getToday();
 
-  const initialCalendarData = Array.from({ length: 1 }, (_value, index) =>
-    generateCalendarData(year, month + index)
-  );
+  const initialCalendarData = [generateCalendarData(year, month)];
 
   const [calendarData, setCalendarData] = useState(initialCalendarData);
 
@@ -16,11 +14,8 @@ export function useCalendarData() {
       if (calendarData.length === 0) return calendarData;
 
       const first = calendarData[0];
-
-      const previousData = Array.from({ length: 1 }, (_value, index) =>
-        generateCalendarData(first.year, first.month - 1 + index)
-      );
-      return [...previousData, ...calendarData];
+      const previousData = generateCalendarData(first.year, first.month - 1);
+      return [previousData, ...calendarData];
     });
   }
 
@@ -33,11 +28,8 @@ export function useCalendarData() {
       if (calendarData.length === 0) return calendarData;
 
       const last = calendarData[calendarData.length - 1];
-
-      const nextData = Array.from({ length: 1 }, (_value, index) =>
-        generateCalendarData(last.year, last.month + 1 + index)
-      );
-      return [...calendarData, ...nextData];
+      const nextData = generateCalendarData(last.year, last.month + 1);
+      return [...calendarData, nextData];
     });
   }
 
@@ -79,5 +71,6 @@ export function useCalendarData() {
     handleCalendarRemovePrevious,
     handleCalendarRequestNext,
     handleCalendarRemoveNext,
+    generateCalendarData,
   };
 }
