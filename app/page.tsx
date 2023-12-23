@@ -15,7 +15,9 @@ export default function Home() {
     calendarData,
     setCalendarData,
     handleCalendarRequestPrevious,
+    handleCalendarRemovePrevious,
     handleCalendarRequestNext,
+    handleCalendarRemoveNext,
   } = useCalendarData();
 
   const {
@@ -42,7 +44,9 @@ export default function Home() {
           className="shrink-0 border-r border-border"
           data={calendarData}
           onRequestPrevious={handleCalendarRequestPrevious}
+          onRemovePrevious={handleCalendarRemovePrevious}
           onRequestNext={handleCalendarRequestNext}
+          onRemoveNext={handleCalendarRemoveNext}
           onDayClick={(year, month, day) => {
             console.log("onDayClick", year, month, day);
           }}

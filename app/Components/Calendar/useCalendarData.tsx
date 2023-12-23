@@ -5,32 +5,52 @@ import { memoizedRandom, getToday, getDate } from "@/app/utils";
 export function useCalendarData() {
   const { year, month } = getToday();
 
-  const initialCalendarData = Array.from({ length: 3 }, (_value, index) =>
+  const initialCalendarData = Array.from({ length: 1 }, (_value, index) =>
     generateCalendarData(year, month + index)
   );
 
   const [calendarData, setCalendarData] = useState(initialCalendarData);
 
   function handleCalendarRequestPrevious() {
+    console.log("handleCalendarRequestPrevious");
+
     setCalendarData((calendarData) => {
+      if (calendarData.length === 0) return calendarData;
+
       const first = calendarData[0];
 
-      const previousData = Array.from({ length: 3 }, (_value, index) =>
-        generateCalendarData(first.year, first.month - 3 + index)
+      const previousData = Array.from({ length: 1 }, (_value, index) =>
+        generateCalendarData(first.year, first.month - 1 + index)
       );
-      return [...previousData, ...calendarData].slice(0, 12);
+      return [...previousData, ...calendarData];
     });
   }
 
+  function handleCalendarRemovePrevious() {
+    console.log("handleCalendarRemovePrevious");
+
+    setCalendarData((calendarData) => calendarData.slice(1));
+  }
+
   function handleCalendarRequestNext() {
+    console.log("handleCalendarRequestNext");
+
     setCalendarData((calendarData) => {
+      if (calendarData.length === 0) return calendarData;
+
       const last = calendarData[calendarData.length - 1];
 
-      const nextData = Array.from({ length: 3 }, (_value, index) =>
+      const nextData = Array.from({ length: 1 }, (_value, index) =>
         generateCalendarData(last.year, last.month + 1 + index)
       );
-      return [...calendarData, ...nextData].slice(-12);
+      return [...calendarData, ...nextData];
     });
+  }
+
+  function handleCalendarRemoveNext() {
+    console.log("handleCalendarRemoveNext");
+
+    setCalendarData((calendarData) => calendarData.slice(0, -1));
   }
 
   function generateCalendarData(year: number, month: number) {
@@ -64,6 +84,8 @@ export function useCalendarData() {
     calendarData,
     setCalendarData,
     handleCalendarRequestPrevious,
+    handleCalendarRemovePrevious,
     handleCalendarRequestNext,
+    handleCalendarRemoveNext,
   };
 }

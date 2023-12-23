@@ -1,109 +1,71 @@
 import { useEffect, useRef, useState } from "react";
 
 export function useCalendarScroll(
+  data: {
+    year: number;
+    month: number;
+    days: { day: number; keypointCount: number }[];
+  }[],
   onRequestPrevious: () => void,
-  onRequestNext: () => void
+  onRemovePrevious: () => void,
+  onRequestNext: () => void,
+  onRemoveNext: () => void
 ) {
   const scrollRef = useRef(null);
 
-  let intialized = false;
+  let initialized = false;
 
-  const [disableScrollHandler, setDisableScrollHandler] =
-    useState<boolean>(false);
+  useEffect(() => {
+    if (initialized) return;
+    initialized = true;
+
+    if (!scrollRef.current) return;
+    (scrollRef.current as HTMLElement).scrollTo({ top: 10 });
+
+    checkContent();
+  }, []);
+
+  useEffect(() => checkContent(), [data]);
 
   useEffect(() => {
     if (!scrollRef.current) return;
-    const scrollCurrent = scrollRef.current as HTMLElement;
-    scrollCurrent.addEventListener("scroll", handleScroll);
-    scrollCurrent.addEventListener("scrollend", handleScrollEnd);
-
-    if (!intialized) {
-      intialized = true;
-      (scrollRef.current as HTMLElement).scrollTo({
-        top: (scrollRef.current as HTMLElement).clientHeight,
-        behavior: "instant",
-      });
-    }
+    (scrollRef.current as HTMLElement).addEventListener("scroll", handleScroll);
 
     return () => {
       if (!scrollRef.current) return;
-      const scrollCurrent = scrollRef.current as HTMLElement;
-      scrollCurrent.removeEventListener("scroll", handleScroll);
-      scrollCurrent.removeEventListener("scrollend", handleScrollEnd);
+      (scrollRef.current as HTMLElement).removeEventListener(
+        "scroll",
+        handleScroll
+      );
     };
   }, []);
 
   function handleScroll() {
-    if (disableScrollHandler) return;
     if (!scrollRef.current) return;
+    const scroll = scrollRef.current as HTMLElement;
 
-    const { childCount, scrollTopChild, scrollBottomChild, overscroll } =
-      getScrollInfo(scrollRef.current);
+    if (scroll.scrollTop === 0) scroll.scrollTo({ top: 10 });
+    if (scroll.scrollTop + scroll.clientHeight === scroll.scrollHeight)
+      scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 10 });
 
-    if (scrollTopChild === 0) {
-      (scrollRef.current as HTMLElement).scrollTo({
-        top: (scrollRef.current as HTMLElement).clientHeight,
-        behavior: "instant",
-      });
-    } else if (scrollTopChild === childCount - 1) {
-      (scrollRef.current as HTMLElement).scrollBy({
-        top: -overscroll,
-        behavior: "instant",
-      });
-    }
-
-    if (scrollTopChild <= 2) onRequestPrevious();
-    if (scrollBottomChild >= childCount - 1) onRequestNext();
+    checkContent();
   }
 
-  function handleScrollEnd() {
-    if (disableScrollHandler) {
-      setDisableScrollHandler(false);
+  function checkContent() {
+    if (!scrollRef.current) return;
+    const scroll = scrollRef.current as HTMLElement;
 
-      if (!scrollRef.current) return;
+    const contentBottom =
+      scroll.scrollHeight -
+      scroll.clientHeight -
+      (scroll.scrollTop + scroll.clientHeight);
 
-      (scrollRef.current as HTMLElement).scrollBy({
-        top: 1,
-        behavior: "instant",
-      });
-    }
+    if (scroll.scrollTop < scroll.clientHeight) onRequestPrevious();
+    if (contentBottom < 0) onRequestNext();
+
+    if (scroll.scrollTop > scroll.clientHeight * 2) onRemovePrevious();
+    if (contentBottom > scroll.clientHeight) onRemoveNext();
   }
 
-  function getScrollInfo(target: HTMLElement) {
-    const superChildren = Array.from(target.children);
-
-    function spread(superChildren: Element[]) {
-      return superChildren.reduce<Element[]>(
-        (prev, curr) => [...prev, ...Array.from(curr.children)],
-        []
-      );
-    }
-
-    const children = [
-      superChildren[0],
-      ...spread(superChildren.slice(1, -1)),
-      superChildren[superChildren.length - 1],
-    ];
-    const childHeights = children.map(({ clientHeight }) => clientHeight);
-    const childPositions = childHeights
-      .reduce((prev, curr, index) => [...prev, prev[index] + curr], [0])
-      .slice(0, -1);
-
-    const scrollTop = target.scrollTop + childHeights[1];
-    const scrollBottom = target.scrollTop + target.clientHeight;
-
-    const childCount = children.length;
-    const scrollTopChild = childPositions.findLastIndex(
-      (value) => scrollTop >= value
-    );
-    const scrollBottomChild = childPositions.findLastIndex(
-      (value) => scrollBottom >= value
-    );
-
-    const overscroll = scrollBottom - childPositions[childPositions.length - 1];
-
-    return { childCount, scrollTopChild, scrollBottomChild, overscroll };
-  }
-
-  return { scrollRef, setDisableScrollHandler };
+  return { scrollRef };
 }

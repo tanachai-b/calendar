@@ -7,7 +7,9 @@ export function Calendar({
   className,
   data,
   onRequestPrevious,
+  onRemovePrevious,
   onRequestNext,
+  onRemoveNext,
   onDayClick,
 }: {
   className: string;
@@ -17,16 +19,21 @@ export function Calendar({
     days: { day: number; keypointCount: number }[];
   }[];
   onRequestPrevious: () => void;
+  onRemovePrevious: () => void;
   onRequestNext: () => void;
+  onRemoveNext: () => void;
   onDayClick: (year: number, month: number, day: number) => void;
 }) {
   const todayRef = useRef(null);
 
   const dataCombinedYear = useMemo(() => combineYear(data), [data]);
 
-  const { scrollRef, setDisableScrollHandler } = useCalendarScroll(
+  const { scrollRef } = useCalendarScroll(
+    data,
     onRequestPrevious,
-    onRequestNext
+    onRemovePrevious,
+    onRequestNext,
+    onRemoveNext
   );
 
   function handleDayClick(
@@ -37,19 +44,15 @@ export function Calendar({
   ) {
     if (!monthRef.current) return;
 
-    setDisableScrollHandler(true);
     (monthRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
-
     onDayClick(year, month, day);
   }
 
   return (
     <div
       ref={scrollRef}
-      className={`flex flex-col overflow-y-auto scroll-pt-[46px] hide-scroll ${className}`}
+      className={`flex flex-col overflow-y-auto xscroll-pt-[46px] hide-scroll ${className}`}
     >
-      <div className="shrink-0 h-full" />
-
       {dataCombinedYear.map(({ year, months }) => (
         <CalendarYear
           key={year}
