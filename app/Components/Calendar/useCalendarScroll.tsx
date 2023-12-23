@@ -1,4 +1,3 @@
-import { Black_Han_Sans } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 
 export function useCalendarScroll(
@@ -32,34 +31,27 @@ export function useCalendarScroll(
 
   useEffect(() => {
     if (!scrollRef.current) return;
-    (scrollRef.current as HTMLElement).addEventListener("scroll", handleScroll);
-    (scrollRef.current as HTMLElement).addEventListener(
-      "scrollend",
-      handleScrollEnd
-    );
+    const scroll = scrollRef.current as HTMLElement;
+
+    scroll.addEventListener("scroll", handleScroll);
+    scroll.addEventListener("scrollend", handleScrollEnd);
 
     return () => {
       if (!scrollRef.current) return;
-      (scrollRef.current as HTMLElement).removeEventListener(
-        "scroll",
-        handleScroll
-      );
-      (scrollRef.current as HTMLElement).removeEventListener(
-        "scrollend",
-        handleScrollEnd
-      );
+      scroll.removeEventListener("scroll", handleScroll);
+      scroll.removeEventListener("scrollend", handleScrollEnd);
     };
   }, [handleScroll, handleScrollEnd]);
 
   function handleScroll() {
-    if (blockHandler) return;
-
     if (!scrollRef.current) return;
     const scroll = scrollRef.current as HTMLElement;
 
     if (scroll.scrollTop === 0) scroll.scrollTo({ top: 1 });
     if (scroll.scrollTop + scroll.clientHeight === scroll.scrollHeight)
       scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 50 });
+
+    if (blockHandler) return;
 
     checkContent();
   }
@@ -87,12 +79,19 @@ export function useCalendarScroll(
     if (contentBottom > scroll.clientHeight) onRemoveNext();
   }
 
-  function scrollTo(monthRef: React.MutableRefObject<null>) {
-    if (!monthRef.current) return;
+  function scrollTo(ref: React.MutableRefObject<null>) {
+    if (!ref.current) return;
 
     setBlockHandler(true);
-    (monthRef.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
+    (ref.current as HTMLElement).scrollIntoView({ behavior: "smooth" });
   }
 
-  return { scrollRef, scrollTo };
+  function resetScroll() {
+    if (!scrollRef.current) return;
+
+    setBlockHandler(true);
+    (scrollRef.current as HTMLElement).scrollTo({ top: 1 });
+  }
+
+  return { scrollRef, scrollTo, resetScroll };
 }

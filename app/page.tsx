@@ -2,7 +2,10 @@
 
 import React from "react";
 
-import { Calendar } from "./Components/Calendar/Calendar";
+import {
+  Calendar,
+  useCalendarController,
+} from "./Components/Calendar/Calendar";
 import { useCalendarData } from "./Components/Calendar/useCalendarData";
 import { Diary } from "./Components/Diary/Diary";
 import { useDiaryData } from "./Components/Diary/useDiaryData";
@@ -20,6 +23,14 @@ export default function Home() {
     handleCalendarRemoveNext,
   } = useCalendarData();
 
+  const calendarController = useCalendarController({
+    data: calendarData,
+    onRequestPrevious: handleCalendarRequestPrevious,
+    onRemovePrevious: handleCalendarRemovePrevious,
+    onRequestNext: handleCalendarRequestNext,
+    onRemoveNext: handleCalendarRemoveNext,
+  });
+
   const {
     initialDiaryData,
     diaryData,
@@ -29,7 +40,10 @@ export default function Home() {
   } = useDiaryData();
 
   function handleTodayClicked() {
-    setCalendarData(initialCalendarData);
+    calendarController.scrollToToday(() =>
+      setCalendarData(initialCalendarData)
+    );
+
     setDiaryData(initialDiaryData);
   }
 
@@ -42,11 +56,7 @@ export default function Home() {
       <div className="grow flex flex-row overflow-hidden">
         <Calendar
           className="shrink-0 border-r border-border"
-          data={calendarData}
-          onRequestPrevious={handleCalendarRequestPrevious}
-          onRemovePrevious={handleCalendarRemovePrevious}
-          onRequestNext={handleCalendarRequestNext}
-          onRemoveNext={handleCalendarRemoveNext}
+          controller={calendarController}
           onDayClick={(year, month, day) => {
             console.log("onDayClick", year, month, day);
           }}
