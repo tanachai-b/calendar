@@ -1,8 +1,14 @@
 import { Icon, IconButton } from "./common";
 
-export function ToolBar({ onTodayClicked }: { onTodayClicked: () => void }) {
+export function ToolBar({
+  className,
+  onTodayClicked,
+}: {
+  className?: string;
+  onTodayClicked: () => void;
+}) {
   return (
-    <div className="flex flex-wrap px-2.5 border-b border-highlight_yellow ">
+    <div className={`flex flex-wrap px-2.5 ${className}`}>
       <IconButton
         icon={<Icon className="text-base" icon="today" />}
         text="Today"

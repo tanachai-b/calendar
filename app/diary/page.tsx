@@ -70,7 +70,10 @@ export default function Home() {
     <div className="flex flex-col h-screen overflow-hidden">
       <NavBar />
 
-      <ToolBar onTodayClicked={handleTodayClicked} />
+      <ToolBar
+        className="border-b border-highlight_yellow"
+        onTodayClicked={handleTodayClicked}
+      />
 
       <div className="grow flex flex-row overflow-hidden">
         <Calendar
