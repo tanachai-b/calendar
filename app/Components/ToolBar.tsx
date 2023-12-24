@@ -1,5 +1,4 @@
-import { Icon } from "./common/Icon";
-import { IconButton } from "./common/IconButton";
+import { Icon, IconButton } from "./common";
 
 export function ToolBar({ onTodayClicked }: { onTodayClicked: () => void }) {
   return (

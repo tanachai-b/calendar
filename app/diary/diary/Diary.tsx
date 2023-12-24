@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { SearchBox } from "../../components/common/SearchBox";
-import { useCalendarScroll } from "../Calendar/useCalendarScroll";
+import { SearchBox } from "../../components";
+import { useCalendarScroll } from "../Calendar";
 import { DiaryYear } from "./DiaryYear";
 
 export function useDiaryController({

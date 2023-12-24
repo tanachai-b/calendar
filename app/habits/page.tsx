@@ -1,6 +1,6 @@
 "use client";
 
-import { NavBar } from "../components/NavBar";
+import { NavBar } from "../components";
 
 export default function Habits() {
   const data = `

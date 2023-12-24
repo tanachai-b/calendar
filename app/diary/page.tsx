@@ -1,7 +1,6 @@
 "use client";
 
-import { NavBar } from "../components/NavBar";
-import { ToolBar } from "../components/ToolBar";
+import { NavBar, ToolBar } from "../components";
 import { Calendar, useCalendarController, useCalendarData } from "./Calendar";
 import { Diary, useDiaryController, useDiaryData } from "./Diary";
 
