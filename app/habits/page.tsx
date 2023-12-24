@@ -1,9 +1,15 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { NavBar } from "../components";
 
 export default function Habits() {
-  const data = `
+  const initialData = `
+
+2023-12-22
+
+> went on a trip
+
 2023-12-23
 
 - sleep at home
@@ -26,106 +32,109 @@ export default function Habits() {
 ^ have dinner at museum food court
 
 - 18:00 go home
-  `;
 
-  console.log("data::\n", data.trim());
+`.trim();
 
-  const splitedDays = data
+  const [data, setData] = useState(initialData);
+
+  const output = useMemo(() => processData(data), [data]);
+
+  return (
+    <div className="flex flex-col h-screen">
+      <NavBar className="border-b border-highlight_yellow" />
+
+      <div className="flex flex-row h-full divide-x divide-border overflow-hidden">
+        <div className="flex-1 shrink-0">
+          <textarea
+            className="h-full w-full p-2.5 outline-none text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none"
+            placeholder="input"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+          />
+        </div>
+
+        <div className="flex-1 shrink-0 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_white">
+          {JSON.stringify(output, null, 2)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function processData(data: string) {
+  const splitedDays = splitDays(data);
+
+  const objectDays = splitedDays.map((day) => objectDay(day));
+
+  const splitedParameters = objectDays.map((day) => splitParameters(day));
+
+  const splitedNotes = splitedParameters.map((day) => splitNotes(day));
+
+  return splitedNotes;
+}
+
+function splitDays(data: string) {
+  return data
     .trim()
-    .replace(/^(\d{4}-\d{2}-\d{2})/gm, "[NEW-LINE-29384]$1")
-    .split("[NEW-LINE-29384]")
+    .replace(/^(\d+-\d+-\d+)/gm, "<new_line>$1")
+    .split("<new_line>")
     .slice(1)
     .map((value) => value.trim());
+}
 
-  console.log("splitedDays::\n", splitedDays.toString());
+function objectDay(day: string) {
+  return {
+    date: day.match(/^\d+-\d+-\d+/)?.[0],
+    keypoints: day.replace(/^-.*/ms, "").match(/^>.*/ms)?.[0].trim(),
+    notes: day.match(/^-.*/ms)?.[0].trim(),
+  };
+}
 
-  const processedDays = splitedDays.map((day) =>
-    splitEachNotes(splitKeypointsAndNotes(objectizeDay(day)))
-  );
+function splitParameters({
+  date,
+  keypoints,
+  notes,
+}: {
+  date?: string;
+  keypoints?: string;
+  notes?: string;
+}) {
+  return {
+    year: date?.split("-")[0],
+    month: date?.split("-")[1],
+    day: date?.split("-")[2],
+    keypoints: keypoints
+      ?.split(/^>/gm)
+      .slice(1)
+      .map((v) => v.trim()),
+    notes: notes
+      ?.split(/^-/gm)
+      .slice(1)
+      .map((v) => v.replace(/^\^ */gm, "").trim()),
+  };
+}
 
-  console.log("proc::\n", processedDays);
-
-  function objectizeDay(day: string) {
-    const addedNewLineBeforeKeypoints = day.replace(
-      /(^>)/m,
-      "[NEW-LINE-29384]$1"
-    );
-    const addedNewLineBeforeNotes = addedNewLineBeforeKeypoints.replace(
-      /(^-)/m,
-      "[NEW-LINE-29384]$1"
-    );
-    const splitted: string[] = addedNewLineBeforeNotes
-      .split("[NEW-LINE-29384]")
-      .map((value) => value.trim());
-
-    console.log("day::\n", splitted.toString());
-
-    return {
-      date: splitted[0],
-      keypoints: splitted.find((v) => v.charAt(0) === ">"),
-      notes: splitted.find((v) => v.charAt(0) === "-"),
-    };
-  }
-
-  function splitKeypointsAndNotes({
-    date,
-    keypoints,
-    notes,
-  }: {
-    date: string;
-    keypoints?: string;
-    notes?: string;
-  }) {
-    const dateRegex = /(\d{4})-(\d{2})-(\d{2})/;
-    return {
-      year: date.replace(dateRegex, "$1"),
-      month: date.replace(dateRegex, "$2"),
-      day: date.replace(dateRegex, "$3"),
-      keypoints: keypoints?.split("\n").map((v) => v.replace(/^>/, "").trim()),
-      notes: notes
-        ?.split(/^-/gm)
-        .slice(1)
-        .map((v) => v.replace(/^\^ */gm, "").trim()),
-    };
-  }
-
-  function splitEachNotes({
+function splitNotes({
+  year,
+  month,
+  day,
+  keypoints,
+  notes,
+}: {
+  year?: string;
+  month?: string;
+  day?: string;
+  keypoints?: string[];
+  notes?: string[];
+}) {
+  return {
     year,
     month,
     day,
     keypoints,
-    notes,
-  }: {
-    year: string;
-    month: string;
-    day: string;
-    keypoints?: string[];
-    notes?: string[];
-  }) {
-    return {
-      year,
-      month,
-      day,
-      keypoints,
-      notes: notes?.map((v) => {
-        const vv = v
-          .replace(/^(\d+:\d+)((.|\n)*)/, "$1[NEW-LINE-29384]$2")
-          .trim();
-
-        return {
-          time: vv.replace(/(.*)\[NEW-LINE-29384\]((.|\n)*)/, "$1").trim(),
-          note: vv.replace(/(.*)\[NEW-LINE-29384\]((.|\n)*)/, "$2").trim(),
-        };
-      }),
-    };
-  }
-
-  const xv = "asdf asdov".replace(/(poipo)(asdf asdov)/, "$1");
-  console.log(xv);
-
-  return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <NavBar />
-    </div>
-  );
+    notes: notes?.map((note) => ({
+      time: note.match(/^~?\d+:\d+/)?.[0],
+      note: note.substring(note.match(/^~?\d+:\d+/)?.[0]?.length ?? 0).trim(),
+    })),
+  };
 }
