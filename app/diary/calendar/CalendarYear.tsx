@@ -1,5 +1,3 @@
-import React from "react";
-
 import { CalendarMonth } from "./CalendarMonth";
 
 export function CalendarYear({

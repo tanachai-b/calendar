@@ -1,8 +1,6 @@
-import React from "react";
-
 import { monthNames } from "../../constants";
-import { DiaryDay } from "./DiaryDay";
 import { getWeekday, isToday } from "../../utils";
+import { DiaryDay } from "./DiaryDay";
 
 export function DiaryMonth({
   year,

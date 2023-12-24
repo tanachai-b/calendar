@@ -1,7 +1,7 @@
-import React, { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { IconButton } from "./Common/IconButton";
-import { Icons } from "./Common/Icons";
+import { IconButton } from "./common/IconButton";
+import { Icons } from "./common/Icons";
 
 export function NavBar() {
   const pathname = usePathname();

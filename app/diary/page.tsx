@@ -1,14 +1,9 @@
 "use client";
 
-import {
-  Calendar,
-  useCalendarController,
-} from "../Components/Calendar/Calendar";
-import { useCalendarData } from "../Components/Calendar/useCalendarData";
-import { Diary, useDiaryController } from "../Components/Diary/Diary";
-import { useDiaryData } from "../Components/Diary/useDiaryData";
-import { NavBar } from "../Components/NavBar";
-import { ToolBar } from "../Components/ToolBar";
+import { NavBar } from "../components/NavBar";
+import { ToolBar } from "../components/ToolBar";
+import { Calendar, useCalendarController, useCalendarData } from "./Calendar";
+import { Diary, useDiaryController, useDiaryData } from "./Diary";
 
 export default function Home() {
   const {

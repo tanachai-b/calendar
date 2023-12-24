@@ -1,5 +1,3 @@
-import React from "react";
-
 import { weekdayNames } from "../../constants";
 
 export function DiaryDay({

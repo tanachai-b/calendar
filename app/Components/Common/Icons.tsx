@@ -1,5 +1,3 @@
-import React from "react";
-
 enum Size {
   small = "small",
   large = "large",

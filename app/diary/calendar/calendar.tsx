@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import { CalendarYear } from "./CalendarYear";
 import { useCalendarScroll } from "./useCalendarScroll";

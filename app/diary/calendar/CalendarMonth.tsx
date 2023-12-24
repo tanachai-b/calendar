@@ -1,8 +1,6 @@
-import React from "react";
-
-import { CalendarDay } from "./CalendarDay";
 import { monthNames } from "../../constants";
-import { isToday, getDate } from "../../utils";
+import { getDate, isToday } from "../../utils";
+import { CalendarDay } from "./CalendarDay";
 
 export function CalendarMonth({
   year,

@@ -1,7 +1,5 @@
-import React from "react";
-
-import { IconButton } from "./Common/IconButton";
-import { Icons } from "./Common/Icons";
+import { IconButton } from "./common/IconButton";
+import { Icons } from "./common/Icons";
 
 export function ToolBar({ onTodayClicked }: { onTodayClicked: () => void }) {
   return (

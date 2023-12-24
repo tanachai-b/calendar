@@ -1,4 +1,4 @@
-import React, { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 import { Icons } from "./Icons";
 

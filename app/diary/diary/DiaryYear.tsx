@@ -1,5 +1,3 @@
-import React from "react";
-
 import { DiaryMonth } from "./DiaryMonth";
 
 export function DiaryYear({
