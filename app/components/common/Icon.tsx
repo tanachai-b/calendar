@@ -14,7 +14,7 @@ export function Icon({
       <span
         className={`material-symbols-rounded align-middle !leading-none ${className
           ?.trim()
-          .split(/ +/)
+          .split(/ +/g)
           .map((v) => `!${v}`)
           .join(" ")}`}
       >

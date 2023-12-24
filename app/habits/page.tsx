@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { NavBar } from "../components";
+import { monthNames } from "../constants";
 
 export default function Habits() {
   const initialData = `
@@ -53,8 +54,52 @@ export default function Habits() {
           />
         </div>
 
-        <div className="flex-1 shrink-0 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_white">
+        {/* <div className="flex-1 shrink-0 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_white">
           {JSON.stringify(output, null, 2)}
+        </div> */}
+
+        <div className="flex-1 shrink-0 overflow-y-scroll divide-y divide-border">
+          {output.map((v, index) => (
+            <div className="flex flex-col p-2.5 gap-2.5" key={index}>
+              <div className="flex flex-row gap-2.5">
+                <div>{v.year}</div>
+                <div>
+                  {v.month ? monthNames[parseInt(v.month) - 1] : undefined}
+                </div>
+                <div>{v.day}</div>
+              </div>
+
+              {v.keypoints && v.keypoints.length > 0 ? (
+                <div className="flex flex-wrap gap-1">
+                  {v.keypoints?.map((v, index) => (
+                    <div className="px-1 border border-border" key={index}>
+                      {v}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+
+              {v.notes && v.notes.length > 0 ? (
+                <div
+                  className="grid grid-cols-[min-content_1fr] gap-2.5"
+                  key={index}
+                >
+                  {v.notes?.map((v) => {
+                    return (
+                      <>
+                        <div className="text-right">{v.time}</div>
+                        <div className="whitespace-pre-wrap">{v.note}</div>
+                      </>
+                    );
+                  })}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -76,7 +121,7 @@ function processData(data: string) {
 function splitDays(data: string) {
   return data
     .trim()
-    .replace(/^(\d+-\d+-\d+)/gm, "<new_line>$1")
+    .replace(/^(\d{4}-\d{1,2}-\d{1,2})/gm, "<new_line>$1")
     .split("<new_line>")
     .slice(1)
     .map((value) => value.trim());
@@ -84,7 +129,7 @@ function splitDays(data: string) {
 
 function objectDay(day: string) {
   return {
-    date: day.match(/^\d+-\d+-\d+/)?.[0],
+    date: day.match(/^\d{4}-\d{1,2}-\d{1,2}/)?.[0],
     keypoints: day.replace(/^-.*/ms, "").match(/^>.*/ms)?.[0].trim(),
     notes: day.match(/^-.*/ms)?.[0].trim(),
   };
@@ -133,8 +178,10 @@ function splitNotes({
     day,
     keypoints,
     notes: notes?.map((note) => ({
-      time: note.match(/^~?\d+:\d+/)?.[0],
-      note: note.substring(note.match(/^~?\d+:\d+/)?.[0]?.length ?? 0).trim(),
+      time: note.match(/^~?\d{1,2}:\d{1,2}/)?.[0],
+      note: note
+        .substring(note.match(/^~?\d{1,2}:\d{1,2}/)?.[0]?.length ?? 0)
+        .trim(),
     })),
   };
 }
