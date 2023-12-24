@@ -49,6 +49,7 @@ export default function Home() {
     onRemovePrevious: handleDiaryRemovePrevious,
     onRequestNext: handleDiaryRequestNext,
     onRemoveNext: handleDiaryRemoveNext,
+    onScrollEnd: handleDiaryScrollEnd,
   });
 
   async function handleTodayClicked() {
@@ -59,17 +60,19 @@ export default function Home() {
     diaryController.setData(() => setDiaryData(initialDiaryData));
   }
 
-  const handleDayClick = (year: number, month: number, day: number): void => {
-    // setCalendarData([]);
-    // calendarController.setData(() =>
-    //   setCalendarData([generateCalendarData(year, month)])
-    // );
-
+  function handleDayClick(year: number, month: number, day: number) {
     setDiaryData([]);
     diaryController.setData(() =>
       setDiaryData([generateDiaryData(year, month, day)])
     );
-  };
+  }
+
+  function handleDiaryScrollEnd(year: number, month: number) {
+    setCalendarData([]);
+    calendarController.setData(() =>
+      setCalendarData([generateCalendarData(year, month)])
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">

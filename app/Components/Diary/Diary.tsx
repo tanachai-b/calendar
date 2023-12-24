@@ -10,6 +10,7 @@ export function useDiaryController({
   onRemovePrevious,
   onRequestNext,
   onRemoveNext,
+  onScrollEnd,
 }: {
   data: {
     year: number;
@@ -22,14 +23,21 @@ export function useDiaryController({
   onRemovePrevious: () => void;
   onRequestNext: () => void;
   onRemoveNext: () => void;
+  onScrollEnd: (year: number, month: number) => void;
 }) {
   const { scrollRef, setBlockCheckContent, resetScroll } = useCalendarScroll(
     data,
     onRequestPrevious,
     onRemovePrevious,
     onRequestNext,
-    onRemoveNext
+    onRemoveNext,
+    handleOnScrollEnd
   );
+
+  function handleOnScrollEnd(scrollTop: number) {
+    console.log("handleOnScroll", scrollTop);
+    onScrollEnd(2023, 12);
+  }
 
   async function setData(setData: () => void) {
     setBlockCheckContent(true);

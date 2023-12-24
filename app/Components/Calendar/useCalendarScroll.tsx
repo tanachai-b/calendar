@@ -5,13 +5,15 @@ export function useCalendarScroll<T>(
   onRequestPrevious: () => void,
   onRemovePrevious: () => void,
   onRequestNext: () => void,
-  onRemoveNext: () => void
+  onRemoveNext: () => void,
+  onScrollEnd?: (scrollTop: number) => void
 ) {
   const scrollRef = useRef(null);
 
   let initialized = false;
 
   const [blockCheckContent, setBlockCheckContent] = useState<boolean>(false);
+  const [isSystemScroll, setIsSystemScroll] = useState<boolean>(false);
 
   useEffect(() => {
     if (initialized) return;
@@ -28,10 +30,12 @@ export function useCalendarScroll<T>(
     const scroll = scrollRef.current as HTMLElement;
 
     scroll.addEventListener("scroll", handleScroll);
+    scroll.addEventListener("scrollend", handleScrollEnd);
 
     return () => {
       if (!scrollRef.current) return;
       scroll.removeEventListener("scroll", handleScroll);
+      scroll.removeEventListener("scrollend", handleScrollEnd);
     };
   }, [handleScroll]);
 
@@ -44,6 +48,15 @@ export function useCalendarScroll<T>(
       scroll.scrollTo({ top: scroll.scrollHeight - scroll.clientHeight - 90 });
 
     checkContent();
+  }
+
+  function handleScrollEnd() {
+    if (isSystemScroll) return;
+
+    if (!scrollRef.current) return;
+    const scroll = scrollRef.current as HTMLElement;
+
+    onScrollEnd?.(scroll.scrollTop);
   }
 
   function checkContent() {
@@ -64,8 +77,13 @@ export function useCalendarScroll<T>(
     if (contentBottom > scroll.clientHeight) onRemoveNext();
   }
 
-  function resetScroll() {
+  async function resetScroll() {
     if (!scrollRef.current) return;
+
+    setIsSystemScroll(true);
+    setTimeout(() => setIsSystemScroll(false), 20);
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
     (scrollRef.current as HTMLElement).scrollTo({ top: 1 });
   }
 
