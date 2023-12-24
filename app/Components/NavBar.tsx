@@ -1,7 +1,7 @@
 import { usePathname, useRouter } from "next/navigation";
 
+import { Icon } from "./common/Icon";
 import { IconButton } from "./common/IconButton";
-import { Icons } from "./common/Icons";
 
 export function NavBar() {
   const pathname = usePathname();
@@ -10,14 +10,14 @@ export function NavBar() {
   return (
     <nav className="flex flex-wrap px-2.5">
       <IconButton
-        icon={Icons.diary_large}
+        icon={<Icon className="text-xl" icon="partly_cloudy_day" />}
         text="Diary"
         active={pathname === "/diary"}
         onClick={() => router.push("/diary")}
       />
 
       <IconButton
-        icon={Icons.habits_large}
+        icon={<Icon className="text-xl" icon="directions_bike" />}
         text="Habits"
         active={pathname === "/habits"}
         onClick={() => router.push("/habits")}
@@ -25,7 +25,10 @@ export function NavBar() {
 
       <div className="grow" />
 
-      <IconButton icon={Icons.settings_large} text="Settings" />
+      <IconButton
+        icon={<Icon className="text-xl" icon="settings" />}
+        text="Settings"
+      />
     </nav>
   );
 }

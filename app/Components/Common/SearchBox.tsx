@@ -1,6 +1,6 @@
 import { FormEvent, useMemo, useState } from "react";
 
-import { Icons } from "./Icons";
+import { Icon } from "./Icon";
 
 export function SearchBox({
   onChange,
@@ -59,7 +59,9 @@ export function SearchBox({
         />
 
         <div className="flex flex-row w-full pointer-events-none z-50">
-          <div className="p-2.5">{Icons.search_large}</div>
+          <div className="p-2.5">
+            <Icon className="text-xl" icon="search" />
+          </div>
 
           <div className="grow" />
 
@@ -68,7 +70,7 @@ export function SearchBox({
               className="p-2.5 pointer-events-auto cursor-pointer hover:text-text_white active:text-highlight_yellow"
               onClick={handleSubmitButtonClick}
             >
-              {Icons.submit_large}
+              <Icon className="text-xl" icon="arrow_forward" />
             </div>
           ) : (
             <></>
@@ -79,7 +81,7 @@ export function SearchBox({
               className="p-2.5 pointer-events-auto cursor-pointer hover:text-text_white active:text-highlight_yellow"
               onClick={handleClearButtonClick}
             >
-              {Icons.clear_large}
+              <Icon className="text-xl" icon="close" />
             </div>
           ) : (
             <></>
