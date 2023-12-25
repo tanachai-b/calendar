@@ -22,6 +22,13 @@ export function NavBar({ className }: { className?: string }) {
         onClick={() => router.push("/habits")}
       />
 
+      <IconButton
+        icon={<Icon className="text-xl" icon="directions_bike" />}
+        text="Sticky"
+        active={pathname === "/sticky"}
+        onClick={() => router.push("/sticky")}
+      />
+
       <div className="grow" />
 
       <IconButton
