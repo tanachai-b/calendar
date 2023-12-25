@@ -11,6 +11,40 @@ export default function Habits() {
 
   const splitedDays = useMemo(() => splitDays(data), [data]);
   const output = useMemo(() => processData(data), [data]);
+  const outputToText = useMemo(() => toText(output), [output]);
+
+  function toText(
+    input: {
+      year?: string;
+      month?: string;
+      day?: string;
+      keypoints?: string[];
+      notes?: { time?: string; note?: string }[];
+    }[]
+  ) {
+    const joinedSubParameters = input.map(
+      ({ year, month, day, keypoints, notes }) => ({
+        year,
+        month,
+        day,
+        keypoints: keypoints?.map((v) => `> ${v}`).join("\n") ?? "",
+        notes:
+          notes
+            ?.map(({ time, note }) => `- ${`${time ?? ""} ${note}`.trim()}`)
+            .join("\n\n") ?? "",
+      })
+    );
+
+    const joinedParameters = joinedSubParameters.map(
+      ({ year, month, day, keypoints, notes }) => {
+        return `${year}-${month}-${day}${keypoints ? `\n\n${keypoints}` : ""}${
+          notes ? `\n\n${notes}` : ""
+        }\n`;
+      }
+    );
+
+    return joinedParameters.join("\n");
+  }
 
   const textareaRefs: RefObject<HTMLTextAreaElement>[] = useMemo(
     () => splitedDays.map(() => createRef()),
@@ -91,6 +125,10 @@ export default function Habits() {
           {JSON.stringify(output, null, 2)}
         </div> */}
 
+        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
+          {outputToText}
+        </div> */}
+
         {/* <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll divide-y divide-border">
           {output.map((day, index) => (
             <BeautifiedDay
@@ -104,7 +142,12 @@ export default function Habits() {
           ))}
         </div> */}
 
-        <div className="flex-1 basis-2/3 flex flex-col divide-y divide-border overflow-y-auto overflow-x-hidden">
+        <div
+          className="flex-1 basis-2/3 flex flex-col divide-y divide-border overflow-y-auto overflow-x-hidden"
+          onBlur={(e) => {
+            if (e.relatedTarget === null) setData(outputToText);
+          }}
+        >
           {splitedDays.map((day, index) => (
             <div className="flex flex-row divide-x divide-border" key={index}>
               <div className="flex-1">
