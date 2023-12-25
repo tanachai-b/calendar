@@ -3,9 +3,15 @@
 import { RefObject, createRef, useEffect, useMemo, useState } from "react";
 import { NavBar } from "../components";
 import { BeautifiedDay } from "./BeautifiedDay";
-import { processData, splitDays } from "./dataProcessingUtils";
+import {
+  isDayGotMergedToPrevious,
+  isDayGotSplitted,
+  setCursorOnNewTextarea,
+  setCursorOnPrevTextarea,
+} from "./cursorCalculationUtils";
 import { initialData } from "./initialData";
-import { toText } from "./toTextUtils";
+import { toText } from "./objectToTextUtils";
+import { processData, splitDays } from "./textToObjectUtils";
 
 export default function Habits() {
   const [data, setData] = useState(initialData);
@@ -30,7 +36,7 @@ export default function Habits() {
     textarea.setSelectionRange(cursor.selection, cursor.selection);
   }, [cursor]);
 
-  async function handleDayChanged(value: string, index: number) {
+  function handleDayChanged(value: string, index: number) {
     const updatedDays = splittedDays.map((v, i) => (i === index ? value : v));
 
     setData(updatedDays.join("\n"));
@@ -39,62 +45,12 @@ export default function Habits() {
       Math.max(index - 1, 0),
       Math.min(index + 2, updatedDays.length)
     );
-    const comparer = splitDays(baseline.join("\n"));
+    const resplittedDays = splitDays(baseline.join("\n"));
 
-    if (isDayGotMergedToPrevious(baseline, comparer)) {
+    if (isDayGotMergedToPrevious(baseline, resplittedDays)) {
       setCursorOnPrevTextarea(textareaRefs, index, setCursor);
-    } else if (isDayGotSplitted(baseline, comparer)) {
+    } else if (isDayGotSplitted(baseline, resplittedDays)) {
       setCursorOnNewTextarea(textareaRefs, index, setCursor);
-    }
-
-    function isDayGotMergedToPrevious(baseline: string[], comparer: string[]) {
-      return (
-        (baseline.length === 3 && comparer.length === 2) ||
-        (baseline.length === 2 && comparer.length === 1)
-      );
-    }
-
-    function isDayGotSplitted(baseline: string[], comparer: string[]) {
-      return (
-        (baseline.length === 3 && comparer.length === 4) ||
-        (baseline.length === 2 && comparer.length === 3) ||
-        (baseline.length === 1 && comparer.length === 2)
-      );
-    }
-
-    function setCursorOnPrevTextarea(
-      textareaRefs: RefObject<HTMLTextAreaElement>[],
-      index: number,
-      setCursor: (props: { index: number; selection: number }) => void
-    ) {
-      if (textareaRefs[index - 1].current && textareaRefs[index].current) {
-        const prevTextarea = textareaRefs[index - 1]
-          .current as HTMLTextAreaElement;
-        const currTextarea = textareaRefs[index].current as HTMLTextAreaElement;
-
-        const newSelection =
-          prevTextarea.textLength + currTextarea.selectionStart + 1;
-
-        setCursor({ index: index - 1, selection: newSelection });
-      }
-    }
-
-    async function setCursorOnNewTextarea(
-      textareaRefs: RefObject<HTMLTextAreaElement>[],
-      index: number,
-      setCursor: (props: { index: number; selection: number }) => void
-    ) {
-      if (textareaRefs[index].current) {
-        const currTextarea = textareaRefs[index].current as HTMLTextAreaElement;
-
-        const oldSelection = currTextarea.selectionStart;
-
-        await new Promise((resolve) => setTimeout(resolve, 10));
-
-        const newSelection = oldSelection - currTextarea.textLength - 1;
-
-        setCursor({ index: index + 1, selection: newSelection });
-      }
     }
   }
 
