@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { monthNames } from "../constants";
 
 export function BeautifiedDay({
@@ -35,12 +37,12 @@ export function BeautifiedDay({
 
       {notes && notes.length > 0 ? (
         <div className="grid grid-cols-[min-content_1fr] gap-2.5">
-          {notes?.map((v) => {
+          {notes?.map((v, index) => {
             return (
-              <>
+              <Fragment key={`${index}`}>
                 <div className="text-right">{v.time}</div>
                 <div className="whitespace-pre-wrap">{v.note}</div>
-              </>
+              </Fragment>
             );
           })}
         </div>
