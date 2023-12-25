@@ -1,6 +1,14 @@
 "use client";
 
-import { RefObject, createRef, useEffect, useMemo, useState } from "react";
+import {
+  FocusEvent,
+  RefObject,
+  createRef,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import { NavBar } from "../components";
 import { BeautifiedDay } from "./BeautifiedDay";
 import {
@@ -9,12 +17,12 @@ import {
   setCursorOnNewTextarea,
   setCursorOnPrevTextarea,
 } from "./cursorCalculationUtils";
-import { initialData } from "./initialData";
+import { initialInput } from "./initialInput";
 import { objectsToText } from "./objectsToTextUtils";
 import { splitDays, textToObjects } from "./textToObjectsUtils";
 
 export default function Habits() {
-  const [inputText, setInputText] = useState(initialData);
+  const [inputText, setInputText] = useState(initialInput);
 
   const dayObjects = useMemo(() => textToObjects(inputText), [inputText]);
   const objectsBackToText = useMemo(
@@ -32,7 +40,7 @@ export default function Habits() {
 
   useEffect(() => {
     if (!cursor) return;
-    if (!textareaRefs[cursor?.index].current) return;
+    if (!textareaRefs[cursor?.index]?.current) return;
 
     const textarea = textareaRefs[cursor?.index].current as HTMLTextAreaElement;
     textarea.focus();
@@ -54,6 +62,12 @@ export default function Habits() {
       setCursorOnPrevTextarea(textareaRefs, index, setCursor);
     } else if (isDayGotSplitted(baseline, resplittedDays)) {
       setCursorOnNewTextarea(textareaRefs, index, setCursor);
+    }
+  }
+
+  function handleDayTextBlurred(e: FocusEvent) {
+    if ((e as FocusEvent).relatedTarget === null) {
+      setInputText(objectsBackToText);
     }
   }
 
@@ -94,9 +108,7 @@ export default function Habits() {
 
         <div
           className="flex-1 basis-2/3 flex flex-col divide-y divide-border overflow-y-auto overflow-x-hidden"
-          onBlur={(e) => {
-            if (e.relatedTarget === null) setInputText(objectsBackToText);
-          }}
+          onBlur={handleDayTextBlurred}
         >
           {splittedDays.map((day, index) => (
             <div className="flex flex-row divide-x divide-border" key={index}>

@@ -1,4 +1,4 @@
-export const initialData = `
+export const initialInput = `
 
 2023-12-22
 
