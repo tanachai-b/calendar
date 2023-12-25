@@ -10,67 +10,90 @@ import { toText } from "./toTextUtils";
 export default function Habits() {
   const [data, setData] = useState(initialData);
 
-  const splitedDays = useMemo(() => splitDays(data), [data]);
+  const splittedDays = useMemo(() => splitDays(data), [data]);
   const output = useMemo(() => processData(data), [data]);
   const outputToText = useMemo(() => toText(output), [output]);
 
   const textareaRefs: RefObject<HTMLTextAreaElement>[] = useMemo(
-    () => splitedDays.map(() => createRef()),
-    [splitedDays]
+    () => splittedDays.map(() => createRef()),
+    [splittedDays]
   );
 
-  const [focus, setFocus] = useState<{ index: number; selection: number }>();
+  const [cursor, setCursor] = useState<{ index: number; selection: number }>();
 
   useEffect(() => {
-    if (!focus) return;
-    if (!textareaRefs[focus?.index].current) return;
+    if (!cursor) return;
+    if (!textareaRefs[cursor?.index].current) return;
 
-    const textarea = textareaRefs[focus?.index].current as HTMLTextAreaElement;
+    const textarea = textareaRefs[cursor?.index].current as HTMLTextAreaElement;
     textarea.focus();
-    textarea.setSelectionRange(focus.selection, focus.selection);
-  }, [focus]);
+    textarea.setSelectionRange(cursor.selection, cursor.selection);
+  }, [cursor]);
 
   async function handleDayChanged(value: string, index: number) {
-    const result = [...splitedDays];
-    result[index] = value;
+    const updatedDays = splittedDays.map((v, i) => (i === index ? value : v));
 
-    const unformattedData = result.slice(
+    setData(updatedDays.join("\n"));
+
+    const baseline = updatedDays.slice(
       Math.max(index - 1, 0),
-      Math.min(index + 2, result.length)
+      Math.min(index + 2, updatedDays.length)
     );
-    const formattedData = splitDays(unformattedData.join("\n"));
+    const comparer = splitDays(baseline.join("\n"));
 
-    setData(result.join("\n"));
+    if (isDayGotMergedToPrevious(baseline, comparer)) {
+      setCursorOnPrevTextarea(textareaRefs, index, setCursor);
+    } else if (isDayGotSplitted(baseline, comparer)) {
+      setCursorOnNewTextarea(textareaRefs, index, setCursor);
+    }
 
-    if (
-      (unformattedData.length === 3 && formattedData.length === 2) ||
-      (unformattedData.length === 2 && formattedData.length === 1)
+    function isDayGotMergedToPrevious(baseline: string[], comparer: string[]) {
+      return (
+        (baseline.length === 3 && comparer.length === 2) ||
+        (baseline.length === 2 && comparer.length === 1)
+      );
+    }
+
+    function isDayGotSplitted(baseline: string[], comparer: string[]) {
+      return (
+        (baseline.length === 3 && comparer.length === 4) ||
+        (baseline.length === 2 && comparer.length === 3) ||
+        (baseline.length === 1 && comparer.length === 2)
+      );
+    }
+
+    function setCursorOnPrevTextarea(
+      textareaRefs: RefObject<HTMLTextAreaElement>[],
+      index: number,
+      setCursor: (props: { index: number; selection: number }) => void
     ) {
       if (textareaRefs[index - 1].current && textareaRefs[index].current) {
-        const lastTextarea = textareaRefs[index - 1]
+        const prevTextarea = textareaRefs[index - 1]
           .current as HTMLTextAreaElement;
-        const thisTextarea = textareaRefs[index].current as HTMLTextAreaElement;
+        const currTextarea = textareaRefs[index].current as HTMLTextAreaElement;
 
         const newSelection =
-          lastTextarea.textLength + thisTextarea.selectionStart + 1;
+          prevTextarea.textLength + currTextarea.selectionStart + 1;
 
-        setFocus({ index: index - 1, selection: newSelection });
+        setCursor({ index: index - 1, selection: newSelection });
       }
-    } else if (
-      (unformattedData.length === 3 && formattedData.length === 4) ||
-      (unformattedData.length === 2 && formattedData.length === 3) ||
-      (unformattedData.length === 1 && formattedData.length === 2)
+    }
+
+    async function setCursorOnNewTextarea(
+      textareaRefs: RefObject<HTMLTextAreaElement>[],
+      index: number,
+      setCursor: (props: { index: number; selection: number }) => void
     ) {
       if (textareaRefs[index].current) {
-        const thisTextarea = textareaRefs[index].current as HTMLTextAreaElement;
+        const currTextarea = textareaRefs[index].current as HTMLTextAreaElement;
 
-        const oldSelection = thisTextarea.selectionStart;
+        const oldSelection = currTextarea.selectionStart;
 
         await new Promise((resolve) => setTimeout(resolve, 10));
 
-        const newSelection = oldSelection - thisTextarea.textLength - 1;
+        const newSelection = oldSelection - currTextarea.textLength - 1;
 
-        setFocus({ index: index + 1, selection: newSelection });
+        setCursor({ index: index + 1, selection: newSelection });
       }
     }
   }
@@ -116,7 +139,7 @@ export default function Habits() {
             if (e.relatedTarget === null) setData(outputToText);
           }}
         >
-          {splitedDays.map((day, index) => (
+          {splittedDays.map((day, index) => (
             <div className="flex flex-row divide-x divide-border" key={index}>
               <div className="flex-1">
                 <BeautifiedDay
