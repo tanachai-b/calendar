@@ -18,12 +18,13 @@ export function randomizedArray<T>({
   memoizeKey: string;
   probability: number;
 }) {
-  return array.reduce<T[]>((prev, curr, index) => {
-    return [
+  return array.reduce<T[]>(
+    (prev, curr, index) => [
       ...prev,
       ...(memoizedRandom(`${memoizeKey} ${index}`) < probability ? [curr] : []),
-    ];
-  }, []);
+    ],
+    []
+  );
 }
 
 export function isToday(year: number, month: number, day: number) {

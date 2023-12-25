@@ -10,16 +10,19 @@ import {
   setCursorOnPrevTextarea,
 } from "./cursorCalculationUtils";
 import { initialData } from "./initialData";
-import { toText } from "./objectToTextUtils";
-import { processData, splitDays } from "./textToObjectUtils";
+import { objectsToText } from "./objectsToTextUtils";
+import { splitDays, textToObjects } from "./textToObjectsUtils";
 
 export default function Habits() {
-  const [data, setData] = useState(initialData);
+  const [inputText, setInputText] = useState(initialData);
 
-  const splittedDays = useMemo(() => splitDays(data), [data]);
-  const output = useMemo(() => processData(data), [data]);
-  const outputToText = useMemo(() => toText(output), [output]);
+  const dayObjects = useMemo(() => textToObjects(inputText), [inputText]);
+  const objectsBackToText = useMemo(
+    () => objectsToText(dayObjects),
+    [dayObjects]
+  );
 
+  const splittedDays = useMemo(() => splitDays(inputText), [inputText]);
   const textareaRefs: RefObject<HTMLTextAreaElement>[] = useMemo(
     () => splittedDays.map(() => createRef()),
     [splittedDays]
@@ -36,10 +39,10 @@ export default function Habits() {
     textarea.setSelectionRange(cursor.selection, cursor.selection);
   }, [cursor]);
 
-  function handleDayChanged(value: string, index: number) {
+  function handleDayTextChanged(value: string, index: number) {
     const updatedDays = splittedDays.map((v, i) => (i === index ? value : v));
 
-    setData(updatedDays.join("\n"));
+    setInputText(updatedDays.join("\n"));
 
     const baseline = updatedDays.slice(
       Math.max(index - 1, 0),
@@ -63,8 +66,8 @@ export default function Habits() {
           <textarea
             className="h-full w-full p-2.5 outline-none text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none font-mono"
             placeholder="input"
-            value={data}
-            onChange={(e) => setData(e.target.value)}
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
           />
         </div>
 
@@ -92,18 +95,18 @@ export default function Habits() {
         <div
           className="flex-1 basis-2/3 flex flex-col divide-y divide-border overflow-y-auto overflow-x-hidden"
           onBlur={(e) => {
-            if (e.relatedTarget === null) setData(outputToText);
+            if (e.relatedTarget === null) setInputText(objectsBackToText);
           }}
         >
           {splittedDays.map((day, index) => (
             <div className="flex flex-row divide-x divide-border" key={index}>
               <div className="flex-1">
                 <BeautifiedDay
-                  year={output[index].year}
-                  month={output[index].month}
-                  day={output[index].day}
-                  keypoints={output[index].keypoints}
-                  notes={output[index].notes}
+                  year={dayObjects[index].year}
+                  month={dayObjects[index].month}
+                  day={dayObjects[index].day}
+                  keypoints={dayObjects[index].keypoints}
+                  notes={dayObjects[index].notes}
                 />
               </div>
 
@@ -113,7 +116,7 @@ export default function Habits() {
                   className="peer absolute h-full w-full p-2.5 outline-none text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none overflow-hidden font-mono"
                   placeholder="input"
                   value={day}
-                  onChange={(e) => handleDayChanged(e.target.value, index)}
+                  onChange={(e) => handleDayTextChanged(e.target.value, index)}
                 />
 
                 <div className="flex-1 p-2.5 whitespace-pre-wrap invisible hxidden peer-focus:block">

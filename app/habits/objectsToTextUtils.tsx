@@ -1,4 +1,4 @@
-export function toText(
+export function objectsToText(
   input: {
     year?: string;
     month?: string;
@@ -64,9 +64,10 @@ function joinParameters(
     notes?: string;
   }[]
 ) {
-  return joinedSubParameters.map(({ year, month, day, keypoints, notes }) => {
-    return `${year}-${month}-${day}${keypoints ? `\n\n${keypoints}` : ""}${
-      notes ? `\n\n${notes}` : ""
-    }\n`;
-  });
+  return joinedSubParameters.map(
+    ({ year, month, day, keypoints, notes }) =>
+      `${year}-${month}-${day}${keypoints ? `\n\n${keypoints}` : ""}${
+        notes ? `\n\n${notes}` : ""
+      }\n`
+  );
 }

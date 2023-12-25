@@ -1,9 +1,9 @@
-export function processData(data: string) {
-  const splitedDays = splitDays(data);
-  const objectDays = splitedDays.map((day) => objectDay(day));
-  const splitedParameters = objectDays.map((day) => splitParameters(day));
-  const splitedNotes = splitedParameters.map((day) => splitNotes(day));
-  return splitedNotes;
+export function textToObjects(text: string) {
+  const splittedDays = splitDays(text);
+  const objectifiedDays = splittedDays.map((day) => objectifyDay(day));
+  const splittedParameters = objectifiedDays.map((day) => splitParameters(day));
+  const splittedNotes = splittedParameters.map((day) => splitNotes(day));
+  return splittedNotes;
 }
 
 export function splitDays(data: string) {
@@ -12,7 +12,7 @@ export function splitDays(data: string) {
     .split("<new_line>");
 }
 
-function objectDay(day: string) {
+function objectifyDay(day: string) {
   return {
     date: day.match(/^\d{4}-\d{1,2}-\d{1,2}/)?.[0],
     keypoints: day.replace(/^-.*/ms, "").match(/^>.*/ms)?.[0].trim(),
