@@ -107,12 +107,27 @@ export default function Habits() {
         </div> */}
 
         <div
-          className="flex-1 basis-2/3 flex flex-col divide-y divide-border overflow-y-auto overflow-x-hidden"
+          className="flex-1 basis-2/3 flex flex-col xdivide-y divide-border overflow-y-auto overflow-x-hidden"
           onBlur={handleDayTextBlurred}
         >
           {splittedDays.map((day, index) => (
             <div className="flex flex-row divide-x divide-border" key={index}>
-              <div className="flex-1">
+              <div className="flex-1 relative">
+                <textarea
+                  ref={textareaRefs[index]}
+                  className="peer absolute h-full w-full p-2.5 outline-none text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none overflow-hidden font-mono border-b border-border"
+                  placeholder="input"
+                  value={day}
+                  onChange={(e) => handleDayTextChanged(e.target.value, index)}
+                />
+
+                <div className="flex-1 p-2.5 whitespace-pre-wrap invisible xhidden peer-focus:block">
+                  {day}
+                  {"\n"}
+                </div>
+              </div>
+
+              <div className="flex-1 xborder-b border-border">
                 <BeautifiedDay
                   year={dayObjects[index].year}
                   month={dayObjects[index].month}
@@ -120,21 +135,6 @@ export default function Habits() {
                   keypoints={dayObjects[index].keypoints}
                   notes={dayObjects[index].notes}
                 />
-              </div>
-
-              <div className="flex-1 relative">
-                <textarea
-                  ref={textareaRefs[index]}
-                  className="peer absolute h-full w-full p-2.5 outline-none text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none overflow-hidden font-mono"
-                  placeholder="input"
-                  value={day}
-                  onChange={(e) => handleDayTextChanged(e.target.value, index)}
-                />
-
-                <div className="flex-1 p-2.5 whitespace-pre-wrap invisible hxidden peer-focus:block">
-                  {day}
-                  {"\n"}
-                </div>
               </div>
             </div>
           ))}

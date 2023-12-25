@@ -3,12 +3,14 @@ import { Fragment } from "react";
 import { monthNames } from "../constants";
 
 export function BeautifiedDay({
+  className,
   year,
   month,
   day,
   keypoints,
   notes,
 }: {
+  className?: string;
   year?: string;
   month?: string;
   day?: string;
@@ -16,7 +18,7 @@ export function BeautifiedDay({
   notes?: { time?: string; note?: string }[];
 }) {
   return (
-    <div className="flex flex-col p-2.5 gap-2.5">
+    <div className={`flex flex-col p-2.5 gap-2.5 ${className}`}>
       <div>
         <span>{year} </span>
         <span>{month ? monthNames[parseInt(month) - 1] : undefined} </span>
