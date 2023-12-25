@@ -22,6 +22,9 @@ const config: Config = {
         text_red: "#ff0000",
         highlight_yellow: "#ffc000",
       },
+      fontFamily: {
+        default: ["__Inter_e66fe9", "__Noto_Sans_Thai_e8ac70"],
+      },
     },
   },
   plugins: [],
