@@ -22,7 +22,20 @@ export default function Habits() {
       notes?: { time?: string; note?: string }[];
     }[]
   ) {
-    const joinedSubParameters = input.map(
+    const joinedNoteLines = input.map(
+      ({ year, month, day, keypoints, notes }) => ({
+        year,
+        month,
+        day,
+        keypoints,
+        notes: notes?.map(({ time, note }) => ({
+          time,
+          note: note?.replace(/\n/g, "\n^ "),
+        })),
+      })
+    );
+
+    const joinedSubParameters = joinedNoteLines.map(
       ({ year, month, day, keypoints, notes }) => ({
         year,
         month,
@@ -30,7 +43,9 @@ export default function Habits() {
         keypoints: keypoints?.map((v) => `> ${v}`).join("\n") ?? "",
         notes:
           notes
-            ?.map(({ time, note }) => `- ${`${time ?? ""} ${note}`.trim()}`)
+            ?.map(
+              ({ time, note }) => `- ${`${time ?? ""} ${note ?? ""}`.trim()}`
+            )
             .join("\n\n") ?? "",
       })
     );

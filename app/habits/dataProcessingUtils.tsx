@@ -45,11 +45,17 @@ function splitParameters({
     keypoints: keypoints
       ?.split(/^>/gm)
       .slice(1)
-      .map((v) => v.trim()),
+      .map((v) => v.trim().replace(/\s+/g, " ")),
     notes: notes
       ?.split(/^-/gm)
       .slice(1)
-      .map((v) => v.replace(/^\^ */gm, "").trim()),
+      .map((v) =>
+        v
+          .replace(/^\^/gm, "<new_line>")
+          .trim()
+          .replace(/\s+/g, " ")
+          .replace(/ *<new_line> */g, "\n")
+      ),
   };
 }
 
