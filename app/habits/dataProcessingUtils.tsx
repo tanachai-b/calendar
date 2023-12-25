@@ -1,24 +1,15 @@
 export function processData(data: string) {
   const splitedDays = splitDays(data);
-
   const objectDays = splitedDays.map((day) => objectDay(day));
-
   const splitedParameters = objectDays.map((day) => splitParameters(day));
-
   const splitedNotes = splitedParameters.map((day) => splitNotes(day));
-
   return splitedNotes;
 }
 
 export function splitDays(data: string) {
-  return (
-    data
-      // .trim()
-      .replace(/\n(\d{4}-\d{1,2}-\d{1,2})/gm, "<new_line>$1")
-      .split("<new_line>")
-    // .slice(1)
-  );
-  // .map((value) => value.trim());
+  return data
+    .replace(/\n(\d{4}-\d{1,2}-\d{1,2})/gm, "<new_line>$1")
+    .split("<new_line>");
 }
 
 function objectDay(day: string) {

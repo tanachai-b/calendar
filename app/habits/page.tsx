@@ -5,6 +5,7 @@ import { NavBar } from "../components";
 import { BeautifiedDay } from "./BeautifiedDay";
 import { processData, splitDays } from "./dataProcessingUtils";
 import { initialData } from "./initialData";
+import { toText } from "./toTextUtils";
 
 export default function Habits() {
   const [data, setData] = useState(initialData);
@@ -12,54 +13,6 @@ export default function Habits() {
   const splitedDays = useMemo(() => splitDays(data), [data]);
   const output = useMemo(() => processData(data), [data]);
   const outputToText = useMemo(() => toText(output), [output]);
-
-  function toText(
-    input: {
-      year?: string;
-      month?: string;
-      day?: string;
-      keypoints?: string[];
-      notes?: { time?: string; note?: string }[];
-    }[]
-  ) {
-    const joinedNoteLines = input.map(
-      ({ year, month, day, keypoints, notes }) => ({
-        year,
-        month,
-        day,
-        keypoints,
-        notes: notes?.map(({ time, note }) => ({
-          time,
-          note: note?.replace(/\n/g, "\n^ "),
-        })),
-      })
-    );
-
-    const joinedSubParameters = joinedNoteLines.map(
-      ({ year, month, day, keypoints, notes }) => ({
-        year,
-        month,
-        day,
-        keypoints: keypoints?.map((v) => `> ${v}`).join("\n") ?? "",
-        notes:
-          notes
-            ?.map(
-              ({ time, note }) => `- ${`${time ?? ""} ${note ?? ""}`.trim()}`
-            )
-            .join("\n\n") ?? "",
-      })
-    );
-
-    const joinedParameters = joinedSubParameters.map(
-      ({ year, month, day, keypoints, notes }) => {
-        return `${year}-${month}-${day}${keypoints ? `\n\n${keypoints}` : ""}${
-          notes ? `\n\n${notes}` : ""
-        }\n`;
-      }
-    );
-
-    return joinedParameters.join("\n");
-  }
 
   const textareaRefs: RefObject<HTMLTextAreaElement>[] = useMemo(
     () => splitedDays.map(() => createRef()),
