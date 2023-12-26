@@ -9,20 +9,35 @@ export function NewDiaryDay({
 }: {
   className?: string;
   day?: string;
-  notes?: string[];
+  notes?: { topic?: string; details?: string[] }[];
 }) {
   return (
     <div className={`flex flex-col p-2.5 gap-2.5 ${className}`}>
-      <div>
-        <span>{day}</span>
-      </div>
+      <div className="text-2xl">{day}</div>
 
       {notes && notes.length > 0 ? (
-        <div className="grid grid-cols-[min-content_1fr] gap-x-1 gap-y-2.5">
-          {notes?.map((note, index) => (
-            <Fragment key={`${index}`}>
-              <div>-</div>
-              <div className="whitespace-pre-wrap">{note}</div>
+        <div className="grid grid-cols-[min-content_1fr] gap-1 text-sm text-text_white">
+          {notes?.map(({ topic, details }, index) => (
+            <Fragment key={index}>
+              <div className="text-right tabular-nums">-</div>
+              <div>{topic}</div>
+
+              {details && details.length > 0 ? (
+                <>
+                  <div></div>
+                  <div className="grid grid-cols-[min-content_1fr] p-1 gap-1 text-xs text-text_grey">
+                    {details?.map((detail, index) => (
+                      <Fragment key={index}>
+                        <div className="text-right tabular-nums">-</div>
+
+                        <div>{detail}</div>
+                      </Fragment>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
             </Fragment>
           ))}
         </div>

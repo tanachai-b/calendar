@@ -78,16 +78,16 @@ export default function Sticky() {
       <div className="flex flex-row h-full divide-x divide-border overflow-hidden">
         <div className="flex-1 basis-1/3">
           <textarea
-            className="h-full w-full p-2.5 outline-none text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none font-mono"
+            className="h-full w-full p-2.5 outline-none text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none xfont-mono"
             placeholder="input"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           />
         </div>
 
-        <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
+        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
           {JSON.stringify(dayObjects, null, 2)}
-        </div>
+        </div> */}
 
         {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
           {objectsBackToText}
