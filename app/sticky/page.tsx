@@ -85,7 +85,7 @@ export default function Sticky() {
           />
         </div>
 
-        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
+        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre font-mono overflow-auto text-text_grey">
           {JSON.stringify(dayObjects, null, 2)}
         </div> */}
 
@@ -93,13 +93,17 @@ export default function Sticky() {
           {objectsBackToText}
         </div> */}
 
-        <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll divide-y divide-border">
-          {dayObjects.map((dayObject, index) => (
-            <NewDiaryDay
-              key={index}
-              day={dayObject.day}
-              notes={dayObject.notes}
-            />
+        <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll">
+          {dayObjects.map(({ month, days }) => (
+            <div className="pb-10" key={month ?? "x"}>
+              <div className="sticky top-0 z-50 bg-bg p-2.5 mb-5 text-2xl font-extralight">
+                {month}
+              </div>
+
+              {days.map(({ day, notes }) => (
+                <NewDiaryDay key={`${month}-${day}`} day={day} notes={notes} />
+              ))}
+            </div>
           ))}
         </div>
 

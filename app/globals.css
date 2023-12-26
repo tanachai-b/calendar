@@ -5,7 +5,7 @@
 @media not (hover: none), not (hover: on-demand) {
   /* width */
   ::-webkit-scrollbar {
-    @apply w-1;
+    @apply w-1 h-1;
   }
 
   /* Track */
@@ -21,6 +21,10 @@
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-text_grey;
+  }
+
+  ::-webkit-scrollbar-corner {
+    @apply bg-transparent;
   }
 
   /* IE, Edge and Firefox */

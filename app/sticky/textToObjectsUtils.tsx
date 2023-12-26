@@ -1,13 +1,52 @@
 export function textToObjects(text: string) {
-  const splittedDays = splitDays(text);
-  const objectifiedDays = splittedDays.map((day) => objectifyDay(day));
-  const splittedParameters = objectifiedDays.map((day) => splitParameters(day));
-  const splittedNotes = splittedParameters.map((day) => splitNotes(day));
-  return splittedNotes;
+  const splittedMonths = splitMonths(text);
+  const objectifiedMonths = splittedMonths.map((month) =>
+    objectifyMonths(month)
+  );
+
+  const processDays = objectifiedMonths.map(({ month, days }) => {
+    const splittedDays = splitDays(days);
+    const objectifiedDays = splittedDays.map((day) => objectifyDay(day));
+    const splittedParameters = objectifiedDays.map((day) =>
+      splitParameters(day)
+    );
+    const splittedNotes = splittedParameters.map((day) => splitNotes(day));
+
+    return {
+      month,
+      days: splittedNotes,
+    };
+  });
+
+  return processDays;
+}
+
+export function splitMonths(data: string) {
+  return data
+    .replace(
+      /\n(January|February|March|April|May|June|July|August|September|October|November|December)/g,
+      "<split>$1"
+    )
+    .split("<split>");
+}
+
+export function objectifyMonths(month: string) {
+  return {
+    month: month.match(
+      /^(January|February|March|April|May|June|July|August|September|October|November|December)/g
+    )?.[0],
+    days: month.replace(
+      /^(January|February|March|April|May|June|July|August|September|October|November|December).*/g,
+      ""
+    ),
+  };
 }
 
 export function splitDays(data: string) {
-  return data.replace(/\n(\d+: )/g, "<split>$1").split("<split>");
+  return data
+    .trim()
+    .replace(/\n(\d+: )/g, "<split>$1")
+    .split("<split>");
 }
 
 function objectifyDay(day: string) {
