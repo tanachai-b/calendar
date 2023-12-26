@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import { NavBar } from "../components";
-import { BeautifiedDay } from "./BeautifiedDay";
+import { NewDiaryDay } from "./BeautifiedDay";
 import {
   isDayGotMergedToPrevious,
   isDayGotSplitted,
@@ -25,10 +25,10 @@ export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
 
   const dayObjects = useMemo(() => textToObjects(inputText), [inputText]);
-  const objectsBackToText = useMemo(
-    () => objectsToText(dayObjects),
-    [dayObjects]
-  );
+  // const objectsBackToText = useMemo(
+  //   () => objectsToText(dayObjects),
+  //   [dayObjects]
+  // );
 
   const splittedDays = useMemo(() => splitDays(inputText), [inputText]);
   const textareaRefs: RefObject<HTMLTextAreaElement>[] = useMemo(
@@ -47,29 +47,29 @@ export default function Sticky() {
     textarea.setSelectionRange(cursor.selection, cursor.selection);
   }, [cursor]);
 
-  function handleDayTextChanged(value: string, index: number) {
-    const updatedDays = splittedDays.map((v, i) => (i === index ? value : v));
+  // function handleDayTextChanged(value: string, index: number) {
+  //   const updatedDays = splittedDays.map((v, i) => (i === index ? value : v));
 
-    setInputText(updatedDays.join("\n"));
+  //   setInputText(updatedDays.join("\n"));
 
-    const baseline = updatedDays.slice(
-      Math.max(index - 1, 0),
-      Math.min(index + 2, updatedDays.length)
-    );
-    const resplittedDays = splitDays(baseline.join("\n"));
+  //   const baseline = updatedDays.slice(
+  //     Math.max(index - 1, 0),
+  //     Math.min(index + 2, updatedDays.length)
+  //   );
+  //   const resplittedDays = splitDays(baseline.join("\n"));
 
-    if (isDayGotMergedToPrevious(baseline, resplittedDays)) {
-      setCursorOnPrevTextarea(textareaRefs, index, setCursor);
-    } else if (isDayGotSplitted(baseline, resplittedDays)) {
-      setCursorOnNewTextarea(textareaRefs, index, setCursor);
-    }
-  }
+  //   if (isDayGotMergedToPrevious(baseline, resplittedDays)) {
+  //     setCursorOnPrevTextarea(textareaRefs, index, setCursor);
+  //   } else if (isDayGotSplitted(baseline, resplittedDays)) {
+  //     setCursorOnNewTextarea(textareaRefs, index, setCursor);
+  //   }
+  // }
 
-  function handleDayTextBlurred(e: FocusEvent) {
-    if ((e as FocusEvent).relatedTarget === null) {
-      setInputText(objectsBackToText);
-    }
-  }
+  // function handleDayTextBlurred(e: FocusEvent) {
+  //   if ((e as FocusEvent).relatedTarget === null) {
+  //     setInputText(objectsBackToText);
+  //   }
+  // }
 
   return (
     <div className="flex flex-col h-screen">
@@ -85,28 +85,25 @@ export default function Sticky() {
           />
         </div>
 
-        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
-          {JSON.stringify(output, null, 2)}
-        </div> */}
+        <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
+          {JSON.stringify(dayObjects, null, 2)}
+        </div>
 
         {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
-          {outputToText}
+          {objectsBackToText}
         </div> */}
 
-        {/* <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll divide-y divide-border">
-          {output.map((day, index) => (
-            <BeautifiedDay
+        <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll divide-y divide-border">
+          {dayObjects.map((dayObject, index) => (
+            <NewDiaryDay
               key={index}
-              year={day.year}
-              month={day.month}
-              day={day.day}
-              keypoints={day.keypoints}
-              notes={day.notes}
+              day={dayObject.day}
+              notes={dayObject.notes}
             />
           ))}
-        </div> */}
+        </div>
 
-        <div
+        {/* <div
           className="flex-1 basis-2/3 flex flex-col xdivide-y divide-border overflow-y-auto overflow-x-hidden"
           onBlur={handleDayTextBlurred}
         >
@@ -138,7 +135,7 @@ export default function Sticky() {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

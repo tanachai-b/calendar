@@ -2,47 +2,27 @@ import { Fragment } from "react";
 
 import { monthNames } from "../constants";
 
-export function BeautifiedDay({
+export function NewDiaryDay({
   className,
-  year,
-  month,
   day,
-  keypoints,
   notes,
 }: {
   className?: string;
-  year?: string;
-  month?: string;
   day?: string;
-  keypoints?: string[];
-  notes?: { time?: string; note?: string }[];
+  notes?: string[];
 }) {
   return (
     <div className={`flex flex-col p-2.5 gap-2.5 ${className}`}>
       <div>
-        <span>{year} </span>
-        <span>{month ? monthNames[parseInt(month) - 1] : undefined} </span>
         <span>{day}</span>
       </div>
 
-      {keypoints && keypoints.length > 0 ? (
-        <div className="flex flex-wrap gap-1">
-          {keypoints?.map((v, index) => (
-            <div className="px-1 border border-border" key={index}>
-              {v}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <></>
-      )}
-
       {notes && notes.length > 0 ? (
-        <div className="grid grid-cols-[min-content_1fr] gap-2.5">
-          {notes?.map((v, index) => (
+        <div className="grid grid-cols-[min-content_1fr] gap-x-1 gap-y-2.5">
+          {notes?.map((note, index) => (
             <Fragment key={`${index}`}>
-              <div className="text-right">{v.time}</div>
-              <div className="whitespace-pre-wrap">{v.note}</div>
+              <div>-</div>
+              <div className="whitespace-pre-wrap">{note}</div>
             </Fragment>
           ))}
         </div>
