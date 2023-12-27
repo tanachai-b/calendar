@@ -135,9 +135,11 @@ function Format({ className, line }: { className: string; line: string }) {
 
     return (
       <div className={className}>
-        <div className="pl-2.5 text-2xl font-extralight">{day}</div>
+        <div className="pl-2.5 text-2xl font-extralight tabular-nums">
+          {day}
+        </div>
 
-        <div className="flex flex-row gap-1 pl-10 text-text_white text-base font-light">
+        <div className="flex flex-row gap-1 pl-12 text-text_white text-base font-light">
           <div>-</div>
           <div>{note}</div>
         </div>
@@ -149,7 +151,7 @@ function Format({ className, line }: { className: string; line: string }) {
     const note = line.replace(/^ *- */, "");
     return (
       <div
-        className={`flex flex-row gap-1 pl-10 text-text_white text-base font-light ${className}`}
+        className={`flex flex-row gap-1 pl-12 text-text_white text-base font-light ${className}`}
       >
         <div>-</div>
         <div>{note}</div>
@@ -160,7 +162,7 @@ function Format({ className, line }: { className: string; line: string }) {
   if (isDetail) {
     const note = line.replace(/^ *\^ */, "");
     return (
-      <div className={`flex flex-row gap-1 pl-14 text-sm ${className}`}>
+      <div className={`flex flex-row gap-1 pl-16 text-sm ${className}`}>
         <div>-</div>
         <div>{note}</div>
       </div>
