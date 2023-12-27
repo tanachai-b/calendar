@@ -1,17 +1,26 @@
 import { Fragment } from "react";
 
-import { monthNames } from "../constants";
+import { monthNames, weekdayNames } from "../constants";
 
 export function NewDiaryDay({
   day,
+  weekday,
   notes,
 }: {
   day?: string;
+  weekday?: number;
   notes?: { topic?: string; details?: string[] }[];
 }) {
   return (
-    <div className={"flex flex-col p-2.5 pb-5"}>
-      <div className={"text-xl font-light tabular-nums"}>{day}</div>
+    <div className={"flex flex-col p-2.5 pb-5 gap-1"}>
+      <div className="flex flex-row items-center">
+        <div
+          className={"sticky top-[60px] w-10 text-xl font-light tabular-nums"}
+        >
+          {day}
+        </div>
+        <div>{weekday != null ? weekdayNames[weekday] : ""}</div>
+      </div>
 
       {notes && notes.length > 0 ? (
         <div className="grid grid-cols-[min-content_1fr] gap-1 text-sm text-text_white pl-10">

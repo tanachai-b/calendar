@@ -4,7 +4,7 @@ export function textToObjects(text: string) {
     objectifyMonths(month)
   );
 
-  const processDays = objectifiedMonths.map(({ month, days }) => {
+  const processDays = objectifiedMonths.map(({ monthName, days }) => {
     const splittedDays = splitDays(days);
     const objectifiedDays = splittedDays.map((day) => objectifyDay(day));
     const splittedParameters = objectifiedDays.map((day) =>
@@ -13,7 +13,7 @@ export function textToObjects(text: string) {
     const splittedNotes = splittedParameters.map((day) => splitNotes(day));
 
     return {
-      month,
+      monthName,
       days: splittedNotes,
     };
   });
@@ -32,7 +32,7 @@ export function splitMonths(data: string) {
 
 export function objectifyMonths(month: string) {
   return {
-    month: month.match(
+    monthName: month.match(
       /^(January|February|March|April|May|June|July|August|September|October|November|December)/g
     )?.[0],
     days: month.replace(

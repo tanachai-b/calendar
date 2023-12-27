@@ -20,6 +20,8 @@ import {
 import { initialInput } from "./initialInput";
 import { objectsToText } from "./objectsToTextUtils";
 import { splitDays, textToObjects } from "./textToObjectsUtils";
+import { monthNames, weekdayNames } from "../constants";
+import { getWeekday } from "../utils";
 
 export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
@@ -94,14 +96,23 @@ export default function Sticky() {
         </div> */}
 
         <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll">
-          {dayObjects.map(({ month, days }) => (
-            <div className="pb-10" key={month ?? "x"}>
+          {dayObjects.map(({ monthName, days }) => (
+            <div className="pb-10" key={monthName ?? "x"}>
               <div className="sticky top-0 z-50 bg-bg p-2.5 mb-5 text-2xl font-extralight">
-                {month}
+                {monthName}
               </div>
 
               {days.map(({ day, notes }) => (
-                <NewDiaryDay key={`${month}-${day}`} day={day} notes={notes} />
+                <NewDiaryDay
+                  key={`${monthName}-${day}`}
+                  day={day}
+                  weekday={getWeekday(
+                    2023,
+                    monthNames.indexOf(monthName ?? "") + 1,
+                    parseInt(day ?? "")
+                  )}
+                  notes={notes}
+                />
               ))}
             </div>
           ))}
