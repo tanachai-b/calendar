@@ -15,7 +15,7 @@ export function NewDiaryDay({
     <div className={"flex flex-row p-2.5 pb-5 gap-2.5"}>
       <div
         className={
-          "sticky top-[52px] shrink-0 w-7 text-xl font-light tabular-nums h-fit text-right"
+          "sticky top-[56px] shrink-0 w-7 text-xl font-light tabular-nums h-fit text-right"
         }
       >
         {day}

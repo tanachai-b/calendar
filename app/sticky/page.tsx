@@ -98,8 +98,9 @@ export default function Sticky() {
         <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll">
           {dayObjects.map(({ monthName, days }) => (
             <div key={monthName ?? "x"}>
-              <div className="sticky top-0 z-50 bg-bg p-2.5 mt-10 mb-5 text-3xl font-extralight">
-                <div className="pl-9">{monthName}</div>
+              <div className="sticky top-0 z-50 bg-bg flex flex-row p-2.5 pl-12 mt-10 mb-5 text-3xl font-extralight">
+                <div className="grow">{monthName}</div>
+                <div>2023</div>
               </div>
 
               {days.map(({ day, notes }) => (
