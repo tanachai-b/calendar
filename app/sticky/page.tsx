@@ -26,7 +26,7 @@ import { getWeekday } from "../utils";
 export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
 
-  const dayObjects = useMemo(() => textToObjects(inputText), [inputText]);
+  const monthObjects = useMemo(() => textToObjects(inputText), [inputText]);
   // const objectsBackToText = useMemo(
   //   () => objectsToText(dayObjects),
   //   [dayObjects]
@@ -96,22 +96,26 @@ export default function Sticky() {
         </div> */}
 
         <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll">
-          {dayObjects.map(({ monthName, days }) => (
-            <div key={monthName ?? "x"}>
-              <div className="sticky top-0 z-50 bg-bg flex flex-row p-2.5 pl-12 mt-10 mb-5 text-3xl font-extralight">
-                <div className="grow">{monthName}</div>
-                <div>2023</div>
-              </div>
+          {monthObjects.map(({ month, days }, index) => (
+            <div key={index}>
+              {month != null ? (
+                <div className="sticky top-0 z-50 bg-bg flex flex-row p-2.5 pl-12 mt-10 mb-5 text-3xl font-extralight">
+                  <div className="grow">{monthNames[month - 1]}</div>
+                  <div>2023</div>
+                </div>
+              ) : (
+                <></>
+              )}
 
-              {days.map(({ day, notes }) => (
+              {days.map(({ day, notes }, index) => (
                 <NewDiaryDay
-                  key={`${monthName}-${day}`}
-                  day={day}
-                  weekday={getWeekday(
-                    2023,
-                    monthNames.indexOf(monthName ?? "") + 1,
-                    parseInt(day ?? "")
-                  )}
+                  key={index}
+                  day={day != null ? parseInt(day) : undefined}
+                  weekday={
+                    month != null && day != null
+                      ? getWeekday(2023, month, parseInt(day))
+                      : undefined
+                  }
                   notes={notes}
                 />
               ))}

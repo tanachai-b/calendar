@@ -7,7 +7,7 @@ export function NewDiaryDay({
   weekday,
   notes,
 }: {
-  day?: string;
+  day?: number;
   weekday?: number;
   notes?: { topic?: string; details?: string[] }[];
 }) {
