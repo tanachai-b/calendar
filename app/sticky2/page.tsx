@@ -75,7 +75,7 @@ export default function Sticky() {
         <div
           ref={textInputRef}
           onScroll={handleTextScrolled}
-          className="flex-1 basis-1/3 text-base overflow-y-auto"
+          className="flex-1 text-base overflow-y-auto"
         >
           <div className="relative">
             <textarea
@@ -97,12 +97,10 @@ export default function Sticky() {
         <div
           ref={previewRef}
           onScroll={handlePreviewScrolled}
-          className="flex-1 basis-1/3 overflow-y-scroll overflow-x-hidden text-sm"
+          className="flex-1 overflow-y-scroll overflow-x-hidden"
         >
           {lines.map((line, index) => (
-            <div key={index} className="px-2.5 min-h-5 overflow-hidden">
-              {format(line)}
-            </div>
+            <Format key={index} className="min-h-6" line={line} />
           ))}
         </div>
       </div>
@@ -110,7 +108,7 @@ export default function Sticky() {
   );
 }
 
-function format(line: string) {
+function Format({ className, line }: { className: string; line: string }) {
   const isMonth =
     line.match(
       /^(January|February|March|April|May|June|July|August|September|October|November|December)/
@@ -123,28 +121,36 @@ function format(line: string) {
   const isDetail = line.match(/^ *\^/) != null;
 
   if (isMonth)
-    return <div className="pl-10 text-3xl font-extralight">{line}</div>;
+    return (
+      <div
+        className={`sticky top-0 bg-bg pl-10 text-3xl font-extralight ${className}`}
+      >
+        {line}
+      </div>
+    );
 
   if (isDay) {
     const day = line.match(/^\d.*?(?=:)/);
     const note = line.replace(/^\d.*?:/, "");
 
     return (
-      <>
-        <div className="text-2xl font-extralight">{day}</div>
+      <div className={className}>
+        <div className="pl-2.5 text-2xl font-extralight">{day}</div>
 
         <div className="flex flex-row gap-1 pl-10 text-text_white text-base font-light">
           <div>-</div>
           <div>{note}</div>
         </div>
-      </>
+      </div>
     );
   }
 
   if (isTopic) {
     const note = line.replace(/^ *- */, "");
     return (
-      <div className="flex flex-row gap-1 pl-10 text-text_white text-base font-light">
+      <div
+        className={`flex flex-row gap-1 pl-10 text-text_white text-base font-light ${className}`}
+      >
         <div>-</div>
         <div>{note}</div>
       </div>
@@ -154,12 +160,12 @@ function format(line: string) {
   if (isDetail) {
     const note = line.replace(/^ *\^ */, "");
     return (
-      <div className="flex flex-row gap-1 pl-14 text-sm">
+      <div className={`flex flex-row gap-1 pl-14 text-sm ${className}`}>
         <div>-</div>
         <div>{note}</div>
       </div>
     );
   }
 
-  return line;
+  return <div className={`pl-2.5 ${className}`}>{line}</div>;
 }
