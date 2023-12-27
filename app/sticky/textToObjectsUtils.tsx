@@ -60,12 +60,12 @@ function objectifyDay(day: string) {
 
 function splitParameters({ day, notes }: { day?: string; notes?: string }) {
   return {
-    day,
+    day: day ? parseInt(day) : undefined,
     notes: notes?.split(/\n *- */g),
   };
 }
 
-function splitNotes({ day, notes }: { day?: string; notes?: string[] }) {
+function splitNotes({ day, notes }: { day?: number; notes?: string[] }) {
   return {
     day,
     notes: notes?.map((note) => {

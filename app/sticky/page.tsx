@@ -10,7 +10,6 @@ import {
 } from "react";
 
 import { NavBar } from "../components";
-import { NewDiaryDay } from "./BeautifiedDay";
 import {
   isDayGotMergedToPrevious,
   isDayGotSplitted,
@@ -20,8 +19,8 @@ import {
 import { initialInput } from "./initialInput";
 import { objectsToText } from "./objectsToTextUtils";
 import { splitDays, textToObjects } from "./textToObjectsUtils";
-import { monthNames, weekdayNames } from "../constants";
-import { getWeekday } from "../utils";
+import { weekdayNames } from "../constants";
+import { StickyMonth } from "./StickyMonth";
 
 export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
@@ -97,29 +96,7 @@ export default function Sticky() {
 
         <div className="flex-1 basis-1/3 flex flex-col overflow-y-scroll">
           {monthObjects.map(({ month, days }, index) => (
-            <div key={index}>
-              {month != null ? (
-                <div className="sticky top-0 z-50 bg-bg flex flex-row p-2.5 pl-12 mt-10 mb-5 text-3xl font-extralight">
-                  <div className="grow">{monthNames[month - 1]}</div>
-                  <div>2023</div>
-                </div>
-              ) : (
-                <></>
-              )}
-
-              {days.map(({ day, notes }, index) => (
-                <NewDiaryDay
-                  key={index}
-                  day={day != null ? parseInt(day) : undefined}
-                  weekday={
-                    month != null && day != null
-                      ? getWeekday(2023, month, parseInt(day))
-                      : undefined
-                  }
-                  notes={notes}
-                />
-              ))}
-            </div>
+            <StickyMonth key={index} month={month} days={days} />
           ))}
         </div>
 
