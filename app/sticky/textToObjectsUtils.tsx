@@ -1,5 +1,23 @@
 import { monthNames } from "../constants";
 
+export function textToObjectsAAA(text: string) {
+  const splittedMonths = splitMonths(text);
+  const objectifiedMonths = splittedMonths.map((month) =>
+    objectifyMonths(month)
+  );
+
+  const processDays = objectifiedMonths.map(({ monthName, days }) => {
+    const splittedDays = splitDays(days);
+
+    return {
+      month: monthName ? monthNames.indexOf(monthName) + 1 : undefined,
+      days: splittedDays,
+    };
+  });
+
+  return processDays;
+}
+
 export function textToObjects(text: string) {
   const splittedMonths = splitMonths(text);
   const objectifiedMonths = splittedMonths.map((month) =>

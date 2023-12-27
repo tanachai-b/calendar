@@ -3,16 +3,18 @@ import { Fragment } from "react";
 import { weekdayNames } from "../constants";
 
 export function StickyDay({
+  className,
   day,
   weekday,
   notes,
 }: {
+  className?: string;
   day?: number;
   weekday?: number;
   notes?: { topic?: string; details?: string[] }[];
 }) {
   return (
-    <div className="flex flex-row p-2.5 pb-5 gap-2.5">
+    <div className={`flex flex-row p-2.5 pb-5 gap-2.5 ${className}`}>
       <div className="sticky top-[56px] shrink-0 w-7 text-xl font-light tabular-nums h-fit text-right">
         {day}
       </div>
