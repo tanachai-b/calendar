@@ -26,10 +26,10 @@ export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
 
   const monthObjects = useMemo(() => textToObjects(inputText), [inputText]);
-  // const objectsBackToText = useMemo(
-  //   () => objectsToText(dayObjects),
-  //   [dayObjects]
-  // );
+  const objectsBackToText = useMemo(
+    () => objectsToText(monthObjects),
+    [monthObjects]
+  );
 
   const splittedDays = useMemo(() => splitDays(inputText), [inputText]);
   const textareaRefs: RefObject<HTMLTextAreaElement>[] = useMemo(
@@ -87,10 +87,10 @@ export default function Sticky() {
         </div>
 
         {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre font-mono overflow-auto text-text_grey">
-          {JSON.stringify(dayObjects, null, 2)}
+          {JSON.stringify(monthObjects, null, 2)}
         </div> */}
 
-        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre-wrap font-mono overflow-auto text-text_grey">
+        {/* <div className="flex-1 basis-1/3 p-2.5 whitespace-pre overflow-auto text-text_grey">
           {objectsBackToText}
         </div> */}
 

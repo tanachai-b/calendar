@@ -46,9 +46,9 @@ export function objectifyMonths(month: string) {
 
 export function splitDays(data: string) {
   return data
-    .trim()
     .replace(/\n(\d+: )/g, "<split>$1")
-    .split("<split>");
+    .split("<split>")
+    .slice(1);
 }
 
 function objectifyDay(day: string) {
@@ -71,8 +71,8 @@ function splitNotes({ day, notes }: { day?: number; notes?: string[] }) {
     notes: notes?.map((note) => {
       const splitted = note.split(/\n *\^ */g);
       return {
-        topic: splitted[0].trim(),
-        details: splitted.slice(1).map((v) => v.trim().replace(/\s+/, " ")),
+        topic: splitted[0].trim().replace(/\s+/g, " "),
+        details: splitted.slice(1).map((v) => v.trim().replace(/\s+/g, " ")),
       };
     }),
   };

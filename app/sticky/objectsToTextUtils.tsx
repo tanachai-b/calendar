@@ -1,73 +1,135 @@
+import { monthNames } from "../constants";
+
 export function objectsToText(
   input: {
-    year?: string;
-    month?: string;
-    day?: string;
-    keypoints?: string[];
-    notes?: { time?: string; note?: string }[];
+    month?: number;
+    days: {
+      day?: number;
+      notes?: {
+        topic: string;
+        details: string[];
+      }[];
+    }[];
   }[]
 ) {
-  const joinedNoteLines = joinNoteLines(input);
-  const joinedSubParameters = joinSubParameters(joinedNoteLines);
-  const joinedParameters = joinParameters(joinedSubParameters);
-  return joinedParameters.join("\n");
+  const joinedNoteLines = joinDetails(input);
+  const joinedTopicDetails = joinTopicDetails(joinedNoteLines);
+  const joinedNotes = joinNotes(joinedTopicDetails);
+  const joinedDayNotes = joinDayNotes(joinedNotes);
+  const joinedDays = joinDays(joinedDayNotes);
+  const joinedMonthDays = joinMonthDays(joinedDays);
+  const joinedMonths = joinMonths(joinedMonthDays);
+
+  return joinedMonths;
 }
 
-function joinNoteLines(
+function joinDetails(
   input: {
-    year?: string;
-    month?: string;
-    day?: string;
-    keypoints?: string[];
-    notes?: { time?: string; note?: string }[];
+    month?: number;
+    days: {
+      day?: number;
+      notes?: {
+        topic: string;
+        details: string[];
+      }[];
+    }[];
   }[]
 ) {
-  return input.map(({ year, month, day, keypoints, notes }) => ({
-    year,
+  return input.map(({ month, days }) => ({
     month,
-    day,
-    keypoints,
-    notes: notes?.map(({ time, note }) => ({
-      time,
-      note: note?.replace(/\n/g, "\n^ "),
+    days: days.map(({ day, notes }) => ({
+      day,
+      notes: notes?.map(({ topic, details }) => ({
+        topic,
+        details: details.map((detail) => `^ ${detail}`).join("\n"),
+      })),
     })),
   }));
 }
 
-function joinSubParameters(
-  joinedNoteLines: {
-    year?: string;
-    month?: string;
-    day?: string;
-    keypoints?: string[];
-    notes?: { time?: string; note?: string }[];
+function joinTopicDetails(
+  input: {
+    month?: number;
+    days: {
+      day?: number;
+      notes?: {
+        topic: string;
+        details: string;
+      }[];
+    }[];
   }[]
 ) {
-  return joinedNoteLines.map(({ year, month, day, keypoints, notes }) => ({
-    year,
+  return input.map(({ month, days }) => ({
     month,
-    day,
-    keypoints: keypoints?.map((v) => `> ${v}`).join("\n") ?? "",
-    notes:
-      notes
-        ?.map(({ time, note }) => `- ${`${time ?? ""} ${note ?? ""}`.trim()}`)
-        .join("\n\n") ?? "",
+    days: days.map(({ day, notes }) => ({
+      day,
+      notes: notes?.map(
+        ({ topic, details }) =>
+          `- ${topic}${details !== "" ? `\n${details}` : ""}`
+      ),
+    })),
   }));
 }
 
-function joinParameters(
-  joinedSubParameters: {
-    year?: string;
-    month?: string;
-    day?: string;
-    keypoints?: string;
-    notes?: string;
+function joinNotes(
+  input: {
+    month?: number;
+    days: {
+      day?: number;
+      notes?: string[];
+    }[];
   }[]
 ) {
-  return joinedSubParameters.map(
-    ({ year, month, day, keypoints, notes }) =>
-      `${year}-${month}-${day}${keypoints ? `\n\n${keypoints}` : ""}${
-        notes ? `\n\n${notes}` : ""
-      }\n`
+  return input.map(({ month, days }) => ({
+    month,
+    days: days.map(({ day, notes }) => ({
+      day,
+      notes: notes?.join("\n").replace(/^- /, ""),
+    })),
+  }));
+}
+
+function joinDayNotes(
+  input: {
+    month?: number;
+    days: {
+      day?: number;
+      notes?: string;
+    }[];
+  }[]
+) {
+  return input.map(({ month, days }) => ({
+    month,
+    days: days.map(({ day, notes }) => `${day}: ${notes}`),
+  }));
+}
+
+function joinDays(
+  input: {
+    month?: number;
+    days: string[];
+  }[]
+) {
+  return input.map(({ month, days }) => ({
+    month,
+    days: days.join("\n\n"),
+  }));
+}
+
+function joinMonthDays(
+  input: {
+    month?: number;
+    days: string;
+  }[]
+) {
+  return input.map(
+    ({ month, days }) =>
+      `${month != null ? `${monthNames[month - 1]} 2023` : ""}${
+        days !== "" ? `\n\n${days}` : ""
+      }`
   );
+}
+
+function joinMonths(months: string[]) {
+  return months.join("\n\n\n");
 }
