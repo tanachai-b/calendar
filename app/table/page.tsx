@@ -21,6 +21,7 @@ export default function Sticky() {
 
         <textarea
           className="flex-1 w-full h-full outline-none px-2.5 text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none"
+          // value={JSON.stringify(blockize(tabularize(inputText)), null, 2)}
           value={textize(blockize(tabularize(inputText)))}
         />
       </div>
@@ -35,38 +36,101 @@ function tabularize(text: string) {
 function blockize(table: string[][]) {
   const blockSize = 10;
 
-  const block: string[][][] = [];
+  const weeks: string[][][] = [];
 
-  table.forEach((row, y) =>
-    row.forEach((column, x) => {
-      if (x === 0 && column.length > 0) {
-        block.push([]);
+  let commentRow = -1;
+  table.forEach((row, y) => {
+    commentRow++;
+
+    return row.forEach((cell, x) => {
+      if ((x === 0 && y === 0) || (x === 0 && cell.length > 0)) {
+        weeks.push([]);
+        commentRow = 0;
       }
+      const currentWeek = weeks[weeks.length - 1];
 
-      if (column.length === 0) return;
-      if (column === "x") return;
+      const dayInWeek = Math.floor(x / blockSize);
+      if (currentWeek[dayInWeek] == null) currentWeek[dayInWeek] = [];
+      const currentDay = currentWeek[dayInWeek];
 
-      const blockRow = block[block.length - 1] ?? [];
+      if (currentDay[commentRow] == null) currentDay[commentRow] = "";
 
-      if (blockRow[Math.floor(x / blockSize)] == null) {
-        blockRow[Math.floor(x / blockSize)] = [];
+      if (cell.length === 0) return;
+      if (cell.toLowerCase() === "x") return;
+
+      if (currentDay[commentRow] === "") {
+        currentDay[commentRow] = cell;
+      } else {
+        currentDay[commentRow] += "%%%" + cell;
       }
+    });
+  });
 
-      blockRow[Math.floor(x / blockSize)].push(column);
-    })
-  );
+  return weeks
+    .reduce((prev, curr) => [...prev, ...curr], [])
+    .map((v) => combineFirstRows(combineBlanks(trim(v))))
+    .filter((v) => v.length > 0)
+    .filter((v) => !(v.length === 1 && (v[0].match(/^\d+$/)?.length ?? 0) > 0));
+}
 
-  return block.reduce((prev, curr) => [...prev, ...curr], []);
+function trim(array: string[]) {
+  let result = [...array];
+
+  while (result.length > 0 && result[0].length === 0) {
+    result = result.slice(1);
+  }
+
+  while (result.length > 0 && result[result.length - 1].length === 0) {
+    result = result.slice(0, -1);
+  }
+
+  return result;
+}
+
+function combineBlanks(array: string[]) {
+  return array
+    .reduce<string[]>((prev, curr) => {
+      if (
+        prev.length > 1 &&
+        prev[prev.length - 1].length === 0 &&
+        curr.length === 0
+      ) {
+        return [...prev];
+      } else {
+        return [...prev, curr];
+      }
+    }, [])
+    .filter((v, i) => (i === 1 && v.length === 0 ? false : true));
+}
+
+function combineFirstRows(array: string[]) {
+  return array
+    .reduce<string[]>((prev, curr, index) => {
+      if (prev.length === 1 && curr.length === 0) {
+        return [prev[0]];
+      } else if (index === 1) {
+        return [`${prev[0]}: ${curr}`];
+      } else {
+        return [...prev, curr];
+      }
+    }, [])
+    .filter((v, i) => (i === 1 && v.length === 0 ? false : true));
 }
 
 function textize(days: string[][]) {
-  const filtered = days.filter((v) => v.length > 1);
-  const marked = filtered.map((day) =>
+  const marked = days.map((day) =>
     day.map((comment, index) => {
-      if (index === 0) {
-        return `${comment}:`;
+      const trimmed = comment.trim().replace(/\s+/g, " ");
+      if (comment.length > 0) {
+        if (index === 0) {
+          return trimmed;
+        } else if (trimmed.charAt(0) === "^") {
+          return trimmed;
+        } else {
+          return `- ${trimmed}`;
+        }
       } else {
-        return `- ${comment}`;
+        return "";
       }
     })
   );

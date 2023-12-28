@@ -113,6 +113,7 @@ function Format({ className, line }: { className: string; line: string }) {
     line.match(
       /^(January|February|March|April|May|June|July|August|September|October|November|December)/
     ) != null;
+  // const isMonth = line.match(/^M\d\d/) != null;
 
   const isDay = line.match(/^\d.*?:/) != null;
 
