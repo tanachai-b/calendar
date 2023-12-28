@@ -4,67 +4,32 @@ import { UIEvent, useMemo, useRef, useState } from "react";
 
 import { NavBar } from "../components";
 import { initialInput } from "./initialInput";
+import { getScrollIndex, scrollToIndex } from "./scrollUtils";
 
 export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
   const lines = useMemo(() => inputText.split("\n"), [inputText]);
 
   const previewRef = useRef(null);
-  const textHeightRef = useRef(null);
-  const textInputRef = useRef(null);
+  const textLinesRef = useRef(null);
+  const textScrollRef = useRef(null);
 
-  const handleTextScrolled = (e: UIEvent) => {
-    const textX = e.target as HTMLElement;
-    if (!textX.matches(":hover")) return;
+  function handleTextScrolled(e: UIEvent) {
+    const textScroll = e.target as HTMLElement;
+    if (!textScroll.matches(":hover")) return;
+    if (!textLinesRef.current || !previewRef.current) return;
 
-    if (!textHeightRef.current) return;
-    const text = textHeightRef.current as HTMLElement;
-    const textPositions = getChildPositions(text);
-    const textIndex = textPositions.findIndex(
-      (v) => v > textX.scrollTop + textX.clientHeight / 2
-    );
+    const scrollIndex = getScrollIndex(textLinesRef.current, textScroll);
+    scrollToIndex(previewRef.current, previewRef.current, scrollIndex);
+  }
 
-    if (!previewRef.current) return;
-    const preview = previewRef.current as HTMLElement;
-    const previewPositions = getChildPositions(preview);
-    const previewPosition = previewPositions[textIndex];
-    preview.scrollTo({
-      top: previewPosition - preview.clientHeight / 2,
-    });
-  };
-
-  const handlePreviewScrolled = (e: UIEvent) => {
+  function handlePreviewScrolled(e: UIEvent) {
     const preview = e.target as HTMLElement;
     if (!preview.matches(":hover")) return;
+    if (!textLinesRef.current || !textScrollRef.current) return;
 
-    const childPositions = getChildPositions(preview);
-    const viewChildIndex = childPositions.findIndex(
-      (v) => v > preview.scrollTop + preview.clientHeight / 2
-    );
-
-    if (!textHeightRef.current) return;
-    const text = textHeightRef.current as HTMLElement;
-    const textPositions = getChildPositions(text);
-    const textPosition = textPositions[viewChildIndex];
-
-    if (!textInputRef.current) return;
-    const scroll = textInputRef.current as HTMLElement;
-    scroll.scrollTo({
-      top: textPosition - scroll.clientHeight / 2,
-    });
-  };
-
-  function getChildPositions(parent: HTMLElement) {
-    const childHeights = (Array.from(parent.childNodes) as HTMLElement[]).map(
-      (v) => v.clientHeight
-    );
-
-    const childPositions = childHeights.reduce(
-      (prev, curr) => [...prev, prev[prev.length - 1] + curr],
-      [0]
-    );
-
-    return childPositions;
+    const scrollIndex = getScrollIndex(preview, preview);
+    scrollToIndex(textLinesRef.current, textScrollRef.current, scrollIndex);
   }
 
   return (
@@ -73,7 +38,7 @@ export default function Sticky() {
 
       <div className="flex flex-row h-full divide-x divide-border overflow-hidden">
         <div
-          ref={textInputRef}
+          ref={textScrollRef}
           onScroll={handleTextScrolled}
           className="flex-1 text-base overflow-y-auto"
         >
@@ -84,7 +49,7 @@ export default function Sticky() {
               onChange={(e) => setInputText(e.target.value)}
             />
 
-            <div ref={textHeightRef} className="flex flex-col invisible">
+            <div ref={textLinesRef} className="flex flex-col invisible">
               {lines.map((line, index) => (
                 <div key={index} className="px-2.5 whitespace-pre-wrap min-h-6">
                   {line}
