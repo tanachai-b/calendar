@@ -1,6 +1,6 @@
 "use client";
 
-import { UIEvent, useMemo, useRef, useState } from "react";
+import { MutableRefObject, UIEvent, useMemo, useRef, useState } from "react";
 
 import { NavBar } from "../components";
 import { initialInput } from "./initialInput";
@@ -42,21 +42,11 @@ export default function Sticky() {
           onScroll={handleTextScrolled}
           className="flex-1 text-base overflow-y-auto"
         >
-          <div className="relative">
-            <textarea
-              className="absolute w-full h-full outline-none px-2.5 text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none overflow-hidden"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-            />
-
-            <div ref={textLinesRef} className="flex flex-col invisible">
-              {lines.map((line, index) => (
-                <div key={index} className="px-2.5 whitespace-pre-wrap min-h-6">
-                  {line}
-                </div>
-              ))}
-            </div>
-          </div>
+          <AutoSizeTextArea
+            textLinesRef={textLinesRef}
+            text={inputText}
+            onChange={setInputText}
+          />
         </div>
 
         <div
@@ -68,6 +58,36 @@ export default function Sticky() {
             <Format key={index} className="min-h-6" line={line} />
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AutoSizeTextArea({
+  textLinesRef,
+  text,
+  onChange,
+}: {
+  textLinesRef: MutableRefObject<null>;
+  text: string;
+  onChange: (value: string) => void;
+}) {
+  const lines = useMemo(() => text.split("\n"), [text]);
+
+  return (
+    <div className="relative">
+      <textarea
+        className="absolute w-full h-full outline-none px-2.5 text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none overflow-hidden"
+        value={text}
+        onChange={(e) => onChange(e.target.value)}
+      />
+
+      <div ref={textLinesRef} className="flex flex-col xinvisible">
+        {lines.map((line, index) => (
+          <div key={index} className="px-2.5 whitespace-pre-wrap">
+            {line}{" "}
+          </div>
+        ))}
       </div>
     </div>
   );
