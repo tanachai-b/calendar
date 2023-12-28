@@ -1,159 +1,53 @@
 "use client";
 
-import { MutableRefObject, UIEvent, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 
-import { NavBar } from "../components";
+import { Icon, IconButton, NavBar } from "../components";
 import { initialInput } from "./initialInput";
-import { getScrollIndex, scrollToIndex } from "./scrollUtils";
+import { Editor } from "./Editor";
 
 export default function Sticky() {
+  const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
+  const [writable, setWritable] = useState<FileSystemWritableFileStream>();
+  const [saveTimer, setSaveTimer] = useState<NodeJS.Timeout>();
+
   const [inputText, setInputText] = useState(initialInput);
-  const lines = useMemo(() => inputText.split("\n"), [inputText]);
 
-  const previewRef = useRef(null);
-  const textLinesRef = useRef(null);
-  const textScrollRef = useRef(null);
+  async function handleOpenClicked() {
+    const [fileHandle] = await window.showOpenFilePicker();
+    setFileHandle(fileHandle);
+    // setWritable(await fileHandle.createWritable());
 
-  function handleTextScrolled(e: UIEvent) {
-    const textScroll = e.target as HTMLElement;
-    if (!textScroll.matches(":hover")) return;
-    if (!textLinesRef.current || !previewRef.current) return;
-
-    const scrollIndex = getScrollIndex(textLinesRef.current, textScroll);
-    scrollToIndex(previewRef.current, previewRef.current, scrollIndex);
-  }
-
-  function handlePreviewScrolled(e: UIEvent) {
-    const preview = e.target as HTMLElement;
-    if (!preview.matches(":hover")) return;
-    if (!textLinesRef.current || !textScrollRef.current) return;
-
-    const scrollIndex = getScrollIndex(preview, preview);
-    scrollToIndex(textLinesRef.current, textScrollRef.current, scrollIndex);
+    const file = await fileHandle.getFile();
+    const text = await file.text();
+    setInputText(text);
   }
 
   return (
     <div className="flex flex-col h-screen">
-      <NavBar className="border-b border-highlight_yellow" />
+      <NavBar />
 
-      <div className="flex flex-row h-full divide-x divide-border overflow-hidden">
-        <div
-          ref={textScrollRef}
-          onScroll={handleTextScrolled}
-          className="flex-1 text-base overflow-y-auto"
-        >
-          <AutoSizeTextArea
-            textLinesRef={textLinesRef}
-            text={inputText}
-            onChange={setInputText}
-          />
-        </div>
+      <div className="flex flex-wrap px-2.5 border-b border-highlight_yellow">
+        <IconButton
+          icon={<Icon className="text-base" icon="folder_open" />}
+          text="Open"
+          onClick={handleOpenClicked}
+        />
 
-        <div
-          ref={previewRef}
-          onScroll={handlePreviewScrolled}
-          className="flex-1 overflow-y-scroll overflow-x-hidden"
-        >
-          {lines.map((line, index) => (
-            <Format key={index} className="min-h-6" line={line} />
-          ))}
-        </div>
+        <IconButton
+          icon={<Icon className="text-base" icon="edit" />}
+          text="Edit"
+          onClick={() => {}}
+        />
+
+        <IconButton
+          icon={<Icon className="text-base" icon="save" />}
+          text="Save"
+          onClick={() => {}}
+        />
       </div>
+
+      <Editor inputText={inputText} onChange={setInputText} />
     </div>
   );
-}
-
-function AutoSizeTextArea({
-  textLinesRef,
-  text,
-  onChange,
-}: {
-  textLinesRef: MutableRefObject<null>;
-  text: string;
-  onChange: (value: string) => void;
-}) {
-  const lines = useMemo(() => text.split("\n"), [text]);
-
-  return (
-    <div className="relative">
-      <textarea
-        className="absolute w-full h-full outline-none px-2.5 text-text_grey active:text-text_white bg-transparent placeholder:text-text_grey focus:text-text_white focus:bg-bg_hover resize-none overflow-hidden"
-        value={text}
-        onChange={(e) => onChange(e.target.value)}
-      />
-
-      <div ref={textLinesRef} className="flex flex-col xinvisible">
-        {lines.map((line, index) => (
-          <div key={index} className="px-2.5 whitespace-pre-wrap">
-            {line}{" "}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Format({ className, line }: { className: string; line: string }) {
-  const isMonth =
-    line.match(
-      /^(January|February|March|April|May|June|July|August|September|October|November|December)/
-    ) != null;
-  // const isMonth = line.match(/^M\d\d/) != null;
-
-  const isDay = line.match(/^\d.*?:/) != null;
-
-  const isTopic = line.match(/^ *-/) != null;
-
-  const isDetail = line.match(/^ *\^/) != null;
-
-  if (isMonth)
-    return (
-      <div
-        className={`sticky top-0 bg-bg pl-10 text-3xl font-extralight ${className}`}
-      >
-        {line}
-      </div>
-    );
-
-  if (isDay) {
-    const day = line.match(/^\d.*?(?=:)/);
-    const note = line.replace(/^\d.*?:/, "");
-
-    return (
-      <div className={className}>
-        <div className="pl-2.5 text-2xl font-extralight tabular-nums">
-          {day}
-        </div>
-
-        <div className="flex flex-row gap-1 pl-12 text-text_white text-base font-light">
-          <div>-</div>
-          <div>{note}</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isTopic) {
-    const note = line.replace(/^ *- */, "");
-    return (
-      <div
-        className={`flex flex-row gap-1 pl-12 text-text_white text-base font-light ${className}`}
-      >
-        <div>-</div>
-        <div>{note}</div>
-      </div>
-    );
-  }
-
-  if (isDetail) {
-    const note = line.replace(/^ *\^ */, "");
-    return (
-      <div className={`flex flex-row gap-1 pl-16 text-sm ${className}`}>
-        <div>-</div>
-        <div>{note}</div>
-      </div>
-    );
-  }
-
-  return <div className={`pl-2.5 ${className}`}>{line}</div>;
 }
