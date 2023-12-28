@@ -9,52 +9,47 @@ export function NavBar({ className }: { className?: string }) {
   return (
     <nav className={`flex flex-wrap px-2.5 ${className}`}>
       <IconButton
-        icon={<Icon className="text-xl" icon="directions_bike" />}
-        text="Sticky 2"
+        icon={<Icon className="text-xl" icon="sticky_note" />}
+        text="Sticky Notes"
         active={pathname === "/sticky2"}
         onClick={() => router.push("/sticky2")}
-      />
-
-      <IconButton
-        icon={<Icon className="text-xl" icon="directions_bike" />}
-        text="File System"
-        active={pathname === "/fileSystem"}
-        onClick={() => router.push("/fileSystem")}
-      />
-
-      <IconButton
-        icon={<Icon className="text-xl" icon="directions_bike" />}
-        text="Table"
-        active={pathname === "/table"}
-        onClick={() => router.push("/table")}
       />
 
       <div className="grow" />
 
       <IconButton
-        icon={<Icon className="text-xl" icon="directions_bike" />}
-        text="Sticky"
-        active={pathname === "/sticky"}
-        onClick={() => router.push("/sticky")}
+        icon={<Icon className="text-xl" icon="open_in_browser" />}
+        text="File System Testing"
+        active={pathname === "/fileSystem"}
+        onClick={() => router.push("/fileSystem")}
       />
 
       <IconButton
-        icon={<Icon className="text-xl" icon="partly_cloudy_day" />}
-        text="Diary"
+        icon={<Icon className="text-xl" icon="table" />}
+        text="Table Interpreter"
+        active={pathname === "/table"}
+        onClick={() => router.push("/table")}
+      />
+
+      <IconButton
+        icon={<Icon className="text-xl" icon="calendar_today" />}
+        text="Calendar"
         active={pathname === "/diary"}
         onClick={() => router.push("/diary")}
       />
 
       <IconButton
-        icon={<Icon className="text-xl" icon="directions_bike" />}
-        text="Habits"
-        active={pathname === "/habits"}
-        onClick={() => router.push("/habits")}
+        icon={<Icon className="text-xl" icon="draw" />}
+        text="Beautiful Sticky"
+        active={pathname === "/sticky"}
+        onClick={() => router.push("/sticky")}
       />
 
       <IconButton
-        icon={<Icon className="text-xl" icon="settings" />}
-        text="Settings"
+        icon={<Icon className="text-xl" icon="delete" />}
+        text="Obsolete"
+        active={pathname === "/habits"}
+        onClick={() => router.push("/habits")}
       />
     </nav>
   );
