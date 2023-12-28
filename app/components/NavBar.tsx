@@ -43,6 +43,13 @@ export function NavBar({ className }: { className?: string }) {
         onClick={() => router.push("/table")}
       />
 
+      <IconButton
+        icon={<Icon className="text-xl" icon="directions_bike" />}
+        text="File System"
+        active={pathname === "/fileSystem"}
+        onClick={() => router.push("/fileSystem")}
+      />
+
       <div className="grow" />
 
       <IconButton
