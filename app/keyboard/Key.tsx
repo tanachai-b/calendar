@@ -6,6 +6,7 @@ export function Key({
   rightTop,
   rightBottom,
   isTactile,
+  className,
 }: {
   width?: number;
   center?: string;
@@ -14,10 +15,13 @@ export function Key({
   rightTop?: string;
   rightBottom?: string;
   isTactile?: boolean;
+  className?: string;
 }) {
   return (
     <div style={{ width: `${width * 70}px` }} className={`h-[70px]`}>
-      <div className="group relative w-full h-full border border-bg hover:border-text_grey text-base leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden">
+      <div
+        className={`group relative w-full h-full border border-bg hover:border-text_grey text-base leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
+      >
         <div className="absolute w-full h-full px-2 py-2 flex flex-row justify-center items-center text-xs">
           {center}
         </div>

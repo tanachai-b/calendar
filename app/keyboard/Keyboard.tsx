@@ -15,7 +15,7 @@ export function Keyboard({
     <div className="border border-border rounded-xl overflow-hidden">
       <div className="flex flex-col divide-y divide-border">
         <div className="flex flex-row divide-x divide-border">
-          <Key {...scheme[0]} />
+          <Key {...scheme[0]} className="rounded-tl-xl" />
 
           <Key {...scheme[1]} />
           <Key {...scheme[2]} />
@@ -30,7 +30,7 @@ export function Keyboard({
 
           <Key {...scheme[11]} />
           <Key {...scheme[12]} />
-          <Key center="Backspace" width={2} />
+          <Key center="Backspace" width={2} className="rounded-tr-xl" />
         </div>
 
         <div className="flex flex-row divide-x divide-border">
@@ -88,7 +88,7 @@ export function Keyboard({
         </div>
 
         <div className="flex flex-row divide-x divide-border">
-          <Key center="Ctrl" width={1.25} />
+          <Key center="Ctrl" width={1.25} className="rounded-bl-xl" />
           <Key center="Win" width={1.25} />
           <Key center="Alt" width={1.25} />
 
@@ -97,7 +97,7 @@ export function Keyboard({
           <Key center="Alt" width={1.25} />
           <Key center="Win" width={1.25} />
           <Key center="Menu" width={1.25} />
-          <Key center="Ctrl" width={1.25} />
+          <Key center="Ctrl" width={1.25} className="rounded-br-xl" />
         </div>
       </div>
     </div>
