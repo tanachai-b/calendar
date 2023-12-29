@@ -11,22 +11,22 @@ export function NavBar({ className }: { className?: string }) {
       <IconButton
         icon={<Icon className="text-xl" icon="sticky_note" />}
         text="Sticky Notes"
-        active={pathname === "/sticky2"}
-        onClick={() => router.push("/sticky2")}
+        active={pathname === "/sticky-notes"}
+        onClick={() => router.push("/sticky-notes")}
       />
 
       <div className="grow" />
 
       <IconButton
         icon={<Icon className="text-xl" icon="open_in_browser" />}
-        text="File System Testing"
-        active={pathname === "/fileSystem"}
-        onClick={() => router.push("/fileSystem")}
+        text="File System"
+        active={pathname === "/file-system"}
+        onClick={() => router.push("/file-system")}
       />
 
       <IconButton
         icon={<Icon className="text-xl" icon="table" />}
-        text="Table Interpreter"
+        text="Table"
         active={pathname === "/table"}
         onClick={() => router.push("/table")}
       />
@@ -34,22 +34,22 @@ export function NavBar({ className }: { className?: string }) {
       <IconButton
         icon={<Icon className="text-xl" icon="calendar_today" />}
         text="Calendar"
-        active={pathname === "/diary"}
-        onClick={() => router.push("/diary")}
+        active={pathname === "/calendar"}
+        onClick={() => router.push("/calendar")}
       />
 
       <IconButton
         icon={<Icon className="text-xl" icon="draw" />}
-        text="Beautiful Sticky"
-        active={pathname === "/sticky"}
-        onClick={() => router.push("/sticky")}
+        text="Obsolete Sticky"
+        active={pathname === "/obsolete-sticky"}
+        onClick={() => router.push("/obsolete-sticky")}
       />
 
       <IconButton
         icon={<Icon className="text-xl" icon="delete" />}
         text="Obsolete"
-        active={pathname === "/habits"}
-        onClick={() => router.push("/habits")}
+        active={pathname === "/obsolete"}
+        onClick={() => router.push("/obsolete")}
       />
     </nav>
   );

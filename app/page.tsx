@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  redirect("/sticky2");
+  redirect("/sticky-notes");
 }
