@@ -11,15 +11,7 @@ export function Icon({
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
       />
-      <span
-        className={`material-symbols-rounded align-middle !leading-none ${className
-          ?.trim()
-          .split(/ +/g)
-          .map((v) => `!${v}`)
-          .join(" ")}`}
-      >
-        {icon}
-      </span>
+      <span className={`xmaterial-symbols-rounded ${className}`}>{icon}</span>
     </div>
   );
 }
