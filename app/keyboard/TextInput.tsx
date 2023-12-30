@@ -39,6 +39,7 @@ export function TextInput() {
 
     const newProcessing = handleKeyInput(element);
     setProcessing(newProcessing);
+    console.log(newProcessing);
 
     setHtml({ __html: format(element.innerText, newProcessing) });
     setSelectionStart(getSelectionStart(element));
@@ -58,26 +59,26 @@ export function TextInput() {
   }
 
   function handleKeyInput(element: HTMLElement) {
+    const text = element.innerText;
+    const oldSelection = selectionStart;
+    const newSelection = getSelectionStart(element);
+
     if (
-      !processing ||
-      processing.start + processing.text.length + 1 !==
-        getSelectionStart(element)
+      processing &&
+      newSelection === processing.start + processing.text.length + 1
     ) {
-      if (getSelectionStart(element) !== selectionStart + 1) return;
-
-      const key = element.innerText.slice(
-        selectionStart,
-        getSelectionStart(element)
-      );
-
-      return { start: selectionStart, text: key };
-    } else {
-      const key = element.innerText.slice(
-        selectionStart,
-        getSelectionStart(element)
-      );
-
+      const key = text.slice(oldSelection, newSelection);
       return { start: processing.start, text: processing?.text + key };
+    } else if (
+      processing &&
+      newSelection === processing.start + processing.text.length - 1
+    ) {
+      return { start: processing.start, text: processing?.text.slice(0, -1) };
+    } else {
+      if (newSelection === oldSelection + 1) {
+        const key = text.slice(oldSelection, newSelection);
+        return { start: oldSelection, text: key };
+      }
     }
   }
 
