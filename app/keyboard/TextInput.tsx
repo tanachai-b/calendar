@@ -47,7 +47,13 @@ export function TextInput() {
     const composingText = getComposingText(composingKeys);
     setComposing(composingText);
 
-    setHtml({ __html: format(element.innerText, composingText) });
+    setHtml({
+      __html: replace(
+        element.innerText,
+        getSelectionStart(element),
+        composingText
+      ),
+    });
 
     const selectDiff = getSelectionStart(element) - selectionStart;
     const offset = composingText ? composingText.lengthDiff - selectDiff : 0;
@@ -125,14 +131,15 @@ export function TextInput() {
     };
   }
 
-  function format(
+  function replace(
     text: string,
+    selectionEnd: number,
     composingText?: { start: number; text: string }
   ) {
     if (!composingText) return text;
 
     const before = text.slice(0, composingText.start);
-    const after = text.slice(composingText.start + composingText.text.length);
+    const after = text.slice(selectionEnd);
 
     return before + addColor(composingText.text) + after;
   }
