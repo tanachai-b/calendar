@@ -13,8 +13,6 @@ export default function KeyboardPage() {
         <TextInput />
       </div>
 
-      <button onClick={buttonclik}>hasdfkl</button>
-
       <div className="shrink-0 border-t border-border flex flex-row justify-center overflow-auto p-5">
         <Keyboard />
       </div>
@@ -22,70 +20,116 @@ export default function KeyboardPage() {
   );
 }
 
-function buttonclik(): void {
-  const selection = window.getSelection();
-  if (!selection) return;
-
-  const range = selection.getRangeAt(0);
-  range.deleteContents();
-
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
-
 function TextInput() {
   const textRef = useRef(null);
 
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(true);
-  const [text, setText] = useState<string>("asdfg qwert zxcvb");
+
+  const [html, setHtml] = useState<{ __html: string }>({
+    __html: "asdfg qwert zxcvb",
+  });
+  const [selectionStart, setSelectionStart] = useState<number>(0);
+  const [selectionEnd, setSelectionEnd] = useState<number>(0);
+
+  useEffect(() => {
+    setShowPlaceholder(html.__html.length === 0);
+
+    if (!textRef.current) return;
+    const textArea = textRef.current as HTMLElement;
+
+    textArea.focus();
+    setTimeout(() => setSelectionToEnd(textArea), 1);
+  }, []);
+
+  async function handleTextChanged(element: HTMLElement) {
+    setShowPlaceholder(element.textContent?.length === 0);
+
+    setHtml({ __html: element.innerHTML });
+    setSelectionStart(getSelectionStart(element));
+    setSelectionEnd(getSelectionEnd(element));
+  }
 
   useEffect(() => {
     if (!textRef.current) return;
     const textArea = textRef.current as HTMLElement;
 
-    textArea.textContent = text;
-    textArea.focus();
-    setSelectionToEnd(textRef.current);
+    const { childNode: startChildNode, offset: startOffset } =
+      getChildAtPosition(textArea, selectionStart);
+    const { childNode: endChildNode, offset: endOffset } = getChildAtPosition(
+      textArea,
+      selectionEnd
+    );
 
-    setShowPlaceholder(text.length === 0);
-  }, []);
+    if (!startChildNode) return;
+    if (!selectionEnd) return;
 
-  function handleTextChanged(element: HTMLElement) {
-    setText(element.textContent ?? "");
-    setShowPlaceholder(element.textContent?.length === 0);
-  }
+    const range = document.createRange();
+    range.setStart(startChildNode, startOffset);
+    range.setEnd(endChildNode, endOffset);
 
-  function handleSelectionChanged() {
-    if (!textRef.current) return;
-    const textArea = textRef.current as HTMLElement;
+    const selection = window.getSelection();
+    if (!selection) return;
 
-    const selectionStart = getSelectionStart(textArea);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }, [html]);
 
-    console.log("selectionStart", selectionStart);
+  function buttonclik(): void {
+    setHtml({ __html: "<b>asdf</b>" });
   }
 
   return (
-    <div className="h-full relative text-4xl font-extralight">
-      {showPlaceholder ? (
-        <div className="absolute h-full w-full p-5 text-border">
-          Type Here...
-        </div>
-      ) : (
-        <></>
-      )}
+    <div className="h-full">
+      <button onClick={buttonclik}>hasdfkl</button>
 
-      <div
-        ref={textRef}
-        className="absolute h-full w-full p-5 outline-none"
-        contentEditable
-        suppressContentEditableWarning={true}
-        onInput={(e) => handleTextChanged(e.target as HTMLElement)}
-        onSelect={(e) => handleSelectionChanged()}
-      >
-        {/* {text} */}
+      <div className="h-full relative text-4xl font-extralight">
+        {showPlaceholder ? (
+          <div className="absolute h-full w-full p-5 text-border">
+            Type Here...
+          </div>
+        ) : (
+          <></>
+        )}
+
+        <div
+          ref={textRef}
+          className="absolute h-full w-full p-5 outline-none"
+          contentEditable
+          suppressContentEditableWarning={true}
+          onInput={(e) => handleTextChanged(e.target as HTMLElement)}
+          dangerouslySetInnerHTML={html}
+        />
       </div>
     </div>
   );
+}
+
+function getFlatChildNodes(element: HTMLElement): ChildNode[] {
+  return Array.from(element.childNodes).reduce<ChildNode[]>((prev, curr) => {
+    if (curr.childNodes.length === 0) {
+      return [...prev, curr];
+    } else {
+      return [...prev, ...getFlatChildNodes(curr as HTMLElement)];
+    }
+  }, []);
+}
+
+function getChildAtPosition(element: HTMLElement, position: number) {
+  const flatChildNodes = getFlatChildNodes(element);
+
+  const accumTextLengths = flatChildNodes.reduce(
+    (prev, curr) => [
+      ...prev,
+      prev[prev.length - 1] + (curr.textContent?.length ?? 0),
+    ],
+    [0]
+  );
+  const childIndex = accumTextLengths.findLastIndex((v) => v < position);
+
+  return {
+    childNode: flatChildNodes[childIndex],
+    offset: position - accumTextLengths[childIndex],
+  };
 }
 
 function setSelectionToEnd(element: HTMLElement) {
@@ -95,13 +139,14 @@ function setSelectionToEnd(element: HTMLElement) {
 
   const selection = window.getSelection();
   if (!selection) return;
+
   selection.removeAllRanges();
   selection.addRange(range);
 }
 
-function getSelectionStart(element: HTMLElement) {
+function getSelectionStart(element: HTMLElement): number {
   const selection = window.getSelection();
-  if (!selection) return;
+  if (!selection) return -1;
   const range = selection.getRangeAt(0);
 
   const tempRange = document.createRange();
@@ -111,9 +156,9 @@ function getSelectionStart(element: HTMLElement) {
   return tempRange.toString().length;
 }
 
-function getSelectionEnd(element: HTMLElement) {
+function getSelectionEnd(element: HTMLElement): number {
   const selection = window.getSelection();
-  if (!selection) return;
+  if (!selection) return -1;
   const range = selection.getRangeAt(0);
 
   const tempRange = document.createRange();
