@@ -50,32 +50,24 @@ export function TextInput() {
     setSelection(textArea, selectionStart, selectionEnd);
   }, [html]);
 
-  function buttonclik(): void {
-    setHtml({ __html: "<b>asdf</b>" });
-  }
-
   return (
-    <div className="h-full flex flex-col">
-      <button onClick={buttonclik}>hasdfkl</button>
+    <div className="h-full relative text-4xl font-extralight overflow-y-scroll">
+      {showPlaceholder ? (
+        <div className="absolute h-full w-full p-5 text-border">
+          Type Here...
+        </div>
+      ) : (
+        <></>
+      )}
 
-      <div className="grow relative text-4xl font-extralight overflow-y-scroll">
-        {showPlaceholder ? (
-          <div className="absolute h-full w-full p-5 text-border">
-            Type Here...
-          </div>
-        ) : (
-          <></>
-        )}
-
-        <div
-          ref={textRef}
-          className="absolute h-full w-full p-5 outline-none whitespace-pre"
-          contentEditable
-          suppressContentEditableWarning={true}
-          onInput={(e) => handleTextChanged(e.target as HTMLElement)}
-          dangerouslySetInnerHTML={html}
-        />
-      </div>
+      <div
+        ref={textRef}
+        className="absolute h-full w-full p-5 outline-none whitespace-pre-wrap"
+        contentEditable
+        suppressContentEditableWarning={true}
+        onInput={(e) => handleTextChanged(e.target as HTMLElement)}
+        dangerouslySetInnerHTML={html}
+      />
     </div>
   );
 }
