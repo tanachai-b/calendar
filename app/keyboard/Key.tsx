@@ -18,29 +18,35 @@ export function Key({
   className?: string;
 }) {
   return (
-    <div style={{ width: `${width * 70}px` }} className="h-[70px]">
+    <div style={{ width: `${width * 60}px` }} className="h-[60px]">
       <div
-        className={`group relative w-full h-full border border-bg hover:border-text_grey text-base leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
+        className={`group relative w-full h-full border border-bg hover:border-text_grey text-base font-light leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
       >
-        <div className="absolute w-full h-full px-2 py-2 flex flex-row justify-start items-start text-xs">
-          {label}
-        </div>
+        {label ? (
+          <div className="absolute left-1.5 top-1.5 text-xs">{label}</div>
+        ) : (
+          <></>
+        )}
 
-        <div className="absolute w-full h-full px-2 py-2 flex flex-row justify-start items-start">
-          {top}
-        </div>
+        {top ? <div className="absolute left-1.5 top-1.5">{top}</div> : <></>}
 
-        <div className="absolute w-full h-full px-2 py-2 flex flex-row justify-start items-end">
-          {bottom}
-        </div>
+        {bottom ? (
+          <div className="absolute left-1.5 bottom-1.5">{bottom}</div>
+        ) : (
+          <></>
+        )}
 
-        <div className="absolute w-full h-full px-2 py-2 flex flex-row justify-end items-start">
-          {topRight}
-        </div>
+        {topRight ? (
+          <div className="absolute right-1.5 top-1.5">x{topRight}</div>
+        ) : (
+          <></>
+        )}
 
-        <div className="absolute w-full h-full px-2 py-2 flex flex-row justify-end items-end">
-          {bottomRight}
-        </div>
+        {bottomRight ? (
+          <div className="absolute right-1.5 bottom-1.5">v{bottomRight}</div>
+        ) : (
+          <></>
+        )}
 
         {tactile ? (
           <div className="absolute w-full h-full px-1 py-1 flex flex-row justify-center items-end">
