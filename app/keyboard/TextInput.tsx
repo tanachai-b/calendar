@@ -18,6 +18,12 @@ export function TextInput() {
   const [selectionStart, setSelectionStart] = useState<number>(0);
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
 
+  const [lastKey, setLastKey] = useState<string>("");
+  const [processing, setProcessing] = useState<{
+    start: number;
+    text: string;
+  }>();
+
   useEffect(() => {
     setShowPlaceholder(html.__html.length === 0);
 
@@ -31,16 +37,12 @@ export function TextInput() {
   function handleTextChanged(element: HTMLElement) {
     setShowPlaceholder(element.innerText?.length === 0);
 
-    setHtml({ __html: format(element.innerText) });
+    const newProcessing = handleKeyInput(element);
+    setProcessing(newProcessing);
+
+    setHtml({ __html: format(element.innerText, newProcessing) });
     setSelectionStart(getSelectionStart(element));
     setSelectionEnd(getSelectionEnd(element));
-  }
-
-  function format(text: string) {
-    const result = ` ${text} `
-      .replace(/(?<=\W)(test)(?=\W)/g, "<span style='color:#ffc000'>$1</span>")
-      .slice(1, -1);
-    return result;
   }
 
   useEffect(() => {
@@ -49,6 +51,48 @@ export function TextInput() {
 
     setSelection(textArea, selectionStart, selectionEnd);
   }, [html]);
+
+  function handleTextSelected(element: HTMLElement) {
+    setSelectionStart(getSelectionStart(element));
+    setSelectionEnd(getSelectionEnd(element));
+  }
+
+  function handleKeyInput(element: HTMLElement) {
+    if (
+      !processing ||
+      processing.start + processing.text.length + 1 !==
+        getSelectionStart(element)
+    ) {
+      if (getSelectionStart(element) !== selectionStart + 1) return;
+
+      const key = element.innerText.slice(
+        selectionStart,
+        getSelectionStart(element)
+      );
+
+      return { start: selectionStart, text: key };
+    } else {
+      const key = element.innerText.slice(
+        selectionStart,
+        getSelectionStart(element)
+      );
+
+      return { start: processing.start, text: processing?.text + key };
+    }
+  }
+
+  function format(text: string, processing?: { start: number; text: string }) {
+    if (!processing) return text;
+
+    const before = text.slice(0, processing.start);
+    const after = text.slice(processing.start + processing.text.length);
+
+    return before + addColor(processing.text) + after;
+  }
+
+  function addColor(text: string) {
+    return `<span style='color:#ffc000'>${text}</span>`;
+  }
 
   return (
     <div className="h-full relative text-4xl font-extralight overflow-y-scroll">
@@ -65,8 +109,10 @@ export function TextInput() {
         className="absolute h-full w-full p-5 outline-none whitespace-pre-wrap"
         contentEditable
         suppressContentEditableWarning={true}
-        onInput={(e) => handleTextChanged(e.target as HTMLElement)}
         dangerouslySetInnerHTML={html}
+        onInput={(e) => handleTextChanged(e.target as HTMLElement)}
+        onSelect={(e) => handleTextSelected(e.target as HTMLElement)}
+        onKeyPress={(e) => setLastKey(e.key)}
       />
     </div>
   );
