@@ -19,9 +19,12 @@ export function TextInput() {
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
 
   const [lastKey, setLastKey] = useState<string>("");
-  const [processing, setProcessing] = useState<{
+  const [composing, setComposing] = useState<{
+    isNew?: boolean;
     start: number;
+    keys: string[];
     text: string;
+    lengthDiff: number;
   }>();
 
   useEffect(() => {
@@ -37,13 +40,20 @@ export function TextInput() {
   function handleTextChanged(element: HTMLElement) {
     setShowPlaceholder(element.innerText?.length === 0);
 
-    const newProcessing = handleKeyInput(element);
-    setProcessing(newProcessing);
-    console.log(newProcessing);
+    const composingKeys = getComposingKeys(
+      selectionStart,
+      getSelectionStart(element)
+    );
+    const composingText = getComposingText(composingKeys);
+    setComposing(composingText);
 
-    setHtml({ __html: format(element.innerText, newProcessing) });
-    setSelectionStart(getSelectionStart(element));
-    setSelectionEnd(getSelectionEnd(element));
+    setHtml({ __html: format(element.innerText, composingText) });
+
+    const selectDiff = getSelectionStart(element) - selectionStart;
+    const offset = composingText ? composingText.lengthDiff - selectDiff : 0;
+
+    setSelectionStart(getSelectionStart(element) + offset);
+    setSelectionEnd(getSelectionEnd(element) + offset);
   }
 
   useEffect(() => {
@@ -58,37 +68,73 @@ export function TextInput() {
     setSelectionEnd(getSelectionEnd(element));
   }
 
-  function handleKeyInput(element: HTMLElement) {
-    const text = element.innerText;
-    const oldSelection = selectionStart;
-    const newSelection = getSelectionStart(element);
-
-    if (
-      processing &&
-      newSelection === processing.start + processing.text.length + 1
-    ) {
-      const key = text.slice(oldSelection, newSelection);
-      return { start: processing.start, text: processing?.text + key };
+  function getComposingKeys(oldSelection: number, newSelection: number) {
+    if (["Enter", " "].includes(lastKey)) {
+      return;
     } else if (
-      processing &&
-      newSelection === processing.start + processing.text.length - 1
+      composing &&
+      newSelection === composing.start + composing.text.length + 1
     ) {
-      return { start: processing.start, text: processing?.text.slice(0, -1) };
+      return {
+        start: composing.start,
+        keys: [...composing.keys, lastKey],
+      };
+    } else if (
+      composing &&
+      newSelection === composing.start + composing.text.length - 1
+    ) {
+      if (composing.keys.slice(0, -1).length === 0) return;
+      return {
+        start: composing.start,
+        keys: composing.keys.slice(0, -1),
+      };
+    } else if (oldSelection + 1 === newSelection) {
+      return {
+        isNew: true,
+        start: oldSelection,
+        keys: [lastKey],
+      };
     } else {
-      if (newSelection === oldSelection + 1) {
-        const key = text.slice(oldSelection, newSelection);
-        return { start: oldSelection, text: key };
-      }
+      return;
     }
   }
 
-  function format(text: string, processing?: { start: number; text: string }) {
-    if (!processing) return text;
+  function getComposingText(composingKeys?: {
+    isNew?: boolean;
+    start: number;
+    keys: string[];
+  }) {
+    if (!composingKeys) return;
 
-    const before = text.slice(0, processing.start);
-    const after = text.slice(processing.start + processing.text.length);
+    const mapping: { [key: string]: string } = {
+      q: "44",
+    };
 
-    return before + addColor(processing.text) + after;
+    const text = composingKeys.keys.map((v) => mapping[v] ?? v).join("");
+
+    const lengthDiff = composingKeys.isNew
+      ? text.length
+      : text.length - (composing?.text.length ?? 0);
+
+    return {
+      isNew: composingKeys.isNew,
+      start: composingKeys.start,
+      keys: composingKeys.keys,
+      text,
+      lengthDiff,
+    };
+  }
+
+  function format(
+    text: string,
+    composingText?: { start: number; text: string }
+  ) {
+    if (!composingText) return text;
+
+    const before = text.slice(0, composingText.start);
+    const after = text.slice(composingText.start + composingText.text.length);
+
+    return before + addColor(composingText.text) + after;
   }
 
   function addColor(text: string) {
