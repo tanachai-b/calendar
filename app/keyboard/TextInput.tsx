@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
+import { keyMappings } from "./keyMappings";
 import {
   getSelectionEnd,
   getSelectionStart,
   setSelection,
-  setSelectionToEnd,
 } from "./selectionUtils";
 
 export function TextInput() {
@@ -13,12 +13,12 @@ export function TextInput() {
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(true);
 
   const [html, setHtml] = useState<{ __html: string }>({
-    __html: "asdfg qwert zxcvb",
+    __html: "",
   });
   const [selectionStart, setSelectionStart] = useState<number>(0);
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
 
-  const [lastKey, setLastKey] = useState<string>("");
+  const [key, setKey] = useState<string>("");
   const [composing, setComposing] = useState<{
     isNew?: boolean;
     start: number;
@@ -34,7 +34,7 @@ export function TextInput() {
     const textArea = textRef.current as HTMLElement;
 
     textArea.focus();
-    setTimeout(() => setSelectionToEnd(textArea), 1);
+    // setTimeout(() => setSelectionToEnd(textArea), 1);
   }, []);
 
   function handleTextChanged(element: HTMLElement) {
@@ -75,7 +75,7 @@ export function TextInput() {
   }
 
   function getComposingKeys(oldSelection: number, newSelection: number) {
-    if (["Enter", " "].includes(lastKey)) {
+    if (!Object.keys(keyMappings).includes(key)) {
       return;
     } else if (
       composing &&
@@ -83,13 +83,13 @@ export function TextInput() {
     ) {
       return {
         start: composing.start,
-        keys: [...composing.keys, lastKey],
+        keys: [...composing.keys, key],
       };
     } else if (
       composing &&
-      newSelection === composing.start + composing.text.length - 1
+      newSelection === composing.start + composing.text.length - 1 &&
+      composing.text.length - 1 >= 0
     ) {
-      if (composing.keys.slice(0, -1).length === 0) return;
       return {
         start: composing.start,
         keys: composing.keys.slice(0, -1),
@@ -98,7 +98,7 @@ export function TextInput() {
       return {
         isNew: true,
         start: oldSelection,
-        keys: [lastKey],
+        keys: [key],
       };
     } else {
       return;
@@ -112,11 +112,7 @@ export function TextInput() {
   }) {
     if (!composingKeys) return;
 
-    const mapping: { [key: string]: string } = {
-      q: "44",
-    };
-
-    const text = composingKeys.keys.map((v) => mapping[v] ?? v).join("");
+    const text = composingKeys.keys.map((v) => keyMappings[v] ?? v).join("");
 
     const lengthDiff = composingKeys.isNew
       ? text.length
@@ -166,7 +162,7 @@ export function TextInput() {
         dangerouslySetInnerHTML={html}
         onInput={(e) => handleTextChanged(e.target as HTMLElement)}
         onSelect={(e) => handleTextSelected(e.target as HTMLElement)}
-        onKeyPress={(e) => setLastKey(e.key)}
+        onKeyPress={(e) => setKey(e.key)}
       />
     </div>
   );
