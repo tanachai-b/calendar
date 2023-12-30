@@ -7,11 +7,12 @@ export function getSelectionStart(element: HTMLElement): number {
   tempRange.setStart(element, 0);
   tempRange.setEnd(range.startContainer, range.startOffset);
 
-  const isInDiv =
-    range.startContainer.parentNode !== element &&
-    range.startContainer.parentNode?.nodeName === "DIV";
-
-  return tempRange.toString().length + (isInDiv ? 1 : 0);
+  const rangeString = getRangeString(
+    element,
+    range.startContainer,
+    range.startOffset
+  );
+  return rangeString.length;
 }
 
 export function getSelectionEnd(element: HTMLElement): number {
@@ -23,11 +24,45 @@ export function getSelectionEnd(element: HTMLElement): number {
   tempRange.setStart(element, 0);
   tempRange.setEnd(range.endContainer, range.endOffset);
 
-  const isInDiv =
-    range.startContainer.parentNode !== element &&
-    range.startContainer.parentNode?.nodeName === "DIV";
+  const rangeString = getRangeString(
+    element,
+    range.endContainer,
+    range.endOffset
+  );
+  return rangeString.length;
+}
 
-  return tempRange.toString().length + (isInDiv ? 1 : 0);
+function getRangeChildren(element: HTMLElement, toChild: Node) {
+  const deepToChild =
+    toChild.childNodes.length > 0 ? toChild.childNodes[0] : toChild;
+
+  const flatChildNodes = getFlatChildNodes(element);
+  const startChildIndex = flatChildNodes.findIndex((v) => v === deepToChild);
+
+  return flatChildNodes.slice(0, startChildIndex + 1);
+}
+
+function getRangeString(
+  element: HTMLElement,
+  toChild: Node,
+  childOffset: number
+) {
+  const endingBackward = -((toChild.textContent?.length ?? 0) - childOffset);
+
+  return getRangeChildren(element, toChild)
+    .map((v) => {
+      if (
+        v.parentNode !== element &&
+        v.parentNode?.nodeName === "DIV" &&
+        v.parentNode.firstChild === v
+      ) {
+        return "\n" + v.textContent;
+      } else {
+        return v.textContent;
+      }
+    })
+    .join("")
+    .slice(0, endingBackward !== 0 ? endingBackward : undefined);
 }
 
 function getFlatChildNodes(element: HTMLElement): ChildNode[] {
