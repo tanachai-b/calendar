@@ -1,6 +1,62 @@
-import { KeyboardScheme } from "./Keyboard";
+type KeyboardKey =
+  | "`"
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "0"
+  | "-"
+  | "="
+  | "q"
+  | "w"
+  | "e"
+  | "r"
+  | "t"
+  | "y"
+  | "u"
+  | "i"
+  | "o"
+  | "p"
+  | "["
+  | "]"
+  | "\\"
+  | "a"
+  | "s"
+  | "d"
+  | "f"
+  | "g"
+  | "h"
+  | "j"
+  | "k"
+  | "l"
+  | ";"
+  | "'"
+  | "z"
+  | "x"
+  | "c"
+  | "v"
+  | "b"
+  | "n"
+  | "m"
+  | ","
+  | "."
+  | "/";
 
-export const qwertyScheme: KeyboardScheme = {
+export type KeyboardLayout = {
+  [Key in KeyboardKey]?: {
+    top?: string;
+    bottom?: string;
+    topRight?: string;
+    bottomRight?: string;
+  };
+};
+
+export const qwertyLayout: KeyboardLayout = {
   "`": { top: "~", bottom: "`" },
   "1": { top: "!", bottom: "1" },
   "2": { top: "@", bottom: "2" },
