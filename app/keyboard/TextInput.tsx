@@ -29,9 +29,9 @@ export function TextInput() {
   }, []);
 
   async function handleTextChanged(element: HTMLElement) {
-    setShowPlaceholder(element.textContent?.length === 0);
+    setShowPlaceholder(element.innerText?.length === 0);
 
-    setHtml({ __html: element.innerHTML });
+    setHtml({ __html: element.innerText });
     setSelectionStart(getSelectionStart(element));
     setSelectionEnd(getSelectionEnd(element));
   }
@@ -62,7 +62,7 @@ export function TextInput() {
 
         <div
           ref={textRef}
-          className="absolute h-full w-full p-5 outline-none"
+          className="absolute h-full w-full p-5 outline-none whitespace-pre"
           contentEditable
           suppressContentEditableWarning={true}
           onInput={(e) => handleTextChanged(e.target as HTMLElement)}

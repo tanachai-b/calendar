@@ -7,7 +7,11 @@ export function getSelectionStart(element: HTMLElement): number {
   tempRange.setStart(element, 0);
   tempRange.setEnd(range.startContainer, range.startOffset);
 
-  return tempRange.toString().length;
+  const isInDiv =
+    range.startContainer.parentNode !== element &&
+    range.startContainer.parentNode?.nodeName === "DIV";
+
+  return tempRange.toString().length + (isInDiv ? 1 : 0);
 }
 
 export function getSelectionEnd(element: HTMLElement): number {
@@ -19,7 +23,11 @@ export function getSelectionEnd(element: HTMLElement): number {
   tempRange.setStart(element, 0);
   tempRange.setEnd(range.endContainer, range.endOffset);
 
-  return tempRange.toString().length;
+  const isInDiv =
+    range.startContainer.parentNode !== element &&
+    range.startContainer.parentNode?.nodeName === "DIV";
+
+  return tempRange.toString().length + (isInDiv ? 1 : 0);
 }
 
 function getFlatChildNodes(element: HTMLElement): ChildNode[] {
@@ -35,14 +43,16 @@ function getFlatChildNodes(element: HTMLElement): ChildNode[] {
 function getChildAtPosition(element: HTMLElement, position: number) {
   const flatChildNodes = getFlatChildNodes(element);
 
-  const accumTextLengths = flatChildNodes.reduce(
-    (prev, curr) => [
-      ...prev,
-      prev[prev.length - 1] + (curr.textContent?.length ?? 0),
-    ],
-    [0]
-  );
-  const childIndex = accumTextLengths.findLastIndex((v) => v < position);
+  const accumTextLengths = flatChildNodes
+    .reduce(
+      (prev, curr) => [
+        ...prev,
+        prev[prev.length - 1] + (curr.textContent?.length ?? 0),
+      ],
+      [0]
+    )
+    .slice(0, -1);
+  const childIndex = accumTextLengths.findLastIndex((v) => v <= position);
 
   return {
     childNode: flatChildNodes[childIndex],
