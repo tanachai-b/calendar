@@ -28,12 +28,19 @@ export function TextInput() {
     setTimeout(() => setSelectionToEnd(textArea), 1);
   }, []);
 
-  async function handleTextChanged(element: HTMLElement) {
+  function handleTextChanged(element: HTMLElement) {
     setShowPlaceholder(element.innerText?.length === 0);
 
-    setHtml({ __html: element.innerText });
+    setHtml({ __html: format(element.innerText) });
     setSelectionStart(getSelectionStart(element));
     setSelectionEnd(getSelectionEnd(element));
+  }
+
+  function format(text: string) {
+    const result = ` ${text} `
+      .replace(/(?<=\W)(test)(?=\W)/g, "<span style='color:#ffc000'>$1</span>")
+      .slice(1, -1);
+    return result;
   }
 
   useEffect(() => {
@@ -48,10 +55,10 @@ export function TextInput() {
   }
 
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col">
       <button onClick={buttonclik}>hasdfkl</button>
 
-      <div className="h-full relative text-4xl font-extralight">
+      <div className="grow relative text-4xl font-extralight overflow-y-scroll">
         {showPlaceholder ? (
           <div className="absolute h-full w-full p-5 text-border">
             Type Here...
