@@ -113,9 +113,13 @@ export function TextInput() {
     if (!composingKeys) return;
 
     const appliedDoubleStroke = applyDoubleStroke(composingKeys.keys);
-    const appliedDoubleConsonant = applyDoubleConsonant(appliedDoubleStroke);
+    const combinedConsonant = combineConsonants(appliedDoubleStroke);
+    const combinedVowels = combineVowels(combinedConsonant);
+    const combinedEndings = combineEndings(combinedVowels);
+    const combinedTones = combineTones(combinedEndings);
+    const clearedTonx = removeMarkers(combinedTones);
 
-    const text = appliedDoubleConsonant.join(" | ");
+    const text = clearedTonx.join("");
 
     const lengthDiff = composingKeys.isNew
       ? text.length
@@ -218,6 +222,84 @@ function applyDoubleStroke(keys: string[]) {
   return appliedDoubleStroke.map(({ key }) => key);
 }
 
-function applyDoubleConsonant(keys: string[]) {
-  return keys;
+function combineConsonants(keys: string[]) {
+  return keys.reduce<string[]>((prev, curr) => {
+    if (prev.length === 0) {
+      return [curr];
+    }
+
+    const last = prev[prev.length - 1];
+
+    if (last.startsWith("c_") && curr.startsWith("x_")) {
+      return [...prev.slice(0, -1), `c_${last.slice(2)}${curr.slice(2)}`];
+    } else {
+      return [...prev, curr];
+    }
+  }, []);
+}
+
+function combineVowels(keys: string[]) {
+  return keys.reduce<string[]>((prev, curr) => {
+    if (prev.length === 0) {
+      return [curr];
+    }
+
+    const last = prev[prev.length - 1];
+
+    if (last.startsWith("c_") && curr.startsWith("v_")) {
+      return [
+        ...prev.slice(0, -1),
+        `v_${curr.slice(2).replace(/c/, last.slice(2))}`,
+      ];
+    } else {
+      return [...prev, curr];
+    }
+  }, []);
+}
+
+function combineEndings(keys: string[]) {
+  return keys.reduce<string[]>((prev, curr) => {
+    if (prev.length === 0) {
+      return [curr];
+    }
+
+    const last = prev[prev.length - 1];
+
+    if (last.startsWith("v_") && curr.startsWith("c_")) {
+      return [...prev.slice(0, -1), `${last}${curr.slice(2)}`];
+    } else {
+      return [...prev, curr];
+    }
+  }, []);
+}
+
+function combineTones(keys: string[]) {
+  return keys.reduce<string[]>((prev, curr) => {
+    if (prev.length === 0) {
+      return [curr];
+    }
+
+    const last = prev[prev.length - 1];
+
+    if (last.startsWith("v_") && curr.startsWith("t_")) {
+      return [
+        ...prev.slice(0, -1),
+        `v_${last.slice(2).replace(/t/, curr.slice(2))}`,
+      ];
+    } else {
+      return [...prev, curr];
+    }
+  }, []);
+}
+
+function removeMarkers(keys: string[]) {
+  return keys.map((curr) => {
+    if (curr.startsWith("v_")) {
+      return curr.slice(2).replace(/t/, "");
+    } else if (curr.startsWith("c_")) {
+      return curr.slice(2);
+    } else {
+      return curr;
+    }
+  });
 }
