@@ -52,10 +52,10 @@ type KeyboardKey =
 
 export type KeyboardScheme = {
   [Key in KeyboardKey]?: {
-    leftTop?: string;
-    leftBottom?: string;
-    rightTop?: string;
-    rightBottom?: string;
+    top?: string;
+    bottom?: string;
+    topRight?: string;
+    bottomRight?: string;
   };
 };
 
@@ -83,11 +83,11 @@ export function Keyboard({
 
           <Key {...scheme["-"]} />
           <Key {...scheme["="]} />
-          <Key center="Backspace" width={2} className="rounded-tr-xl" />
+          <Key label="Backspace" width={2} className="rounded-tr-xl" />
         </div>
 
         <div className="flex flex-row divide-x divide-border">
-          <Key center="Tab" width={1.5} />
+          <Key label="Tab" width={1.5} />
 
           <Key {...scheme["q"]} />
           <Key {...scheme["w"]} />
@@ -106,25 +106,25 @@ export function Keyboard({
         </div>
 
         <div className="flex flex-row divide-x divide-border">
-          <Key center="Caps" width={1.75} />
+          <Key label="Caps" width={1.75} />
 
           <Key {...scheme["a"]} />
           <Key {...scheme["s"]} />
           <Key {...scheme["d"]} />
-          <Key {...scheme["f"]} isTactile={true} />
+          <Key {...scheme["f"]} tactile />
           <Key {...scheme["g"]} />
           <Key {...scheme["h"]} />
-          <Key {...scheme["j"]} isTactile={true} />
+          <Key {...scheme["j"]} tactile />
           <Key {...scheme["k"]} />
           <Key {...scheme["l"]} />
           <Key {...scheme[";"]} />
 
           <Key {...scheme["'"]} />
-          <Key center="Enter" width={2.25} />
+          <Key label="Enter" width={2.25} />
         </div>
 
         <div className="flex flex-row divide-x divide-border">
-          <Key center="Shift" width={2.25} />
+          <Key label="Shift" width={2.25} />
 
           <Key {...scheme["z"]} />
           <Key {...scheme["x"]} />
@@ -137,20 +137,20 @@ export function Keyboard({
           <Key {...scheme["."]} />
           <Key {...scheme["/"]} />
 
-          <Key center="Shift" width={2.75} />
+          <Key label="Shift" width={2.75} />
         </div>
 
         <div className="flex flex-row divide-x divide-border">
-          <Key center="Ctrl" width={1.25} className="rounded-bl-xl" />
-          <Key center="Win" width={1.25} />
-          <Key center="Alt" width={1.25} />
+          <Key label="Ctrl" width={1.25} className="rounded-bl-xl" />
+          <Key label="Win" width={1.25} />
+          <Key label="Alt" width={1.25} />
 
-          <Key center="Space" width={6.25} />
+          <Key label="" width={6.25} />
 
-          <Key center="Alt" width={1.25} />
-          <Key center="Win" width={1.25} />
-          <Key center="Menu" width={1.25} />
-          <Key center="Ctrl" width={1.25} className="rounded-br-xl" />
+          <Key label="Alt" width={1.25} />
+          <Key label="Win" width={1.25} />
+          <Key label="Menu" width={1.25} />
+          <Key label="Ctrl" width={1.25} className="rounded-br-xl" />
         </div>
       </div>
     </div>
