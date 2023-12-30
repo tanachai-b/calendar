@@ -91,7 +91,10 @@ function getChildAtPosition(element: HTMLElement, position: number) {
 
   return {
     childNode: flatChildNodes[childIndex],
-    offset: position - accumTextLengths[childIndex],
+    offset: Math.min(
+      position - accumTextLengths[childIndex],
+      flatChildNodes[childIndex]?.textContent?.length ?? 0
+    ),
   };
 }
 
