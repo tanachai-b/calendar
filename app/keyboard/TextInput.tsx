@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { keyMappings } from "./keyMappings";
+import { consonantMappings, vowelMappings } from "./keyMappings";
 import {
   getSelectionEnd,
   getSelectionStart,
@@ -48,7 +48,7 @@ export function TextInput() {
     setComposing(composingText);
 
     setHtml({
-      __html: replace(
+      __html: replaceText(
         element.innerText,
         getSelectionStart(element),
         composingText
@@ -75,7 +75,7 @@ export function TextInput() {
   }
 
   function getComposingKeys(oldSelection: number, newSelection: number) {
-    if (!Object.keys(keyMappings).includes(key)) {
+    if (!Object.keys(consonantMappings).includes(key)) {
       return;
     } else if (
       composing &&
@@ -112,7 +112,10 @@ export function TextInput() {
   }) {
     if (!composingKeys) return;
 
-    const text = composingKeys.keys.map((v) => keyMappings[v] ?? v).join("");
+    const appliedDoubleStroke = applyDoubleStroke(composingKeys.keys);
+    const appliedDoubleConsonant = applyDoubleConsonant(appliedDoubleStroke);
+
+    const text = appliedDoubleConsonant.join(" | ");
 
     const lengthDiff = composingKeys.isNew
       ? text.length
@@ -127,7 +130,7 @@ export function TextInput() {
     };
   }
 
-  function replace(
+  function replaceText(
     text: string,
     selectionEnd: number,
     composingText?: { start: number; text: string }
@@ -166,4 +169,55 @@ export function TextInput() {
       />
     </div>
   );
+}
+
+function applyDoubleStroke(keys: string[]) {
+  const appliedDoubleStroke = keys.reduce<
+    { key: string; type: string; switch: boolean }[]
+  >((prev, key) => {
+    const consonant = consonantMappings[key] ?? { key: key, switchx: true };
+    const vowel = vowelMappings[key] ?? { key: key, switchx: true };
+
+    if (prev.length === 0) {
+      return [
+        { key: consonant.key, type: "consonant", switch: consonant.switch },
+      ];
+    }
+
+    const last = prev[prev.length - 1];
+
+    if (last.type === "consonant") {
+      if (last.switch) {
+        return [
+          ...prev,
+          { key: vowel.key, type: "vowel", switch: vowel.switch },
+        ];
+      } else if (!last.switch) {
+        return [
+          ...prev,
+          { key: consonant.key, type: "consonant", switch: consonant.switch },
+        ];
+      }
+    } else if (last.type === "vowel") {
+      if (last.switch) {
+        return [
+          ...prev,
+          { key: consonant.key, type: "consonant", switch: consonant.switch },
+        ];
+      } else if (!last.switch) {
+        return [
+          ...prev,
+          { key: vowel.key, type: "vowel", switch: vowel.switch },
+        ];
+      }
+    }
+
+    return [...prev];
+  }, []);
+
+  return appliedDoubleStroke.map(({ key }) => key);
+}
+
+function applyDoubleConsonant(keys: string[]) {
+  return keys;
 }
