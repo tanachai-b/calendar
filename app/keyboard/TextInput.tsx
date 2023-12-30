@@ -127,7 +127,7 @@ export function TextInput() {
     const combinedTones = combineTones(combinedEndings);
     const clearedTonx = removeMarkers(combinedTones);
 
-    const text = clearedTonx.join("");
+    const text = clearedTonx.join(" | ");
 
     const lengthDiff = composingKeys.isNew
       ? text.length
