@@ -32,7 +32,6 @@ export function TextInput() {
     start: number;
     keys: string[];
     text: string;
-    lengthDiff: number;
   }>();
 
   useEffect(() => {
@@ -55,19 +54,32 @@ export function TextInput() {
     const composingText = getComposingText(composingKeys);
     setComposing(composingText);
 
-    setHtml({
-      __html: replaceText(
-        element.innerText,
-        getSelectionStart(element),
-        composingText
-      ),
-    });
+    if (composingText) {
+      setHtml({
+        __html: replaceText(
+          element.innerText,
+          composingText.text,
+          composingText.start,
+          getSelectionStart(element)
+        ),
+      });
 
-    const selectDiff = getSelectionStart(element) - selectionStart;
-    const offset = composingText ? composingText.lengthDiff - selectDiff : 0;
+      const selectDiff = getSelectionStart(element) - selectionStart;
 
-    setSelectionStart(getSelectionStart(element) + offset);
-    setSelectionEnd(getSelectionEnd(element) + offset);
+      const composingDiff = composingText.isNew
+        ? composingText.text.length
+        : composingText.text.length - (composing?.text.length ?? 0);
+
+      const offset = composingDiff - selectDiff;
+
+      setSelectionStart(getSelectionStart(element) + offset);
+      setSelectionEnd(getSelectionEnd(element) + offset);
+    } else {
+      setHtml({ __html: element.innerText });
+
+      setSelectionStart(getSelectionStart(element));
+      setSelectionEnd(getSelectionEnd(element));
+    }
   }
 
   useEffect(() => {
@@ -125,34 +137,28 @@ export function TextInput() {
     const combinedVowels = combineVowels(combinedConsonant);
     const combinedEndings = combineEndings(combinedVowels);
     const combinedTones = combineTones(combinedEndings);
-    const clearedTonx = removeMarkers(combinedTones);
+    const removedMarkers = removeMarkers(combinedTones);
 
-    const text = clearedTonx.join(" | ");
-
-    const lengthDiff = composingKeys.isNew
-      ? text.length
-      : text.length - (composing?.text.length ?? 0);
+    const text = removedMarkers.join(" | ");
 
     return {
       isNew: composingKeys.isNew,
       start: composingKeys.start,
       keys: composingKeys.keys,
       text,
-      lengthDiff,
     };
   }
 
   function replaceText(
     text: string,
-    selectionEnd: number,
-    composingText?: { start: number; text: string }
+    replace: string,
+    start: number,
+    end: number
   ) {
-    if (!composingText) return text;
+    const before = text.slice(0, start);
+    const after = text.slice(end);
 
-    const before = text.slice(0, composingText.start);
-    const after = text.slice(selectionEnd);
-
-    return before + addColor(composingText.text) + after;
+    return before + addColor(replace) + after;
   }
 
   function addColor(text: string) {
