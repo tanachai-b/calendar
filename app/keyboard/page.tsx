@@ -24,19 +24,14 @@ export default function KeyboardPage() {
     [nextType]
   );
 
-  const keyboardLayoutX = useMemo(() => {
-    console.log(
-      Object.keys(keyMapping).reduce((prev, curr) => {
-        return { ...prev, [curr]: keyMapping[curr].key };
-      }, {})
-    );
-    return Object.keys(keyMapping).reduce<KeyboardLayout>((prev, curr) => {
-      return {
-        ...prev,
-        [curr]: { top: keyMapping[curr].key.replace(/^.+?_/, "") },
-      };
-    }, {});
-  }, [keyMapping]);
+  const keyboardLayoutX = useMemo(
+    () =>
+      Object.keys(keyMapping).reduce<KeyboardLayout>(
+        (prev, curr) => ({ ...prev, [curr]: { top: keyMapping[curr].label } }),
+        {}
+      ),
+    [keyMapping]
+  );
 
   return (
     <div className="flex flex-col h-screen">

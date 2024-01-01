@@ -20,30 +20,32 @@ export function Key({
   return (
     <div style={{ width: `${width * 60}px` }} className="h-[60px]">
       <div
-        className={`group relative w-full h-full border border-bg hover:border-text_grey text-base font-light leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
+        className={`group relative w-full h-full border border-bg hover:border-text_grey text-3xl font-extralight xfont-looped2 leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
       >
         {label ? (
-          <div className="absolute left-1.5 top-1.5 text-xs">{label}</div>
+          <div className="absolute left-0.5 top-0.5 text-xs font-normal">
+            {label}
+          </div>
         ) : (
           <></>
         )}
 
-        {top ? <div className="absolute left-1.5 top-1.5">{top}</div> : <></>}
+        {top ? <div className="absolute left-0.5 top-0.5">{top}</div> : <></>}
 
         {bottom ? (
-          <div className="absolute left-1.5 bottom-1.5">{bottom}</div>
+          <div className="absolute left-0.5 bottom-0.5">{bottom}</div>
         ) : (
           <></>
         )}
 
         {topRight ? (
-          <div className="absolute right-1.5 top-1.5">x{topRight}</div>
+          <div className="absolute right-0.5 top-0.5">x{topRight}</div>
         ) : (
           <></>
         )}
 
         {bottomRight ? (
-          <div className="absolute right-1.5 bottom-1.5">v{bottomRight}</div>
+          <div className="absolute right-0.5 bottom-0.5">v{bottomRight}</div>
         ) : (
           <></>
         )}

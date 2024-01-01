@@ -24,6 +24,8 @@ const config: Config = {
       },
       fontFamily: {
         default: ["__Inter_e66fe9", "__Noto_Sans_Thai_e8ac70"],
+        looped: ["__Inter_e66fe9", "__Noto_Serif_Thai_93ff82"],
+        looped2: ["__Inter_e66fe9", "__Noto_Sans_Thai_Looped_040fb1"],
       },
     },
   },
