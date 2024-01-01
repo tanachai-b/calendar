@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { TextInput } from "./TextInput";
+import { TextInput } from "../TextInput/TextInput";
 import { consonantMappings } from "./keyMappings";
 import {
   applyDoubleStroke,
@@ -11,7 +11,7 @@ import {
   removeMarkers,
 } from "./linguisticUtils";
 
-export function ModifiedTextInput() {
+export function ModifiedInput() {
   const [composing, setComposing] = useState<{
     isNew?: boolean;
     start: number;

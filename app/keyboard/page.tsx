@@ -1,8 +1,8 @@
 "use client";
 
 import { NavBar } from "../components";
-import { Keyboard } from "./Keyboard";
-import { ModifiedTextInput } from "./ModifiedTextInput";
+import { ModifiedInput } from "./ModifiedInput/ModifiedInput";
+import { Keyboard } from "./VisualKeyboard/Keyboard";
 
 export default function KeyboardPage() {
   return (
@@ -10,7 +10,7 @@ export default function KeyboardPage() {
       <NavBar className="border-b border-highlight_yellow" />
 
       <div className="grow">
-        <ModifiedTextInput />
+        <ModifiedInput />
       </div>
 
       <div className="shrink-0 border-t border-border flex flex-row justify-center overflow-auto p-5">
