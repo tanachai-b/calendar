@@ -2,7 +2,7 @@
 
 import { NavBar } from "../components";
 import { Keyboard } from "./Keyboard";
-import { TextInput } from "./TextInput";
+import { ModifiedTextInput } from "./ModifiedTextInput";
 
 export default function KeyboardPage() {
   return (
@@ -10,7 +10,7 @@ export default function KeyboardPage() {
       <NavBar className="border-b border-highlight_yellow" />
 
       <div className="grow">
-        <TextInput />
+        <ModifiedTextInput />
       </div>
 
       <div className="shrink-0 border-t border-border flex flex-row justify-center overflow-auto p-5">
