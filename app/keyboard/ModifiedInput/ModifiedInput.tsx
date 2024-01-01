@@ -8,10 +8,15 @@ import {
   combineEndings,
   combineTones,
   combineVowels,
+  getNextType,
   removeMarkers,
 } from "./linguisticUtils";
 
-export function ModifiedInput() {
+export function ModifiedInput({
+  onChanged,
+}: {
+  onChanged?: (type: "consonant" | "vowel") => void;
+}) {
   const [composing, setComposing] = useState<{
     isNew?: boolean;
     start: number;
@@ -33,6 +38,8 @@ export function ModifiedInput() {
     );
     const composingText = getComposingText(composingKeys);
     setComposing(composingText);
+
+    onChanged?.(getNextType(composingText?.keys ?? []));
 
     if (composingText) {
       const newHtml = replaceAndFormatText(
@@ -56,7 +63,7 @@ export function ModifiedInput() {
     }
   }
 
-  return <TextInput onTextChanged={handleTextChanged} />;
+  return <TextInput onChanged={handleTextChanged} />;
 }
 
 function getComposingKeys(

@@ -1,11 +1,11 @@
 import { consonantMappings, vowelMappings } from "./keyMappings";
 
-export function applyDoubleStroke(keys: string[]) {
-  const appliedDoubleStroke = keys.reduce<
-    { key: string; type: string; switch: boolean }[]
+function translateKeys(keys: string[]) {
+  return keys.reduce<
+    { key: string; type: "consonant" | "vowel"; switch: boolean }[]
   >((prev, key) => {
-    const consonant = consonantMappings[key] ?? { key: key, switchx: true };
-    const vowel = vowelMappings[key] ?? { key: key, switchx: true };
+    const consonant = consonantMappings[key] ?? { key: key, switch: true };
+    const vowel = vowelMappings[key] ?? { key: key, switch: true };
 
     if (prev.length === 0) {
       return [
@@ -43,8 +43,33 @@ export function applyDoubleStroke(keys: string[]) {
 
     return [...prev];
   }, []);
+}
 
-  return appliedDoubleStroke.map(({ key }) => key);
+export function getNextType(keys: string[]) {
+  if (keys.length === 0) return "consonant";
+
+  const translatedKeys = translateKeys(keys);
+  const last = translatedKeys[translatedKeys.length - 1];
+
+  if (last.type === "consonant") {
+    if (last.switch) {
+      return "vowel";
+    } else if (!last.switch) {
+      return "consonant";
+    }
+  } else if (last.type === "vowel") {
+    if (last.switch) {
+      return "consonant";
+    } else if (!last.switch) {
+      return "vowel";
+    }
+  }
+
+  return "consonant";
+}
+
+export function applyDoubleStroke(keys: string[]) {
+  return translateKeys(keys).map(({ key }) => key);
 }
 
 export function combineConsonants(keys: string[]) {

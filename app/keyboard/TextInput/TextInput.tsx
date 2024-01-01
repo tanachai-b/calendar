@@ -7,9 +7,9 @@ import {
 } from "./selectionUtils";
 
 export function TextInput({
-  onTextChanged,
+  onChanged,
 }: {
-  onTextChanged?: (
+  onChanged?: (
     html: string,
     oldSelection: number,
     newSelection: number,
@@ -41,7 +41,7 @@ export function TextInput({
     setShowPlaceholder(element.innerText?.length === 0);
 
     const { newHtml, selectionOffset } =
-      onTextChanged?.(
+      onChanged?.(
         element.innerText,
         selectionStart,
         getSelectionStart(element),
