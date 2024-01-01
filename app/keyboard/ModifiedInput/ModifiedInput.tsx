@@ -14,8 +14,10 @@ import {
 
 export function ModifiedInput({
   onChanged,
+  onShiftChanged,
 }: {
-  onChanged?: (type: "consonant" | "vowel") => void;
+  onChanged?: (nextType: "consonant" | "vowel") => void;
+  onShiftChanged?: (isDown: boolean) => void;
 }) {
   const [composing, setComposing] = useState<{
     isNew?: boolean;
@@ -63,7 +65,9 @@ export function ModifiedInput({
     }
   }
 
-  return <TextInput onChanged={handleTextChanged} />;
+  return (
+    <TextInput onChanged={handleTextChanged} onShiftChanged={onShiftChanged} />
+  );
 }
 
 function getComposingKeys(

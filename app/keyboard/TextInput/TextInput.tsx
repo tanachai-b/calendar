@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
 import {
   getSelectionEnd,
@@ -8,6 +8,7 @@ import {
 
 export function TextInput({
   onChanged,
+  onShiftChanged,
 }: {
   onChanged?: (
     html: string,
@@ -15,6 +16,7 @@ export function TextInput({
     newSelection: number,
     key: string
   ) => { newHtml: string; selectionOffset: number } | undefined;
+  onShiftChanged?: (isDown: boolean) => void;
 }) {
   const textRef = useRef(null);
 
@@ -25,7 +27,10 @@ export function TextInput({
   });
   const [selectionStart, setSelectionStart] = useState<number>(0);
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
-  const [key, setKey] = useState<string>("");
+  const [pressedKey, setPressedKey] = useState<string>("");
+
+  const [shiftDown, setShiftDown] = useState<boolean>(false);
+  useEffect(() => onShiftChanged?.(shiftDown), [shiftDown]);
 
   useEffect(() => {
     setShowPlaceholder(html.__html.length === 0);
@@ -45,7 +50,7 @@ export function TextInput({
         element.innerText,
         selectionStart,
         getSelectionStart(element),
-        key
+        pressedKey
       ) ?? {};
 
     if (newHtml != null && selectionOffset != null) {
@@ -91,7 +96,13 @@ export function TextInput({
         dangerouslySetInnerHTML={html}
         onInput={(e) => handleTextChanged(e.target as HTMLElement)}
         onSelect={(e) => handleTextSelected(e.target as HTMLElement)}
-        onKeyPress={(e) => setKey(e.key)}
+        onKeyPress={(e) => setPressedKey(e.key)}
+        onKeyDown={(e) => {
+          if (e.key === "Shift") setShiftDown(true);
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Shift") setShiftDown(false);
+        }}
       />
     </div>
   );

@@ -15,32 +15,22 @@ import { consonantMappings, vowelMappings } from "./ModifiedInput/keyMappings";
 
 export default function KeyboardPage() {
   const [nextType, setNextType] = useState<"consonant" | "vowel">("consonant");
+  const [shiftDown, setShiftDown] = useState<boolean>(false);
 
-  const keyboardLayout = useMemo(
-    () => (nextType === "consonant" ? consonantsLayout : vowelsLayout),
-    [nextType]
-  );
-
-  // const keyMapping = useMemo(
-  //   () => (nextType === "consonant" ? consonantMappings : vowelMappings),
-  //   [nextType]
-  // );
-
-  // const keyboardLayoutX = useMemo(
-  //   () =>
-  //     Object.keys(keyMapping).reduce<KeyboardLayout>(
-  //       (prev, curr) => ({ ...prev, [curr]: { top: keyMapping[curr].label } }),
-  //       {}
-  //     ),
-  //   [keyMapping]
-  // );
+  const keyboardLayout = useMemo(() => {
+    if (nextType === "consonant") {
+      return !shiftDown ? consonantsLayout : consonantShiftsLayout;
+    } else {
+      return !shiftDown ? vowelsLayout : vowelShiftsLayout;
+    }
+  }, [nextType, shiftDown]);
 
   return (
     <div className="flex flex-col h-screen">
       <NavBar className="border-b border-highlight_yellow" />
 
       <div className="grow">
-        <ModifiedInput onChanged={setNextType} />
+        <ModifiedInput onChanged={setNextType} onShiftChanged={setShiftDown} />
       </div>
 
       <div className="shrink-0 border-t border-border flex flex-row justify-center overflow-auto p-5">
