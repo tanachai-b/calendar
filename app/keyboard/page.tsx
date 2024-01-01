@@ -6,7 +6,9 @@ import { ModifiedInput } from "./ModifiedInput/ModifiedInput";
 import { Keyboard } from "./VisualKeyboard/Keyboard";
 import {
   KeyboardLayout,
+  consonantShiftsLayout,
   consonantsLayout,
+  vowelShiftsLayout,
   vowelsLayout,
 } from "./VisualKeyboard/keyboardLayouts";
 import { consonantMappings, vowelMappings } from "./ModifiedInput/keyMappings";
@@ -19,19 +21,19 @@ export default function KeyboardPage() {
     [nextType]
   );
 
-  const keyMapping = useMemo(
-    () => (nextType === "consonant" ? consonantMappings : vowelMappings),
-    [nextType]
-  );
+  // const keyMapping = useMemo(
+  //   () => (nextType === "consonant" ? consonantMappings : vowelMappings),
+  //   [nextType]
+  // );
 
-  const keyboardLayoutX = useMemo(
-    () =>
-      Object.keys(keyMapping).reduce<KeyboardLayout>(
-        (prev, curr) => ({ ...prev, [curr]: { top: keyMapping[curr].label } }),
-        {}
-      ),
-    [keyMapping]
-  );
+  // const keyboardLayoutX = useMemo(
+  //   () =>
+  //     Object.keys(keyMapping).reduce<KeyboardLayout>(
+  //       (prev, curr) => ({ ...prev, [curr]: { top: keyMapping[curr].label } }),
+  //       {}
+  //     ),
+  //   [keyMapping]
+  // );
 
   return (
     <div className="flex flex-col h-screen">
@@ -42,7 +44,7 @@ export default function KeyboardPage() {
       </div>
 
       <div className="shrink-0 border-t border-border flex flex-row justify-center overflow-auto p-5">
-        <Keyboard layout={keyboardLayoutX} />
+        <Keyboard layout={keyboardLayout} />
       </div>
     </div>
   );
