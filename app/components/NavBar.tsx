@@ -22,6 +22,13 @@ export function NavBar({ className }: { className?: string }) {
         onClick={() => router.push("/keyboard")}
       />
 
+      <IconButton
+        icon={<Icon className="text-xl" icon="difference" />}
+        text="Text Diff"
+        active={pathname === "/text-diff"}
+        onClick={() => router.push("/text-diff")}
+      />
+
       <div className="grow" />
 
       <IconButton
