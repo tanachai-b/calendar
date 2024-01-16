@@ -19,10 +19,10 @@ export default function StickyPage() {
 
   return (
     <div className={cx("h-full", "flex", "flex-col")}>
-      <NavBar className={cx("border-b", "border-highlight_yellow")} />
+      <NavBar className={cx("border-b", "border-highlight-yellow")} />
 
       <div
-        className={cx("grow", "relative", "overflow-auto", "bg-black_light")}
+        className={cx("grow", "relative", "overflow-auto", "bg-black-light")}
       >
         {data.map(({ x, y }, index) => (
           <Sticky key={index} {...{ x, y, color: index }} />
@@ -82,13 +82,13 @@ function Sticky({
         "rounded-x5",
         "shadow-x20",
         [
-          "bg-yellow_light",
-          "bg-orange_light",
-          "bg-red_light",
-          "bg-purple_light",
-          "bg-blue_light",
-          "bg-green_bluish_light",
-          "bg-green_yellowish_light",
+          "bg-yellow-light",
+          "bg-orange-light",
+          "bg-red-light",
+          "bg-purple-light",
+          "bg-blue-light",
+          "bg-green-bluish-light",
+          "bg-green-yellowish-light",
           "bg-white",
         ][color],
 
