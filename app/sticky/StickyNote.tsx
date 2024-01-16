@@ -5,11 +5,13 @@ import cx from "classnames";
 export function StickyNote({
   x = 0,
   y = 0,
+  rotate = 0,
   color = 0,
   onMouseDown,
 }: {
   x?: number;
   y?: number;
+  rotate?: number;
   color?: number;
   onMouseDown?: () => void;
 } = {}) {
@@ -39,7 +41,7 @@ export function StickyNote({
           "bg-white",
         ][color]
       )}
-      style={{ left: x, top: y }}
+      style={{ left: x, top: y, transform: `rotate(${rotate}deg)` }}
       onMouseDown={onMouseDown}
     >
       Note

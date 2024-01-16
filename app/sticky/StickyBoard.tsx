@@ -5,7 +5,12 @@ import { MouseEvent, useState } from "react";
 
 import { StickyNote } from "./StickyNote";
 
-export type stickyBoardData = { x: number; y: number; color: number };
+export type stickyBoardData = {
+  x: number;
+  y: number;
+  rotate: number;
+  color: number;
+};
 
 export function StickyBoard({
   className,
@@ -58,10 +63,19 @@ export function StickyBoard({
       onMouseUp={() => setIsMouseDown(false)}
       onMouseLeave={() => setIsMouseDown(false)}
     >
-      {data?.map(({ x, y, color }, index) => (
+      <div className={cx("blur-x50 opacity-25")}>
+        {data?.map(({ x, y, color }, index) => (
+          <StickyNote
+            key={index}
+            {...{ x, y, color, onMouseDown: () => handleChildMouseDown(index) }}
+          />
+        ))}
+      </div>
+      {data?.map(({ x, y, rotate, color }, index) => (
         <StickyNote
           key={index}
-          {...{ x, y, color, onMouseDown: () => handleChildMouseDown(index) }}
+          {...{ x, y, rotate, color }}
+          onMouseDown={() => handleChildMouseDown(index)}
         />
       ))}
     </div>
