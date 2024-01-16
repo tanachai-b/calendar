@@ -1,7 +1,7 @@
 "use client";
 
 import cx from "classnames";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useEffect, useState } from "react";
 
 import { NavBar } from "../components";
 
@@ -21,18 +21,33 @@ export default function StickyPage() {
     <div className={cx("h-full", "flex", "flex-col")}>
       <NavBar className={cx("border-b", "border-highlight-yellow")} />
 
-      <div
-        className={cx("grow", "relative", "overflow-auto", "bg-black-light")}
-      >
+      <StickyBoard className={cx("grow")}>
         {data.map(({ x, y }, index) => (
-          <Sticky key={index} {...{ x, y, color: index }} />
+          <StickyNote key={index} {...{ x, y, color: index }} />
         ))}
-      </div>
+      </StickyBoard>
     </div>
   );
 }
 
-function Sticky({
+function StickyBoard({
+  className,
+  children,
+}: {
+  className: string;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={cx("relative", "overflow-auto", "bg-black-light", className)}
+    >
+      {/* <div className="blur-x20">{children}</div> */}
+      {children}
+    </div>
+  );
+}
+
+function StickyNote({
   x: initX = 0,
   y: initY = 0,
   color = 0,
@@ -99,7 +114,7 @@ function Sticky({
       onMouseUp={() => setIsMouseDown(false)}
       onMouseMove={handleMouseMove}
     >
-      Sticky Text
+      Note
     </div>
   );
 }
