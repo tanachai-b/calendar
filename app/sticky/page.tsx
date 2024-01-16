@@ -1,18 +1,23 @@
 "use client";
 
 import cx from "classnames";
-import { MouseEvent, ReactNode, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 import { NavBar } from "../components";
 
 export default function StickyPage() {
-  const [data, setData] = useState<{ x: number; y: number }[]>([]);
+  type StickyBoardData = Required<
+    NonNullable<Parameters<typeof StickyBoard>[0]>
+  >["data"];
+
+  const [data, setData] = useState<StickyBoardData>([]);
 
   useEffect(() => {
     setData(
-      Array.from({ length: 8 }).map((v, i) => ({
-        x: i * 70 + 70,
-        y: i * 70 + 70,
+      Array.from({ length: 8 }).map((_value, index) => ({
+        x: index * 70 + 70,
+        y: index * 70 + 70,
+        color: index,
       }))
     );
   }, []);
@@ -21,66 +26,83 @@ export default function StickyPage() {
     <div className={cx("h-full", "flex", "flex-col")}>
       <NavBar className={cx("border-b", "border-highlight-yellow")} />
 
-      <StickyBoard className={cx("grow")}>
-        {data.map(({ x, y }, index) => (
-          <StickyNote key={index} {...{ x, y, color: index }} />
-        ))}
-      </StickyBoard>
+      <StickyBoard className={cx("grow")} data={data} onDataChanged={setData} />
     </div>
   );
 }
 
 function StickyBoard({
   className,
-  children,
+  data = [],
+  onDataChanged,
 }: {
-  className: string;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className={cx("relative", "overflow-auto", "bg-black-light", className)}
-    >
-      {/* <div className="blur-x20">{children}</div> */}
-      {children}
-    </div>
-  );
-}
-
-function StickyNote({
-  x: initX = 0,
-  y: initY = 0,
-  color = 0,
-}: {
-  x?: number;
-  y?: number;
-  color?: number;
-}) {
-  const [x, setX] = useState<number>(initX);
-  const [y, setY] = useState<number>(initY);
-
-  const [mouseX, setMouseX] = useState<number>(0);
-  const [mouseY, setMouseY] = useState<number>(0);
-
+  className?: string;
+  data?: { x: number; y: number; color: number }[];
+  onDataChanged?: (newData: { x: number; y: number; color: number }[]) => void;
+} = {}) {
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
+  const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  function handleChildMouseDown(childIndex: number) {
+    const result = [
+      ...data.filter((_value, index) => index !== childIndex),
+      data[childIndex],
+    ];
+    onDataChanged?.(result);
+
+    setIsMouseDown(true);
+  }
 
   function handleMouseDown(e: MouseEvent) {
-    setIsMouseDown(true);
-
-    setMouseX(e.clientX);
-    setMouseY(e.clientY);
+    setMouse({ x: e.clientX, y: e.clientY });
   }
 
   function handleMouseMove(e: MouseEvent) {
     if (!isMouseDown) return;
 
-    setX((x) => x + e.clientX - mouseX);
-    setY((y) => y + e.clientY - mouseY);
+    const newData = [
+      ...data.map((value, index) => {
+        if (index !== data.length - 1) return value;
 
-    setMouseX(e.clientX);
-    setMouseY(e.clientY);
+        const newX = value.x + (e.clientX - mouse.x);
+        const newY = value.y + (e.clientY - mouse.y);
+        return { ...value, x: newX, y: newY };
+      }),
+    ];
+    onDataChanged?.(newData);
+
+    setMouse({ x: e.clientX, y: e.clientY });
   }
 
+  return (
+    <div
+      className={cx("relative", "overflow-auto", "bg-black-light", className)}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={() => setIsMouseDown(false)}
+      onMouseLeave={() => setIsMouseDown(false)}
+    >
+      {data?.map(({ x, y, color }, index) => (
+        <StickyNote
+          key={index}
+          {...{ x, y, color, onMouseDown: () => handleChildMouseDown(index) }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function StickyNote({
+  x = 0,
+  y = 0,
+  color = 0,
+  onMouseDown,
+}: {
+  x?: number;
+  y?: number;
+  color?: number;
+  onMouseDown?: () => void;
+} = {}) {
   return (
     <div
       className={cx(
@@ -105,14 +127,10 @@ function StickyNote({
           "bg-green-bluish-light",
           "bg-green-yellowish-light",
           "bg-white",
-        ][color],
-
-        isMouseDown ? "z-50" : "z-auto"
+        ][color]
       )}
       style={{ left: x, top: y }}
-      onMouseDown={handleMouseDown}
-      onMouseUp={() => setIsMouseDown(false)}
-      onMouseMove={handleMouseMove}
+      onMouseDown={onMouseDown}
     >
       Note
     </div>
