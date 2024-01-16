@@ -29,6 +29,13 @@ export function NavBar({ className }: { className?: string }) {
         onClick={() => router.push("/text-diff")}
       />
 
+      <IconButton
+        icon={<Icon className="text-xl" icon="sticky_note" />}
+        text="Sticky"
+        active={pathname === "/sticky"}
+        onClick={() => router.push("/sticky")}
+      />
+
       <div className="grow" />
 
       <IconButton
