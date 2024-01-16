@@ -1,6 +1,8 @@
 "use client";
 
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import cx from "classnames";
+import { MouseEvent, useEffect, useState } from "react";
+
 import { NavBar } from "../components";
 
 export default function StickyPage() {
@@ -16,10 +18,12 @@ export default function StickyPage() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full">
-      <NavBar className="border-b border-highlight_yellow" />
+    <div className={cx("h-full", "flex", "flex-col")}>
+      <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
-      <div className="grow bg-bg2 relative overflow-auto">
+      <div
+        className={cx("grow", "relative", "overflow-auto", "bg-black_light")}
+      >
         {data.map(({ x, y }, index) => (
           <Sticky key={index} {...{ x, y, color: index }} />
         ))}
@@ -37,17 +41,6 @@ function Sticky({
   y?: number;
   color?: number;
 }) {
-  const COLORS = [
-    "#ffe080",
-    "#ffb080",
-    "#ff80c0",
-    "#c080ff",
-    "#80c0ff",
-    "#80ffc0",
-    "#c0ff80",
-    "#ffffff",
-  ];
-
   const [x, setX] = useState<number>(initX);
   const [y, setY] = useState<number>(initY);
 
@@ -75,26 +68,33 @@ function Sticky({
 
   return (
     <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
+      className={cx(
+        "absolute",
+        "w-x300",
+        "h-x300",
 
-        width: "250px",
-        height: "250px",
+        "p-x15",
+        "text-x15",
+        "font-normal",
+        "text-black",
+        "select-none",
 
-        borderRadius: "5px",
-        backgroundColor: COLORS[color],
-        boxShadow: "0 10px 20px 0px #00000080",
+        "rounded-x5",
+        "shadow-x20",
+        [
+          "bg-yellow_light",
+          "bg-orange_light",
+          "bg-red_light",
+          "bg-purple_light",
+          "bg-blue_light",
+          "bg-green_bluish_light",
+          "bg-green_yellowish_light",
+          "bg-white",
+        ][color],
 
-        padding: "10px",
-        color: "#000000",
-        fontSize: "12px",
-        fontWeight: 400,
-        userSelect: "none",
-
-        zIndex: isMouseDown ? 100 : "auto",
-      }}
+        isMouseDown ? "z-50" : "z-auto"
+      )}
+      style={{ left: x, top: y }}
       onMouseDown={handleMouseDown}
       onMouseUp={() => setIsMouseDown(false)}
       onMouseMove={handleMouseMove}
