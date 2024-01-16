@@ -33,7 +33,7 @@ export function Key({
   return (
     <div style={{ width: `${width * 60}px` }} className="h-[60px]">
       <div
-        className={`group relative w-full h-full border border-bg ${keyColors[color]} hover:border-text_grey whitespace-pre text-3xl font-extralight xfont-looped2 leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
+        className={`group relative w-full h-full border border-bg ${keyColors[color]} hover:border-text_grey whitespace-pre text-3xl font-extralight xfont-looped leading-none hover:bg-bg_hover hover:text-text_white overflow-hidden ${className}`}
       >
         {label ? (
           <div className="absolute left-1.5 top-1.5 text-xs font-normal">
