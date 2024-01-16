@@ -35,7 +35,7 @@ export default function FileSystem() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       <NavBar className="border-b border-highlight_yellow" />
 
       <button onClick={() => getFile()}>hello</button>

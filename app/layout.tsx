@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${inter.className} ${notoSansThai.className} ${notoSerifThai.className} ${notoSansThaiLooped.className} !font-default bg-bg text-text_grey text-xs`}
+        className={`${inter.className} ${notoSansThai.className} ${notoSerifThai.className} ${notoSansThaiLooped.className} !font-default bg-bg text-text_grey text-xs h-full`}
       >
         {children}
       </body>

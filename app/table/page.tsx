@@ -9,7 +9,7 @@ export default function Sticky() {
   const [inputText, setInputText] = useState(initialInput);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       <NavBar className="border-b border-highlight_yellow" />
 
       <div className="flex flex-row h-full divide-x divide-border overflow-hidden text-base">

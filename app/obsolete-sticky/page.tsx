@@ -20,7 +20,7 @@ export default function Sticky() {
   const splittedDays = useMemo(() => textToObjectsAAA(inputText), [inputText]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       <NavBar className="border-b border-highlight_yellow" />
 
       <div className="flex flex-row h-full divide-x divide-border overflow-hidden">

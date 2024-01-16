@@ -24,7 +24,7 @@ export default function Sticky() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       <NavBar />
 
       <div className="flex flex-wrap px-2.5 border-b border-highlight_yellow">
