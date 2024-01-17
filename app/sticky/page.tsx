@@ -4,7 +4,7 @@ import cx from "classnames";
 import { useEffect, useState } from "react";
 
 import { NavBar } from "../components";
-import { StickyBoard, stickyBoardData } from "./StickyBoard";
+import { StickyBoard, stickyBoardData } from "./StickyBoard/StickyBoard";
 
 export default function StickyPage() {
   const [data, setData] = useState<stickyBoardData[]>([]);
