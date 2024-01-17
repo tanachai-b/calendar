@@ -1,7 +1,7 @@
 "use client";
 
 import cx from "classnames";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { StickyNote } from "./StickyNote";
 
@@ -22,8 +22,40 @@ export function StickyBoard({
   data?: stickyBoardData[];
   onDataChanged?: (newData: stickyBoardData[]) => void;
 } = {}) {
+  const ref = useRef(null);
+
+  const [isChildMouseDown, setIsChildMouseDown] = useState<boolean>(false);
+
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
   const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const [boardSize, setBoardSize] = useState({ w: 9999, h: 9999 });
+
+  useEffect(() => {
+    if (ref.current) resizeObserver.observe(ref.current);
+  }, [ref.current]);
+
+  const resizeObserver = new ResizeObserver(() => {
+    if (!ref.current) return;
+    const current = ref.current as HTMLElement;
+    setBoardSize({ w: current.offsetWidth, h: current.offsetHeight });
+  });
+
+  const datax = useMemo(() => {
+    const minX = -250 + 20;
+    const minY = -250 + 20;
+    const maxX = boardSize.w - 20;
+    const maxY = boardSize.h - 20;
+
+    return data.map(({ x, y, ...rest }) => {
+      return {
+        ...rest,
+        x: Math.min(Math.max(x, minX), maxX),
+        y: Math.min(Math.max(y, minY), maxY),
+        isDraggable: x > minX && x < maxX && y > minY && y < maxY,
+      };
+    });
+  }, [data, boardSize]);
 
   function handleChildMouseDown(childIndex: number) {
     const result = [
@@ -32,46 +64,67 @@ export function StickyBoard({
     ];
     onDataChanged?.(result);
 
-    setIsMouseDown(true);
+    setIsChildMouseDown(true);
   }
 
   function handleMouseDown(e: MouseEvent) {
+    setIsMouseDown(true);
     setMouse({ x: e.clientX, y: e.clientY });
   }
 
   function handleMouseMove({ clientX, clientY }: MouseEvent) {
-    if (!isMouseDown) return;
-
-    const child = data[data.length - 1];
-    const newX = child.x + (clientX - mouse.x);
-    const newY = child.y + (clientY - mouse.y);
-    const movedChild = { ...child, x: newX, y: newY };
-
-    const newData = [...data.slice(0, -1), movedChild];
-
-    onDataChanged?.(newData);
-
+    if (isChildMouseDown) {
+      moveTopChild(clientX - mouse.x, clientY - mouse.y);
+    } else if (isMouseDown) {
+      moveAllChild(clientX - mouse.x, clientY - mouse.y);
+    }
     setMouse({ x: clientX, y: clientY });
+  }
+
+  function moveTopChild(offsetX: number, offsetY: number) {
+    const { x, y, ...rest } = data[data.length - 1];
+    const newData = [
+      ...data.slice(0, -1),
+      { ...rest, x: x + offsetX, y: y + offsetY },
+    ];
+    onDataChanged?.(newData);
+  }
+
+  function moveAllChild(offsetX: number, offsetY: number) {
+    const newData = data.map(({ x, y, ...rest }) => ({
+      ...rest,
+      x: x + offsetX,
+      y: y + offsetY,
+    }));
+    onDataChanged?.(newData);
+  }
+
+  function handleMouseUp() {
+    setIsChildMouseDown(false);
+    setIsMouseDown(false);
   }
 
   return (
     <div
-      className={cx("relative", "overflow-auto", "bg-black-light", className)}
+      ref={ref}
+      className={cx("relative", "overflow-hidden", "bg-black-light", className)}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
-      onMouseUp={() => setIsMouseDown(false)}
-      onMouseLeave={() => setIsMouseDown(false)}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
     >
       <div className={cx("blur-x50", "opacity-25")}>
-        {data?.map(({ text, color, x, y, rotate }, index) => (
+        {datax?.map(({ text, color, x, y, rotate }, index) => (
           <StickyNote key={index} {...{ text, color, x, y, rotate }} />
         ))}
       </div>
-      {data?.map(({ text, color, x, y, rotate }, index) => (
+      {datax?.map(({ text, color, x, y, rotate, isDraggable }, index) => (
         <StickyNote
           key={text}
           {...{ text, color, x, y, rotate }}
-          onMouseDown={() => handleChildMouseDown(index)}
+          onMouseDown={
+            isDraggable ? () => handleChildMouseDown(index) : () => {}
+          }
         />
       ))}
     </div>

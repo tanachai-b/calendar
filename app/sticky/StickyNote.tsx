@@ -4,10 +4,10 @@ import cx from "classnames";
 
 export function StickyNote({
   text,
+  color = 0,
   x = 0,
   y = 0,
   rotate = 0,
-  color = 0,
   onMouseDown,
 }: {
   text?: string;

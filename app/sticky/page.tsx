@@ -14,8 +14,8 @@ export default function StickyPage() {
       Array.from({ length: 8 }).map((_value, index) => ({
         text: `note ${index + 1}`,
         color: index,
-        x: 70 + index * 10,
-        y: 70 + index * 10,
+        x: 1750 * Math.random(),
+        y: 750 * Math.random(),
         rotate: 10 * Math.random() - 10 / 2,
       }))
     );
