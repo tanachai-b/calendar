@@ -10,6 +10,7 @@ const config: Config = {
     fontFamily: {
       default: ["__Inter_e66fe9", "__Noto_Sans_Thai_e8ac70"],
       looped: ["__Inter_e66fe9", "__Noto_Sans_Thai_Looped_040fb1"],
+      handwriting: ["__Playpen_Sans_39ec5b"],
     },
     fontSize: {
       xs: ["12px", { lineHeight: "16px" }],
@@ -20,12 +21,12 @@ const config: Config = {
       "3xl": ["30px", { lineHeight: "36px" }],
       "4xl": ["36px", { lineHeight: "40px" }],
 
-      x10: "10px",
-      x12: "12px",
-      x15: "15px",
-      x20: "20px",
-      x30: "30px",
-      x50: "50px",
+      x10: ["10px", { lineHeight: "15px" }],
+      x12: ["12px", { lineHeight: "17px" }],
+      x15: ["15px", { lineHeight: "20px" }],
+      x20: ["20px", { lineHeight: "30px" }],
+      x30: ["30px", { lineHeight: "50px" }],
+      x50: ["50px", { lineHeight: "70px" }],
     },
     spacing: {
       "0": "0px",

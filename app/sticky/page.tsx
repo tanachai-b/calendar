@@ -12,10 +12,11 @@ export default function StickyPage() {
   useEffect(() => {
     setData(
       Array.from({ length: 8 }).map((_value, index) => ({
+        text: `note ${index + 1}`,
+        color: index,
         x: 70 + index * 10,
         y: 70 + index * 10,
         rotate: 10 * Math.random() - 10 / 2,
-        color: index,
       }))
     );
   }, []);

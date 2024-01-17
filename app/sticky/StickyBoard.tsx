@@ -6,10 +6,11 @@ import { MouseEvent, useState } from "react";
 import { StickyNote } from "./StickyNote";
 
 export type stickyBoardData = {
+  text: string;
+  color: number;
   x: number;
   y: number;
   rotate: number;
-  color: number;
 };
 
 export function StickyBoard({
@@ -38,21 +39,19 @@ export function StickyBoard({
     setMouse({ x: e.clientX, y: e.clientY });
   }
 
-  function handleMouseMove(e: MouseEvent) {
+  function handleMouseMove({ clientX, clientY }: MouseEvent) {
     if (!isMouseDown) return;
 
-    const newData = [
-      ...data.map((value, index) => {
-        if (index !== data.length - 1) return value;
+    const child = data[data.length - 1];
+    const newX = child.x + (clientX - mouse.x);
+    const newY = child.y + (clientY - mouse.y);
+    const movedChild = { ...child, x: newX, y: newY };
 
-        const newX = value.x + (e.clientX - mouse.x);
-        const newY = value.y + (e.clientY - mouse.y);
-        return { ...value, x: newX, y: newY };
-      }),
-    ];
+    const newData = [...data.slice(0, -1), movedChild];
+
     onDataChanged?.(newData);
 
-    setMouse({ x: e.clientX, y: e.clientY });
+    setMouse({ x: clientX, y: clientY });
   }
 
   return (
@@ -63,18 +62,15 @@ export function StickyBoard({
       onMouseUp={() => setIsMouseDown(false)}
       onMouseLeave={() => setIsMouseDown(false)}
     >
-      <div className={cx("blur-x50 opacity-25")}>
-        {data?.map(({ x, y, color }, index) => (
-          <StickyNote
-            key={index}
-            {...{ x, y, color, onMouseDown: () => handleChildMouseDown(index) }}
-          />
+      <div className={cx("blur-x50", "opacity-25")}>
+        {data?.map(({ text, color, x, y, rotate }, index) => (
+          <StickyNote key={index} {...{ text, color, x, y, rotate }} />
         ))}
       </div>
-      {data?.map(({ x, y, rotate, color }, index) => (
+      {data?.map(({ text, color, x, y, rotate }, index) => (
         <StickyNote
-          key={index}
-          {...{ x, y, rotate, color }}
+          key={text}
+          {...{ text, color, x, y, rotate }}
           onMouseDown={() => handleChildMouseDown(index)}
         />
       ))}
