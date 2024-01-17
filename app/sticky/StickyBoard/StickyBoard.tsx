@@ -43,7 +43,11 @@ export function StickyBoard({
     >
       <div className={cx("blur-x50", "opacity-25")}>
         {forcedInScreenData?.map(({ text, color, x, y, rotate }, index) => (
-          <StickyNote key={index} {...{ text, color, x, y, rotate }} />
+          <StickyNote
+            key={index}
+            isAmbient
+            {...{ text, color, x, y, rotate }}
+          />
         ))}
       </div>
       {forcedInScreenData?.map(

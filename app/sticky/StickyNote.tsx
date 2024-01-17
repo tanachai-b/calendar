@@ -3,6 +3,7 @@
 import cx from "classnames";
 
 export function StickyNote({
+  isAmbient,
   text,
   color = 0,
   x = 0,
@@ -10,6 +11,7 @@ export function StickyNote({
   rotate = 0,
   onMouseDown,
 }: {
+  isAmbient?: boolean;
   text?: string;
   color?: number;
   x?: number;
@@ -37,7 +39,7 @@ export function StickyNote({
         "justify-center",
 
         "rounded-x5",
-        "shadow-x20",
+        { "shadow-x20": !isAmbient },
         [
           "bg-yellow-light",
           "bg-orange-light",
@@ -56,7 +58,7 @@ export function StickyNote({
       }}
       onMouseDown={onMouseDown}
     >
-      {text}
+      {!isAmbient ? text : <></>}
     </div>
   );
 }
