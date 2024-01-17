@@ -14,7 +14,7 @@ export function useHandleDrag(
 
   function handleChildMouseDown(childIndex: number) {
     setIsChildMouseDown(true);
-    onDataChanged?.(moveChildToFront(data, childIndex));
+    onDataChanged?.(moveChildToTop(data, childIndex));
   }
 
   function handleMouseDown(e: MouseEvent) {
@@ -40,6 +40,7 @@ export function useHandleDrag(
   }
 
   return {
+    isChildMouseDown,
     handleChildMouseDown,
     handleMouseDown,
     handleMouseMove,
@@ -47,7 +48,7 @@ export function useHandleDrag(
   };
 }
 
-function moveChildToFront(data: stickyBoardData[], childIndex: number) {
+function moveChildToTop(data: stickyBoardData[], childIndex: number) {
   return [
     ...data.filter((_value, index) => index !== childIndex),
     data[childIndex],

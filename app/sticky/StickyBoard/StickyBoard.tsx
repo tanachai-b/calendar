@@ -1,6 +1,7 @@
 "use client";
 
 import cx from "classnames";
+import { useState } from "react";
 
 import { StickyNote } from "../StickyNote";
 import { useForceDataInScreen } from "./useForceDataInScreen";
@@ -25,7 +26,10 @@ export function StickyBoard({
 } = {}) {
   const { boardRef, forcedInScreenData } = useForceDataInScreen(data);
 
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const {
+    isChildMouseDown,
     handleChildMouseDown,
     handleMouseDown,
     handleMouseMove,
@@ -42,25 +46,70 @@ export function StickyBoard({
       onMouseLeave={handleMouseUp}
     >
       <div className={cx("blur-x50", "opacity-25")}>
-        {forcedInScreenData?.map(({ text, color, x, y, rotate }, index) => (
-          <StickyNote
-            key={index}
-            isAmbient
-            {...{ text, color, x, y, rotate }}
-          />
+        {forcedInScreenData?.map(({ text, color, x, y, rotate }) => (
+          <StickyNote key={text} {...{ text, color, x, y, rotate }} />
         ))}
       </div>
-      {forcedInScreenData?.map(
-        ({ text, color, x, y, rotate, isDraggable }, index) => (
-          <StickyNote
-            key={index}
-            {...{ text, color, x, y, rotate }}
-            onMouseDown={
-              isDraggable ? () => handleChildMouseDown(index) : () => {}
-            }
-          />
-        )
-      )}
+      <div>
+        {forcedInScreenData?.map(
+          ({ text, color, x, y, rotate, isDraggable }, index) => {
+            if (isEditing && index === forcedInScreenData.length - 1) return;
+
+            return (
+              <StickyNote
+                key={text}
+                {...{ text, color, x, y, rotate }}
+                dragging={
+                  isChildMouseDown && index === forcedInScreenData.length - 1
+                }
+                onMouseDown={
+                  isDraggable ? () => handleChildMouseDown(index) : () => {}
+                }
+                onDoubleClick={
+                  isDraggable ? () => setIsEditing(true) : () => {}
+                }
+              />
+            );
+          }
+        )}
+      </div>
+      <div className={cx("w-full", "h-full")}>
+        <div
+          className={cx(
+            "absolute",
+            "w-full",
+            "h-full",
+            { "backdrop-blur-x10": isEditing },
+            { "pointer-events-none": !isEditing },
+            "transition-all"
+          )}
+        />
+        <div
+          className={cx(
+            "absolute",
+            "w-full",
+            "h-full",
+            "bg-black-light",
+            isEditing ? "opacity-50" : "opacity-0",
+            { "pointer-events-none": !isEditing },
+            "transition-all"
+          )}
+          onClick={() => setIsEditing(false)}
+        />
+        {isEditing ? (
+          forcedInScreenData
+            .slice(-1)
+            ?.map(({ text, color, x, y, rotate }) => (
+              <StickyNote
+                key={text}
+                {...{ text, color, x, y, rotate }}
+                editing
+              />
+            ))
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 }

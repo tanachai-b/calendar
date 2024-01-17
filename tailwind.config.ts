@@ -124,6 +124,7 @@ const config: Config = {
       x20: "0 10px 20px 0px #00000080",
       x30: "0 15px 30px 0px #00000080",
       x50: "0 20px 50px 0px #00000080",
+      x70: "0 30px 70px 0px #00000080",
     },
     blur: {
       x0: "0px",

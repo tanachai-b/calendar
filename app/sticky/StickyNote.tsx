@@ -3,21 +3,25 @@
 import cx from "classnames";
 
 export function StickyNote({
-  isAmbient,
   text,
   color = 0,
   x = 0,
   y = 0,
   rotate = 0,
+  dragging,
+  editing,
   onMouseDown,
+  onDoubleClick,
 }: {
-  isAmbient?: boolean;
   text?: string;
   color?: number;
   x?: number;
   y?: number;
   rotate?: number;
+  dragging?: boolean;
+  editing?: boolean;
   onMouseDown?: () => void;
+  onDoubleClick?: () => void;
 } = {}) {
   return (
     <div
@@ -39,7 +43,7 @@ export function StickyNote({
         "justify-center",
 
         "rounded-x5",
-        { "shadow-x20": !isAmbient },
+        editing ? "shadow-x50" : dragging ? "shadow-x20" : "shadow-x10",
         [
           "bg-yellow-light",
           "bg-orange-light",
@@ -49,7 +53,9 @@ export function StickyNote({
           "bg-green-bluish-light",
           "bg-green-yellowish-light",
           "bg-white",
-        ][color]
+        ][color],
+
+        "transition-shadow"
       )}
       style={{
         left: x,
@@ -57,8 +63,11 @@ export function StickyNote({
         transform: `rotate(${rotate}deg)`,
       }}
       onMouseDown={onMouseDown}
+      onDoubleClick={onDoubleClick}
     >
-      {!isAmbient ? text : <></>}
+      <div className={cx("text-center")} contentEditable={editing}>
+        {text}
+      </div>
     </div>
   );
 }
