@@ -28,7 +28,13 @@ export function StickyNote({
 } = {}) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => ref.current?.focus(), []);
+  useEffect(() => {
+    ref.current?.focus();
+    ref.current?.setSelectionRange(
+      ref.current.value.length,
+      ref.current.value.length
+    );
+  }, []);
 
   return (
     <div
@@ -74,9 +80,11 @@ export function StickyNote({
       onMouseDown={onMouseDown}
       onDoubleClick={onDoubleClick}
     >
-      <div className={cx("relative", "w-full", "flex")}>
+      <div
+        className={cx("relative", "w-full", "flex", "max-w-full", "max-h-full")}
+      >
         <div
-          className={cx("w-full", "h-fit", "p-x15", {
+          className={cx("w-full", "h-fit", "p-x15", "break-words", {
             "opacity-0": editing,
           })}
         >

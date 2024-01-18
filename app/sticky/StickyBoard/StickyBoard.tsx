@@ -13,6 +13,7 @@ export type stickyBoardData = {
   x: number;
   y: number;
   rotate: number;
+  key: string;
 };
 
 export function StickyBoard({
@@ -53,18 +54,18 @@ export function StickyBoard({
       onMouseLeave={handleMouseUp}
     >
       <div className={cx("blur-x50", "opacity-25")}>
-        {forcedInScreenData?.map(({ text, color, x, y, rotate }) => (
-          <StickyNote key={text} {...{ text, color, x, y, rotate }} />
+        {forcedInScreenData?.map(({ text, color, x, y, rotate, key }) => (
+          <StickyNote key={key} {...{ text, color, x, y, rotate }} />
         ))}
       </div>
 
       <div>
         {forcedInScreenData?.map(
-          ({ text, color, x, y, rotate, isDraggable }, index) => {
+          ({ text, color, x, y, rotate, key, isDraggable }, index) => {
             if (isEditing && index === forcedInScreenData.length - 1) return;
             return (
               <StickyNote
-                key={text}
+                key={key}
                 {...{ text, color, x, y, rotate }}
                 dragging={
                   isChildMouseDown && index === forcedInScreenData.length - 1
@@ -108,9 +109,9 @@ export function StickyBoard({
         {isEditing ? (
           forcedInScreenData
             .slice(-1)
-            ?.map(({ text, color, x, y, rotate }) => (
+            ?.map(({ text, color, x, y, rotate, key }) => (
               <StickyNote
-                key={text}
+                key={key}
                 {...{ text, color, x, y, rotate }}
                 editing
                 onInput={handleInput}
