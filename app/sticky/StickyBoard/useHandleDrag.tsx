@@ -6,23 +6,30 @@ import { stickyBoardData } from "./StickyBoard";
 
 export function useHandleDrag(
   data: stickyBoardData[],
-  onDataChanged?: (newData: stickyBoardData[]) => void
+  onDataChanged: (newData: stickyBoardData[]) => void,
+  isEditing: boolean
 ) {
   const [isChildMouseDown, setIsChildMouseDown] = useState<boolean>(false);
   const [isBoardMouseDown, setIsBoardMouseDown] = useState<boolean>(false);
   const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   function handleChildMouseDown(childIndex: number) {
+    if (isEditing) return;
+
     setIsChildMouseDown(true);
     onDataChanged?.(moveChildToTop(data, childIndex));
   }
 
   function handleMouseDown(e: MouseEvent) {
+    if (isEditing) return;
+
     setIsBoardMouseDown(true);
     setMouse({ x: e.clientX, y: e.clientY });
   }
 
   function handleMouseMove({ clientX, clientY }: MouseEvent) {
+    if (isEditing) return;
+
     const offsetX = clientX - mouse.x;
     const offsetY = clientY - mouse.y;
 
@@ -35,6 +42,8 @@ export function useHandleDrag(
   }
 
   function handleMouseUp() {
+    if (isEditing) return;
+
     setIsChildMouseDown(false);
     setIsBoardMouseDown(false);
   }

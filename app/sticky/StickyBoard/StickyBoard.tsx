@@ -34,7 +34,14 @@ export function StickyBoard({
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
-  } = useHandleDrag(data, onDataChanged);
+  } = useHandleDrag(data, onDataChanged ?? (() => {}), isEditing);
+
+  function handleInput(text: string): void {
+    return onDataChanged?.([
+      ...data.slice(0, -1),
+      { ...data[data.length - 1], text },
+    ]);
+  }
 
   return (
     <div
@@ -50,11 +57,11 @@ export function StickyBoard({
           <StickyNote key={text} {...{ text, color, x, y, rotate }} />
         ))}
       </div>
+
       <div>
         {forcedInScreenData?.map(
           ({ text, color, x, y, rotate, isDraggable }, index) => {
             if (isEditing && index === forcedInScreenData.length - 1) return;
-
             return (
               <StickyNote
                 key={text}
@@ -73,6 +80,7 @@ export function StickyBoard({
           }
         )}
       </div>
+
       <div className={cx("w-full", "h-full")}>
         <div
           className={cx(
@@ -84,6 +92,7 @@ export function StickyBoard({
             "transition-all"
           )}
         />
+
         <div
           className={cx(
             "absolute",
@@ -104,6 +113,7 @@ export function StickyBoard({
                 key={text}
                 {...{ text, color, x, y, rotate }}
                 editing
+                onInput={handleInput}
               />
             ))
         ) : (

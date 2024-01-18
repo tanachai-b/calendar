@@ -1,6 +1,7 @@
 "use client";
 
 import cx from "classnames";
+import { useEffect, useRef } from "react";
 
 export function StickyNote({
   text,
@@ -12,6 +13,7 @@ export function StickyNote({
   editing,
   onMouseDown,
   onDoubleClick,
+  onInput,
 }: {
   text?: string;
   color?: number;
@@ -22,7 +24,12 @@ export function StickyNote({
   editing?: boolean;
   onMouseDown?: () => void;
   onDoubleClick?: () => void;
+  onInput?: (text: string) => void;
 } = {}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => ref.current?.focus(), []);
+
   return (
     <div
       className={cx(
@@ -30,12 +37,14 @@ export function StickyNote({
         "w-[250px]",
         "h-[250px]",
 
-        "p-x15",
         "text-x30",
         "font-light",
         "text-black-light",
         "font-handwriting",
         "select-none",
+        "whitespace-pre-wrap",
+        "text-center",
+        "overflow-hidden",
 
         "flex",
         "flex-col",
@@ -65,8 +74,30 @@ export function StickyNote({
       onMouseDown={onMouseDown}
       onDoubleClick={onDoubleClick}
     >
-      <div className={cx("text-center")} contentEditable={editing}>
-        {text}
+      <div className={cx("relative", "w-full", "flex")}>
+        <div
+          className={cx("w-full", "h-fit", "p-x15", {
+            "opacity-0": editing,
+          })}
+        >
+          {text}
+        </div>
+        <textarea
+          ref={ref}
+          className={cx(
+            "absolute",
+            "size-full",
+            "resize-none",
+            "outline-none",
+            "bg-transparent",
+            "overflow-hidden",
+            "text-center",
+            "p-x15"
+          )}
+          hidden={!editing}
+          value={text}
+          onChange={(e) => onInput?.(e.target.value ?? "")}
+        />
       </div>
     </div>
   );
