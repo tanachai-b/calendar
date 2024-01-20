@@ -89,6 +89,23 @@ const config: Config = {
       "green-bluish-light": "#80ffc0",
       "green-yellowish-light": "#c0ff80",
     },
+    borderWidth: {
+      DEFAULT: "1px",
+
+      x0: "0px",
+      x1: "1px",
+      x2: "2px",
+      x3: "3px",
+      x5: "5px",
+      x7: "7px",
+      x10: "10px",
+      x15: "15px",
+      x20: "20px",
+      x30: "30px",
+      x50: "50px",
+      x70: "70px",
+      x100: "100px",
+    },
     borderRadius: {
       none: "0",
       xl: "12px",
