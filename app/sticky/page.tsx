@@ -13,9 +13,9 @@ export default function StickyPage() {
 
   useEffect(() => retrieveStorageOrSampleData(STORAGE_KEY, setNotes), []);
 
-  function handleNotesChange(data: NoteData[]): void {
-    setNotes(data);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data, undefined, 4));
+  function handleNotesChange(notes: NoteData[]): void {
+    setNotes(notes);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
   }
 
   return (
@@ -25,7 +25,7 @@ export default function StickyPage() {
       <Board
         className={cx("grow")}
         notes={notes}
-        onNotesChange={(data) => handleNotesChange(data)}
+        onNotesChange={(notes) => handleNotesChange(notes)}
       />
     </div>
   );
@@ -33,7 +33,7 @@ export default function StickyPage() {
 
 function retrieveStorageOrSampleData(
   STORAGE_KEY: string,
-  setNotes: (data: NoteData[]) => void
+  setNotes: (notes: NoteData[]) => void
 ) {
   const storage = localStorage.getItem(STORAGE_KEY);
 
