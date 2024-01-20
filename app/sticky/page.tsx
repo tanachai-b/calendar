@@ -19,6 +19,18 @@ export default function StickyPage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
   }
 
+  function handleNew() {
+    console.log("handleNew");
+  }
+
+  function handleOpen() {
+    console.log("handleOpen");
+  }
+
+  function handleSave() {
+    console.log("handleSave");
+  }
+
   return (
     <div
       className={cx("h-full", "flex", "flex-col", "select-none")}
@@ -34,9 +46,9 @@ export default function StickyPage() {
         />
 
         <ToolBar className={cx("absolute", "size-full")}>
-          <ToolButton icon="note_add" text="New" />
-          <ToolButton icon="folder_open" text="Open" />
-          <ToolButton icon="save" text="Save" />
+          <ToolButton icon="note_add" text="New" onClick={handleNew} />
+          <ToolButton icon="folder_open" text="Open" onClick={handleOpen} />
+          <ToolButton icon="save" text="Save" onClick={handleSave} />
         </ToolBar>
       </div>
     </div>

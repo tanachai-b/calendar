@@ -6,7 +6,10 @@ import { ReactNode } from "react";
 export function ToolBar({
   className,
   children,
-}: { className?: string; children?: ReactNode } = {}) {
+}: {
+  className?: string;
+  children?: ReactNode;
+} = {}) {
   return (
     <div
       className={cx(
@@ -42,9 +45,11 @@ export function ToolBar({
 export function ToolButton({
   icon,
   text,
+  onClick,
 }: {
   icon?: string;
   text?: string;
+  onClick?: () => void;
 } = {}) {
   return (
     <div
@@ -70,6 +75,7 @@ export function ToolButton({
         "cursor-pointer",
         "group"
       )}
+      onClick={onClick}
     >
       <Icon icon={icon} className="text-x30" />
       <div
