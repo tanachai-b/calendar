@@ -54,7 +54,8 @@ export function StickyNote({
         ></TextEdit>
       </Paper>
       <ToolBar
-        isEditing={isEditing}
+        visible={isEditing}
+        color={color}
         onPreviewColor={(color) => setPreviewColor(color)}
         onSelectColor={(color) => onColorChange?.(color)}
       />

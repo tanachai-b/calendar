@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { memoizedRandom, getToday, getDate } from "@/app/utils";
+import { memoizedRandom, getToday, getDate } from "../../utils";
 
 export function useCalendarData() {
   const { year, month } = getToday();

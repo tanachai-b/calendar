@@ -47,7 +47,6 @@
 
 .xmaterial-symbols-rounded {
   font-family: "Material Symbols Rounded";
-  font-weight: normal;
   font-style: normal;
   line-height: 1;
   letter-spacing: normal;
@@ -58,6 +57,5 @@
   direction: ltr;
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
-
   @apply align-middle leading-none;
 }

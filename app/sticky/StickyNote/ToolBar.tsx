@@ -1,11 +1,15 @@
 import cx from "classnames";
 
+import { Icon } from "../../components";
+
 export function ToolBar({
-  isEditing,
+  visible,
+  color,
   onPreviewColor,
   onSelectColor,
 }: {
-  isEditing?: boolean;
+  visible?: boolean;
+  color?: number;
   onPreviewColor?: (colorIndex?: number) => void;
   onSelectColor?: (colorIndex: number) => void;
 }) {
@@ -26,9 +30,9 @@ export function ToolBar({
         "ml-x20",
         "flex",
         "flex-col",
-        isEditing ? "opacity-100" : "opacity-0",
+        visible ? "opacity-100" : "opacity-0",
         "transition-all",
-        { "pointer-events-auto": isEditing }
+        { "pointer-events-auto": visible }
       )}
       onMouseLeave={() => onPreviewColor?.()}
     >
@@ -54,7 +58,14 @@ export function ToolBar({
               "group-hover:scale-150"
             )}
           >
-            <div className={cx("size-full", "rounded-full", bgColor)}></div>
+            <div className={cx("size-full", "rounded-full", bgColor)}>
+              <Icon
+                icon="check"
+                className={cx("text-black-light", "text-[25px]", {
+                  invisible: color !== index,
+                })}
+              />
+            </div>
           </div>
         </div>
       ))}
