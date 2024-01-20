@@ -1,9 +1,7 @@
-"use client";
-
 import cx from "classnames";
 import { useState } from "react";
 
-import { StickyNote } from "../StickyNote";
+import { StickyNote } from "../StickyNote/StickyNote";
 import { useForceDataInScreen } from "./useForceDataInScreen";
 import { useHandleDrag } from "./useHandleDrag";
 

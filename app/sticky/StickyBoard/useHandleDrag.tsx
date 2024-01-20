@@ -1,5 +1,3 @@
-"use client";
-
 import { MouseEvent, useState } from "react";
 
 import { stickyBoardData } from "./StickyBoard";

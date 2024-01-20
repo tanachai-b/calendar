@@ -1,7 +1,8 @@
-"use client";
-
 import cx from "classnames";
-import { RefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+
+import { Gradients } from "./Gradients";
+import { TextEdit } from "./TextEdit";
 
 export function StickyNote({
   text,
@@ -87,79 +88,6 @@ export function StickyNote({
         editing={editing}
         onInput={onInput}
       ></TextEdit>
-    </div>
-  );
-}
-
-function TextEdit({
-  ref,
-  text,
-  editing,
-  onInput,
-}: {
-  ref?: RefObject<HTMLTextAreaElement>;
-  text?: string;
-  editing?: boolean;
-  onInput?: (text: string) => void;
-} = {}) {
-  return (
-    <div
-      className={cx("absolute", "w-full", "flex", "max-w-full", "max-h-full")}
-    >
-      <div
-        className={cx("w-full", "h-fit", "p-x10", "break-words", {
-          "opacity-0": editing,
-        })}
-      >
-        {text}
-      </div>
-      <textarea
-        ref={ref}
-        className={cx(
-          "absolute",
-          "size-full",
-          "resize-none",
-          "outline-none",
-          "bg-transparent",
-          "overflow-hidden",
-          "text-center",
-          "p-x10"
-        )}
-        hidden={!editing}
-        value={text}
-        onChange={(e) => onInput?.(e.target.value ?? "")}
-      />
-    </div>
-  );
-}
-
-function Gradients() {
-  return (
-    <div className={cx("size-full", "absolute")}>
-      <div
-        className={cx("size-full", "absolute")}
-        style={{
-          background: "linear-gradient(155deg, #00000020,#00000000 20%)",
-        }}
-      ></div>
-      <div
-        className={cx("size-full", "absolute")}
-        style={{
-          background: "linear-gradient(-155deg, #00000020,#00000000 20%)",
-        }}
-      ></div>
-      <div
-        className={cx("size-full", "absolute")}
-        style={{
-          background: "linear-gradient(25deg, #ffffff20,#ffffff00 20%)",
-        }}
-      ></div>
-      <div
-        className={cx("size-full", "absolute")}
-        style={{
-          background: "linear-gradient(-25deg, #ffffff20,#ffffff00 20%)",
-        }}
-      ></div>
     </div>
   );
 }

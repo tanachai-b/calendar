@@ -1,5 +1,3 @@
-"use client";
-
 import { RefObject, useEffect, useMemo, useRef, useState } from "react";
 
 import { stickyBoardData } from "./StickyBoard";
