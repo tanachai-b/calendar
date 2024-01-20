@@ -4,12 +4,12 @@ import { RefObject } from "react";
 export function TextEdit({
   ref,
   text,
-  editing,
+  isEditing,
   onInput,
 }: {
   ref?: RefObject<HTMLTextAreaElement>;
   text?: string;
-  editing?: boolean;
+  isEditing?: boolean;
   onInput?: (text: string) => void;
 } = {}) {
   return (
@@ -18,7 +18,7 @@ export function TextEdit({
     >
       <div
         className={cx("w-full", "h-fit", "p-x10", "break-words", {
-          "opacity-0": editing,
+          "opacity-0": isEditing,
         })}
       >
         {text}
@@ -35,7 +35,7 @@ export function TextEdit({
           "text-center",
           "p-x10"
         )}
-        hidden={!editing}
+        hidden={!isEditing}
         value={text}
         onChange={(e) => onInput?.(e.target.value ?? "")}
       />

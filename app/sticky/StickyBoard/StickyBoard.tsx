@@ -4,6 +4,7 @@ import { useState } from "react";
 import { StickyNote } from "../StickyNote/StickyNote";
 import { useForceDataInScreen } from "./useForceDataInScreen";
 import { useHandleDrag } from "./useHandleDrag";
+import { EditingBackDrop } from "./EditingBackDrop";
 
 export type stickyBoardData = {
   text: string;
@@ -71,32 +72,12 @@ export function StickyBoard({
         )}
       </div>
 
-      <div
-        className={cx(
-          "absolute",
-          "w-full",
-          "h-full",
-          "transition-all",
-          { "backdrop-blur-x10": isEditing },
-          { "pointer-events-none": !isEditing }
-        )}
+      <EditingBackDrop
+        isEditing={isEditing}
         onClick={() => setIsEditing(false)}
       />
 
-      <div
-        className={cx(
-          "absolute",
-          "w-full",
-          "h-full",
-          "transition-all",
-          "bg-black-light",
-          isEditing ? "opacity-50" : "opacity-0",
-          { "pointer-events-none": !isEditing }
-        )}
-        onClick={() => setIsEditing(false)}
-      />
-
-      <div className={cx()}>
+      <div>
         {forcedInScreenData.map(
           ({ text, color, x, y, rotate, key, isDraggable }, index) => {
             if (index !== forcedInScreenData.length - 1) return;
@@ -104,14 +85,14 @@ export function StickyBoard({
               <StickyNote
                 key={key}
                 {...{ text, color, x, y, rotate }}
-                dragging={isChildMouseDown}
+                isDragging={isChildMouseDown}
+                isEditing={isEditing}
                 onMouseDown={
                   isDraggable ? () => handleChildMouseDown(index) : () => {}
                 }
                 onDoubleClick={
                   isDraggable ? () => setIsEditing(true) : () => {}
                 }
-                editing={isEditing}
                 onInput={handleInput}
               />
             );

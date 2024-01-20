@@ -1,6 +1,6 @@
 import cx from "classnames";
 
-export function Gradients() {
+export function Shadings() {
   return (
     <div className={cx("size-full", "absolute")}>
       <div
