@@ -61,8 +61,8 @@ export function StickyBoard({
         "relative",
         "overflow-hidden",
         "bg-black-light",
-        className,
-        "select-none"
+        "select-none",
+        className
       )}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -114,6 +114,10 @@ export function StickyBoard({
                 }
                 onTextChange={handleTextChange}
                 onColorChange={handleColorChange}
+                onDelete={() => {
+                  setIsEditing(false);
+                  onDataChanged?.([...data.slice(0, -1)]);
+                }}
               />
             );
           }

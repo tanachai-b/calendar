@@ -18,6 +18,7 @@ export function StickyNote({
   onDoubleClick,
   onTextChange,
   onColorChange,
+  onDelete,
 }: {
   text?: string;
   color?: number;
@@ -30,6 +31,7 @@ export function StickyNote({
   onDoubleClick?: () => void;
   onTextChange?: (text: string) => void;
   onColorChange?: (color: number) => void;
+  onDelete?: () => void;
 } = {}) {
   const [previewColor, setPreviewColor] = useState<number>();
 
@@ -47,17 +49,14 @@ export function StickyNote({
         onDoubleClick={onDoubleClick}
       >
         <Shadings />
-        <TextEdit
-          text={text}
-          isEditing={isEditing}
-          onChange={onTextChange}
-        ></TextEdit>
+        <TextEdit text={text} isEditing={isEditing} onChange={onTextChange} />
       </Paper>
       <ToolBar
         visible={isEditing}
         color={color}
         onPreviewColor={(color) => setPreviewColor(color)}
         onSelectColor={(color) => onColorChange?.(color)}
+        onDelete={onDelete}
       />
     </div>
   );
