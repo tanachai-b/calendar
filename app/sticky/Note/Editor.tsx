@@ -44,26 +44,29 @@ export function Editor({
 
 function DeleteButton({ onClick: onDelete }: { onClick?: () => void } = {}) {
   return (
-    <div
-      className={cx("relative", "flex", "flex-row", "items-center", "gap-x10")}
-      onClick={onDelete}
-    >
+    <div className={cx("relative", "flex", "flex-row", "items-center")}>
       <div className={cx("p-x2", "group", "peer")}>
         <div
           className={cx(
             "size-x30",
             "rounded-full",
+
             "border",
             "border-white",
             "border-x2",
+
             "bg-black-light",
             "bg-opacity-50",
+
             "transition-all",
             "group-hover:scale-150",
+
             "flex",
             "items-center",
-            "justify-center"
+            "justify-center",
+            "cursor-pointer"
           )}
+          onClick={onDelete}
         >
           <Icon icon="close" className={cx("text-white", "text-[25px]")} />
         </div>
@@ -73,10 +76,18 @@ function DeleteButton({ onClick: onDelete }: { onClick?: () => void } = {}) {
         className={cx(
           "absolute",
           "left-[40px]",
-          "peer-hover:left-[45px]",
-          "transition-all",
+
+          "rounded-x7",
+          "px-x5",
+          "py-x2",
+
+          "text-x15",
+          "font-light",
+          "whitespace-pre",
           "text-white",
-          "text-x15"
+
+          "bg-black-light",
+          "bg-opacity-50"
         )}
       >
         Delete

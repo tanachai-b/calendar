@@ -67,14 +67,7 @@ export function Board({
   return (
     <div
       ref={boardRef}
-      className={cx(
-        "relative",
-        "overflow-hidden",
-        "bg-black-light",
-        "select-none",
-        className
-      )}
-      onContextMenu={(e) => e.preventDefault()}
+      className={cx("relative", "overflow-hidden", "bg-black-light", className)}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}

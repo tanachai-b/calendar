@@ -53,7 +53,7 @@ function Color({
 } = {}) {
   return (
     <div
-      className={cx("p-x2", "group")}
+      className={cx("p-x2", "group", "cursor-pointer")}
       onMouseOver={onMouseOver}
       onClick={onClick}
     >
