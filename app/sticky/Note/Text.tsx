@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { useEffect, useRef } from "react";
 
-export function TextEdit({
+export function Text({
   text,
   isEditing,
   onChange,

@@ -1,6 +1,6 @@
 import cx from "classnames";
 
-export function EditingBackDrop({
+export function Backdrop({
   isEditing,
   onClick,
 }: {

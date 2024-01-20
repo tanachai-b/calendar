@@ -3,20 +3,18 @@
 import cx from "classnames";
 import { useEffect, useState } from "react";
 
-import { StickyBoard, stickyBoardData } from "./StickyBoard/StickyBoard";
+import { Board, NoteData } from "./Board/Board";
 import { sampleData } from "./sampleData";
 
 export default function StickyPage() {
   const STORAGE_KEY = "sticky_data";
 
-  const [data, setData] = useState<stickyBoardData[]>([]);
+  const [notes, setNotes] = useState<NoteData[]>([]);
 
-  useEffect(() => {
-    retrieveStorageOrSampleData(STORAGE_KEY, setData);
-  }, []);
+  useEffect(() => retrieveStorageOrSampleData(STORAGE_KEY, setNotes), []);
 
-  function handleDataChanged(data: stickyBoardData[]): void {
-    setData(data);
+  function handleNotesChange(data: NoteData[]): void {
+    setNotes(data);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data, undefined, 4));
   }
 
@@ -24,10 +22,10 @@ export default function StickyPage() {
     <div className={cx("h-full", "flex", "flex-col")}>
       {/* <NavBar className={cx("border-b", "border-highlight-yellow")} /> */}
 
-      <StickyBoard
+      <Board
         className={cx("grow")}
-        data={data}
-        onDataChanged={(data) => handleDataChanged(data)}
+        notes={notes}
+        onNotesChange={(data) => handleNotesChange(data)}
       />
     </div>
   );
@@ -35,17 +33,15 @@ export default function StickyPage() {
 
 function retrieveStorageOrSampleData(
   STORAGE_KEY: string,
-  setData: (data: stickyBoardData[]) => void
+  setNotes: (data: NoteData[]) => void
 ) {
-  (() => {
-    const storage = localStorage.getItem(STORAGE_KEY);
+  const storage = localStorage.getItem(STORAGE_KEY);
 
-    if (storage) {
-      setData(JSON.parse(storage));
-      return;
-    }
+  if (storage) {
+    setNotes(JSON.parse(storage));
+    return;
+  }
 
-    setData(sampleData);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
-  })();
+  setNotes(sampleData);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
 }

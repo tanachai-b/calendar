@@ -1,8 +1,8 @@
 import { RefObject, useEffect, useMemo, useRef, useState } from "react";
 
-import { stickyBoardData } from "./StickyBoard";
+import { NoteData } from "./Board";
 
-export function useForceDataInScreen(data: stickyBoardData[]) {
+export function useInScreenNotes(notes: NoteData[]) {
   const boardRef = useRef<HTMLDivElement>(null);
 
   const [boardSize, setBoardSize] = useState({ w: 9999, h: 9999 });
@@ -12,12 +12,12 @@ export function useForceDataInScreen(data: stickyBoardData[]) {
     [boardRef.current]
   );
 
-  const forcedInScreenData = useMemo(
-    () => forceDataInScreen(data, boardSize),
-    [boardSize, data]
+  const inScreenNotes = useMemo(
+    () => forceNotesInScreen(notes, boardSize),
+    [boardSize, notes]
   );
 
-  return { boardRef, forcedInScreenData };
+  return { boardRef, inScreenNotes };
 }
 
 function observeBoardSize(
@@ -31,8 +31,8 @@ function observeBoardSize(
   }).observe(boardRef.current);
 }
 
-function forceDataInScreen(
-  data: stickyBoardData[],
+function forceNotesInScreen(
+  notes: NoteData[],
   boardSize: { w: number; h: number }
 ) {
   const peek = 20;
@@ -41,7 +41,7 @@ function forceDataInScreen(
   const maxX = boardSize.w - peek;
   const maxY = boardSize.h - peek;
 
-  return data.map(({ x, y, ...rest }) => ({
+  return notes.map(({ x, y, ...rest }) => ({
     ...rest,
     x: Math.min(Math.max(x, minX), maxX),
     y: Math.min(Math.max(y, minY), maxY),

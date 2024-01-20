@@ -2,7 +2,7 @@ import cx from "classnames";
 
 import { Icon } from "../../components";
 
-export function ToolBar({
+export function Editor({
   visible,
   color,
   onPreviewColor,

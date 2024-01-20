@@ -3,10 +3,10 @@ import { useState } from "react";
 
 import { Paper } from "./Paper";
 import { Shadings } from "./Shadings";
-import { TextEdit } from "./TextEdit";
-import { ToolBar } from "./ToolBar";
+import { Text } from "./Text";
+import { Editor } from "./Editor";
 
-export function StickyNote({
+export function Note({
   text,
   color = 0,
   x = 0,
@@ -49,9 +49,9 @@ export function StickyNote({
         onDoubleClick={onDoubleClick}
       >
         <Shadings />
-        <TextEdit text={text} isEditing={isEditing} onChange={onTextChange} />
+        <Text text={text} isEditing={isEditing} onChange={onTextChange} />
       </Paper>
-      <ToolBar
+      <Editor
         visible={isEditing}
         color={color}
         onPreviewColor={(color) => setPreviewColor(color)}
