@@ -52,10 +52,6 @@ export function Board({
     setIsEditing(false);
   }
 
-  function handleBoardDoubleClick(x: number, y: number) {
-    addNote(x, y);
-  }
-
   function handleBoardMouseDown(e: MouseEvent) {
     const { button, clientX, clientY } = e;
     if (button === 0) handleMouseDown(e);
@@ -66,32 +62,6 @@ export function Board({
   function addNote(x: number, y: number) {
     onNotesChange?.([...notes, getNewNote(x, y)]);
     setIsEditing(true);
-  }
-
-  function moveTo(index: number) {
-    let currentNotes = notes;
-
-    const interval = setInterval(() => {
-      const targetX = currentNotes[index].x;
-      const targetY = currentNotes[index].y;
-
-      const offsetX = (-targetX + boardSize.w / 2 - 250 / 2) / 2;
-      const offsetY = (-targetY + boardSize.h / 2 - 250 / 2) / 2;
-
-      if (Math.abs(offsetX) < 1 && Math.abs(offsetY) < 1) {
-        clearInterval(interval);
-      }
-
-      const newNotes = currentNotes.map(({ x, y, ...rest }) => ({
-        ...rest,
-        x: x + Math.floor(offsetX),
-        y: y + Math.floor(offsetY),
-      }));
-
-      currentNotes = newNotes;
-
-      onNotesChange?.(newNotes);
-    }, 1000 / 60);
   }
 
   return (
@@ -112,7 +82,7 @@ export function Board({
       <div
         className={cx("absolute", "size-full")}
         onMouseDown={handleBoardMouseDown}
-        onDoubleClick={(e) => handleBoardDoubleClick(e.clientX, e.clientY)}
+        onDoubleClick={(e) => addNote(e.clientX, e.clientY)}
       />
 
       <div>
@@ -126,7 +96,7 @@ export function Board({
                 onMouseDown={
                   isDraggable
                     ? (e) => handleNoteMouseDown(e.button, index)
-                    : () => moveTo(index)
+                    : () => moveToNote(index, notes, boardSize, onNotesChange)
                 }
               />
             );
@@ -149,7 +119,7 @@ export function Board({
                 onMouseDown={
                   isDraggable
                     ? (e) => handleNoteMouseDown(e.button, index)
-                    : () => moveTo(index)
+                    : () => moveToNote(index, notes, boardSize, onNotesChange)
                 }
                 onDoubleClick={
                   isDraggable ? () => setIsEditing(true) : () => {}
@@ -167,4 +137,35 @@ export function Board({
       </div>
     </div>
   );
+}
+
+function moveToNote(
+  index: number,
+  notes: NoteData[],
+  boardSize: { w: number; h: number },
+  onNotesChange: ((notes: NoteData[]) => void) | undefined
+) {
+  let currentNotes = notes;
+
+  const interval = setInterval(() => {
+    const targetX = currentNotes[index].x;
+    const targetY = currentNotes[index].y;
+
+    const offsetX = (-targetX + boardSize.w / 2 - 250 / 2) / 2;
+    const offsetY = (-targetY + boardSize.h / 2 - 250 / 2) / 2;
+
+    if (Math.abs(offsetX) < 1 && Math.abs(offsetY) < 1) {
+      clearInterval(interval);
+    }
+
+    const newNotes = currentNotes.map(({ x, y, ...rest }) => ({
+      ...rest,
+      x: x + Math.floor(offsetX),
+      y: y + Math.floor(offsetY),
+    }));
+
+    currentNotes = newNotes;
+
+    onNotesChange?.(newNotes);
+  }, 1000 / 60);
 }
