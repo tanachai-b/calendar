@@ -1,4 +1,4 @@
-export const initialData = [
+export const sampleData = [
   {
     text: "Peter\n123-456-7809",
     color: 5,

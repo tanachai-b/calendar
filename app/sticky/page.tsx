@@ -4,7 +4,7 @@ import cx from "classnames";
 import { useEffect, useState } from "react";
 
 import { StickyBoard, stickyBoardData } from "./StickyBoard/StickyBoard";
-import { initialData } from "./initialData";
+import { sampleData } from "./sampleData";
 
 export default function StickyPage() {
   const STORAGE_KEY = "sticky_data";
@@ -22,12 +22,9 @@ export default function StickyPage() {
     const randomData = Array.from({ length: 8 }).map((_value, index) =>
       getRandomData(index)
     );
-    setData(initialData);
+    setData(sampleData);
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(initialData, undefined, 4)
-    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
   }, []);
 
   function handleDataChanged(data: stickyBoardData[]): void {
