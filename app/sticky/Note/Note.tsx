@@ -53,7 +53,7 @@ export function Note({
       </Paper>
       <Editor
         visible={isEditing}
-        color={color}
+        selectedColor={color}
         onPreviewColor={(color) => setPreviewColor(color)}
         onSelectColor={(color) => onColorChange?.(color)}
         onDelete={onDelete}
