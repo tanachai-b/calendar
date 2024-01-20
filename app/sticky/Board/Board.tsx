@@ -69,15 +69,29 @@ export function Board({
   }
 
   function moveTo(index: number) {
-    const targetX = notes[index].x;
-    const targetY = notes[index].y;
-    onNotesChange?.(
-      notes.map((note) => ({
-        ...note,
-        x: note.x - targetX + boardSize.w / 2 - 250 / 2,
-        y: note.y - targetY + boardSize.h / 2 - 250 / 2,
-      }))
-    );
+    let currentNotes = notes;
+
+    const interval = setInterval(() => {
+      const targetX = currentNotes[index].x;
+      const targetY = currentNotes[index].y;
+
+      const offsetX = (-targetX + boardSize.w / 2 - 250 / 2) / 2;
+      const offsetY = (-targetY + boardSize.h / 2 - 250 / 2) / 2;
+
+      if (Math.abs(offsetX) < 1 && Math.abs(offsetY) < 1) {
+        clearInterval(interval);
+      }
+
+      const newNotes = currentNotes.map(({ x, y, ...rest }) => ({
+        ...rest,
+        x: x + Math.floor(offsetX),
+        y: y + Math.floor(offsetY),
+      }));
+
+      currentNotes = newNotes;
+
+      onNotesChange?.(newNotes);
+    }, 1000 / 60);
   }
 
   return (
