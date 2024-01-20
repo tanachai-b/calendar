@@ -46,15 +46,17 @@ export function useFileSystemApi({
     await writable?.close();
   }
 
-  function resetWriteTimer() {
+  function resetWriteTimer(notes: NoteData[]) {
     clearTimeout(writeTimer);
     setWriteTimer(
       setTimeout(async () => {
+        console.log("save");
+
         const writable = await fileHandle?.createWritable();
         await writable?.write(JSON.stringify(notes, undefined, 4));
         await writable?.close();
         setWriteTimer(undefined);
-      }, 100)
+      }, 1000)
     );
   }
 

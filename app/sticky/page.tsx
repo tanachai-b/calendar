@@ -30,7 +30,7 @@ export default function StickyPage() {
     setNotes(notes);
     // localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
 
-    resetWriteTimer();
+    resetWriteTimer(notes);
   }
 
   return (
@@ -53,8 +53,39 @@ export default function StickyPage() {
           <ToolButton icon="save_as" text="Save As" onClick={handleSaveAs} />
         </ToolBar>
 
-        <div className={cx("absolute", "size-full", "pointer-events-none")}>
-          {fileHandle?.name}
+        <div
+          className={cx(
+            "absolute",
+            "size-full",
+            "pointer-events-none",
+            "p-x30",
+            "flex",
+            "items-start",
+            "justify-center"
+          )}
+        >
+          <div
+            className={cx(
+              "rounded-full",
+
+              "border",
+              "border-white-dark",
+              "border-opacity-50",
+
+              "bg-black-light",
+              "bg-opacity-75",
+
+              "text-white-dark",
+              "text-opacity-50",
+
+              "backdrop-blur-x2",
+
+              "px-x10",
+              "py-x5"
+            )}
+          >
+            {fileHandle?.name ?? "Unsaved"}
+          </div>
         </div>
       </div>
     </div>

@@ -13,9 +13,9 @@ export function ToolBar({
   return (
     <div
       className={cx(
+        "p-x30",
         "flex",
         "items-start",
-        "p-x30",
 
         "pointer-events-none",
         className
