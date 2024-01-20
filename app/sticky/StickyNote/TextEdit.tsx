@@ -1,25 +1,39 @@
 import cx from "classnames";
-import { RefObject } from "react";
+import { useEffect, useRef } from "react";
 
 export function TextEdit({
-  ref,
   text,
   isEditing,
   onChange,
 }: {
-  ref?: RefObject<HTMLTextAreaElement>;
   text?: string;
   isEditing?: boolean;
   onChange?: (text: string) => void;
 } = {}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!isEditing) return;
+    ref.current?.focus();
+    ref.current?.setSelectionRange(
+      ref.current.value.length,
+      ref.current.value.length
+    );
+  }, [isEditing]);
+
   return (
     <div
       className={cx("absolute", "w-full", "max-w-full", "max-h-full", "flex")}
     >
       <div
-        className={cx("w-full", "h-fit", "p-x10", "break-words", {
-          "opacity-0": isEditing,
-        })}
+        className={cx(
+          "w-full",
+          "h-fit",
+          "p-x10",
+          "break-words",
+          "min-h-[5rem]",
+          { "opacity-0": isEditing }
+        )}
       >
         {text}
       </div>

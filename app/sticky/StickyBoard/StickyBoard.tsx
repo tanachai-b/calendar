@@ -2,9 +2,9 @@ import cx from "classnames";
 import { useState } from "react";
 
 import { StickyNote } from "../StickyNote/StickyNote";
+import { EditingBackDrop } from "./EditingBackDrop";
 import { useForceDataInScreen } from "./useForceDataInScreen";
 import { useHandleDrag } from "./useHandleDrag";
-import { EditingBackDrop } from "./EditingBackDrop";
 
 export type stickyBoardData = {
   text: string;
@@ -48,6 +48,11 @@ export function StickyBoard({
     setIsEditing(false);
   }
 
+  function handleDoubleClick(x: number, y: number) {
+    onDataChanged?.([...data, getBlankStickyNote(x, y)]);
+    setIsEditing(true);
+  }
+
   return (
     <div
       ref={boardRef}
@@ -63,6 +68,11 @@ export function StickyBoard({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
+      <div
+        className={cx("absolute", "size-full")}
+        onDoubleClick={(e) => handleDoubleClick(e.clientX, e.clientY)}
+      />
+
       <div>
         {forcedInScreenData.map(
           ({ text, color, x, y, rotate, key, isDraggable }, index) => {
@@ -110,4 +120,15 @@ export function StickyBoard({
       </div>
     </div>
   );
+}
+
+function getBlankStickyNote(x: number, y: number) {
+  return {
+    text: "",
+    color: Math.floor(8 * Math.random()),
+    x: x - 125,
+    y: y - 125,
+    rotate: Math.floor((10 * Math.random() - 10 / 2) * 10) / 10,
+    key: Math.floor(Math.random() * 1000000).toString(36),
+  };
 }

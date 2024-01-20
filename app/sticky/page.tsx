@@ -12,19 +12,7 @@ export default function StickyPage() {
   const [data, setData] = useState<stickyBoardData[]>([]);
 
   useEffect(() => {
-    const storage = localStorage.getItem(STORAGE_KEY);
-
-    if (storage) {
-      setData(JSON.parse(storage));
-      return;
-    }
-
-    const randomData = Array.from({ length: 8 }).map((_value, index) =>
-      getRandomData(index)
-    );
-    setData(sampleData);
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
+    retrieveStorageOrSampleData(STORAGE_KEY, setData);
   }, []);
 
   function handleDataChanged(data: stickyBoardData[]): void {
@@ -45,13 +33,19 @@ export default function StickyPage() {
   );
 }
 
-function getRandomData(index: number) {
-  return {
-    text: "",
-    color: index % 8,
-    x: Math.floor(1750 * Math.random()),
-    y: Math.floor(750 * Math.random()),
-    rotate: Math.floor((10 * Math.random() - 10 / 2) * 10) / 10,
-    key: Math.floor(Math.random() * 1000000).toString(36),
-  };
+function retrieveStorageOrSampleData(
+  STORAGE_KEY: string,
+  setData: (data: stickyBoardData[]) => void
+) {
+  (() => {
+    const storage = localStorage.getItem(STORAGE_KEY);
+
+    if (storage) {
+      setData(JSON.parse(storage));
+      return;
+    }
+
+    setData(sampleData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
+  })();
 }

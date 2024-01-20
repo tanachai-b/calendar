@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Paper } from "./Paper";
 import { Shadings } from "./Shadings";
@@ -31,17 +31,7 @@ export function StickyNote({
   onTextChange?: (text: string) => void;
   onColorChange?: (color: number) => void;
 } = {}) {
-  const ref = useRef<HTMLTextAreaElement>(null);
-
   const [previewColor, setPreviewColor] = useState<number>();
-
-  useEffect(() => {
-    ref.current?.focus();
-    ref.current?.setSelectionRange(
-      ref.current.value.length,
-      ref.current.value.length
-    );
-  }, []);
 
   return (
     <div
@@ -58,7 +48,6 @@ export function StickyNote({
       >
         <Shadings />
         <TextEdit
-          ref={ref}
           text={text}
           isEditing={isEditing}
           onChange={onTextChange}
