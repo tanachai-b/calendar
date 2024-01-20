@@ -2,15 +2,15 @@ import cx from "classnames";
 
 export function Backdrop({
   isEditing,
-  onClick,
+  onMouseDown,
 }: {
   isEditing?: boolean;
-  onClick?: () => void;
+  onMouseDown?: () => void;
 } = {}) {
   return (
     <div
       className={cx({ "pointer-events-none": !isEditing })}
-      onClick={onClick}
+      onMouseDown={onMouseDown}
     >
       <div
         className={cx("absolute", "w-full", "h-full", "transition-all", {

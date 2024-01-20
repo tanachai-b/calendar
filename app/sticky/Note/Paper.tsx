@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { ReactNode } from "react";
+import { MouseEvent, ReactNode } from "react";
 
 export function Paper({
   color = 0,
@@ -14,7 +14,7 @@ export function Paper({
   rotate?: number;
   isDragging?: boolean;
   isEditing?: boolean;
-  onMouseDown?: () => void;
+  onMouseDown?: (e: MouseEvent) => void;
   onDoubleClick?: () => void;
   children?: ReactNode;
 } = {}) {

@@ -14,11 +14,14 @@ export function Text({
 
   useEffect(() => {
     if (!isEditing) return;
-    ref.current?.focus();
-    ref.current?.setSelectionRange(
-      ref.current.value.length,
-      ref.current.value.length
-    );
+
+    setTimeout(() => {
+      ref.current?.focus();
+      ref.current?.setSelectionRange(
+        ref.current.value.length,
+        ref.current.value.length
+      );
+    }, 0);
   }, [isEditing]);
 
   return (

@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 
 import { Note } from "../Note/Note";
 import { Backdrop } from "./Backdrop";
@@ -35,7 +35,7 @@ export function Board({
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
-  } = useHandleMouse(notes, isEditing, onNotesChange);
+  } = useHandleMouse(notes, isEditing, setIsEditing, onNotesChange);
 
   function handleTextChange(text: string): void {
     onNotesChange?.([
@@ -52,8 +52,16 @@ export function Board({
     setIsEditing(false);
   }
 
+  function handleBoardDoubleClick(x: number, y: number) {
+    addNote(x, y);
+  }
+
+  function handleBoardMouseDown({ button, clientX, clientY }: MouseEvent) {
+    if (button === 2) addNote(clientX, clientY);
+  }
+
   const { getNewNote } = useGetNewNote();
-  function handleDoubleClick(x: number, y: number) {
+  function addNote(x: number, y: number) {
     onNotesChange?.([...notes, getNewNote(x, y)]);
     setIsEditing(true);
   }
@@ -68,6 +76,7 @@ export function Board({
         "select-none",
         className
       )}
+      onContextMenu={(e) => e.preventDefault()}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
@@ -75,7 +84,8 @@ export function Board({
     >
       <div
         className={cx("absolute", "size-full")}
-        onDoubleClick={(e) => handleDoubleClick(e.clientX, e.clientY)}
+        onDoubleClick={(e) => handleBoardDoubleClick(e.clientX, e.clientY)}
+        onMouseDown={handleBoardMouseDown}
       />
 
       <div>
@@ -87,7 +97,9 @@ export function Board({
                 key={key}
                 {...{ text, color, x, y, rotate }}
                 onMouseDown={
-                  isDraggable ? () => handleNoteMouseDown(index) : () => {}
+                  isDraggable
+                    ? (e) => handleNoteMouseDown(e.button, index)
+                    : () => {}
                 }
               />
             );
@@ -95,7 +107,7 @@ export function Board({
         )}
       </div>
 
-      <Backdrop isEditing={isEditing} onClick={() => setIsEditing(false)} />
+      <Backdrop isEditing={isEditing} onMouseDown={() => setIsEditing(false)} />
 
       <div>
         {inScreenNotes.map(
@@ -108,7 +120,9 @@ export function Board({
                 isDragging={isNoteMouseDown}
                 isEditing={isEditing}
                 onMouseDown={
-                  isDraggable ? () => handleNoteMouseDown(index) : () => {}
+                  isDraggable
+                    ? (e) => handleNoteMouseDown(e.button, index)
+                    : () => {}
                 }
                 onDoubleClick={
                   isDraggable ? () => setIsEditing(true) : () => {}

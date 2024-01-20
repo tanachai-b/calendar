@@ -5,24 +5,32 @@ import { NoteData } from "./Board";
 export function useHandleMouse(
   notes: NoteData[],
   isEditing: boolean,
+  setIsEditing: (isEditing: boolean) => void,
   onNotesChange?: (notes: NoteData[]) => void
 ) {
   const [isNoteMouseDown, setIsNoteMouseDown] = useState<boolean>(false);
   const [isBoardMouseDown, setIsBoardMouseDown] = useState<boolean>(false);
   const [mouse, setMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  function handleNoteMouseDown(index: number) {
+  function handleNoteMouseDown(button: number, index: number) {
     if (isEditing) return;
 
-    setIsNoteMouseDown(true);
     onNotesChange?.(moveNoteToTop(notes, index));
+
+    if (button === 0) {
+      setIsNoteMouseDown(true);
+    } else if (button === 2) {
+      setIsEditing(true);
+    }
   }
 
-  function handleMouseDown({ clientX, clientY }: MouseEvent) {
+  function handleMouseDown({ button, clientX, clientY }: MouseEvent) {
     if (isEditing) return;
 
-    setIsBoardMouseDown(true);
-    setMouse({ x: clientX, y: clientY });
+    if (button === 0) {
+      setIsBoardMouseDown(true);
+      setMouse({ x: clientX, y: clientY });
+    }
   }
 
   function handleMouseMove({ clientX, clientY }: MouseEvent) {

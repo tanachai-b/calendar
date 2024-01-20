@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 
 import { Paper } from "./Paper";
 import { Shadings } from "./Shadings";
@@ -27,7 +27,7 @@ export function Note({
   rotate?: number;
   isDragging?: boolean;
   isEditing?: boolean;
-  onMouseDown?: () => void;
+  onMouseDown?: (e: MouseEvent) => void;
   onDoubleClick?: () => void;
   onTextChange?: (text: string) => void;
   onColorChange?: (color: number) => void;
