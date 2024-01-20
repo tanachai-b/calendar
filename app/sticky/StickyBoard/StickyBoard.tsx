@@ -53,11 +53,11 @@ export function StickyBoard({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      <div className={cx("blur-x50", "opacity-25")}>
+      {/* <div className={cx("blur-x50", "opacity-25")}>
         {forcedInScreenData?.map(({ text, color, x, y, rotate, key }) => (
           <StickyNote key={key} {...{ text, color, x, y, rotate }} />
         ))}
-      </div>
+      </div> */}
 
       <div>
         {forcedInScreenData?.map(

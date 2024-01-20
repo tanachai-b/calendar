@@ -84,7 +84,7 @@ export function StickyNote({
         className={cx("relative", "w-full", "flex", "max-w-full", "max-h-full")}
       >
         <div
-          className={cx("w-full", "h-fit", "p-x15", "break-words", {
+          className={cx("w-full", "h-fit", "p-x10", "break-words", {
             "opacity-0": editing,
           })}
         >
@@ -100,7 +100,7 @@ export function StickyNote({
             "bg-transparent",
             "overflow-hidden",
             "text-center",
-            "p-x15"
+            "p-x10"
           )}
           hidden={!editing}
           value={text}

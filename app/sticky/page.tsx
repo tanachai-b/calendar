@@ -3,8 +3,8 @@
 import cx from "classnames";
 import { useEffect, useState } from "react";
 
-import { NavBar } from "../components";
 import { StickyBoard, stickyBoardData } from "./StickyBoard/StickyBoard";
+import { initialData } from "./initialData";
 
 export default function StickyPage() {
   const STORAGE_KEY = "sticky_data";
@@ -19,17 +19,15 @@ export default function StickyPage() {
       return;
     }
 
-    const randomData = Array.from({ length: 8 }).map((_value, index) => ({
-      text: "",
-      color: index,
-      x: Math.floor(1750 * Math.random()),
-      y: Math.floor(750 * Math.random()),
-      rotate: Math.floor((10 * Math.random() - 10 / 2) * 10) / 10,
-      key: Math.floor(Math.random() * 1000000).toString(36),
-    }));
-    setData(randomData);
+    const randomData = Array.from({ length: 8 }).map((_value, index) =>
+      getRandomData(index)
+    );
+    setData(initialData);
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(randomData, undefined, 4));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(initialData, undefined, 4)
+    );
   }, []);
 
   function handleDataChanged(data: stickyBoardData[]): void {
@@ -39,7 +37,7 @@ export default function StickyPage() {
 
   return (
     <div className={cx("h-full", "flex", "flex-col")}>
-      <NavBar className={cx("border-b", "border-highlight-yellow")} />
+      {/* <NavBar className={cx("border-b", "border-highlight-yellow")} /> */}
 
       <StickyBoard
         className={cx("grow")}
@@ -48,4 +46,15 @@ export default function StickyPage() {
       />
     </div>
   );
+}
+
+function getRandomData(index: number) {
+  return {
+    text: "",
+    color: index % 8,
+    x: Math.floor(1750 * Math.random()),
+    y: Math.floor(750 * Math.random()),
+    rotate: Math.floor((10 * Math.random() - 10 / 2) * 10) / 10,
+    key: Math.floor(Math.random() * 1000000).toString(36),
+  };
 }
