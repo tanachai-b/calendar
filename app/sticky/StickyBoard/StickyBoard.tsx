@@ -36,43 +36,34 @@ export function StickyBoard({
   } = useHandleDrag(data, onDataChanged ?? (() => {}), isEditing);
 
   function handleInput(text: string): void {
-    return onDataChanged?.([
-      ...data.slice(0, -1),
-      { ...data[data.length - 1], text },
-    ]);
+    onDataChanged?.([...data.slice(0, -1), { ...data[data.length - 1], text }]);
   }
 
   return (
     <div
       ref={boardRef}
-      className={cx("relative", "overflow-hidden", "bg-black-light", className)}
+      className={cx(
+        "relative",
+        "overflow-hidden",
+        "bg-black-light",
+        className,
+        "select-none"
+      )}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
-      {/* <div className={cx("blur-x50", "opacity-25")}>
-        {forcedInScreenData?.map(({ text, color, x, y, rotate, key }) => (
-          <StickyNote key={key} {...{ text, color, x, y, rotate }} />
-        ))}
-      </div> */}
-
       <div>
-        {forcedInScreenData?.map(
+        {forcedInScreenData.map(
           ({ text, color, x, y, rotate, key, isDraggable }, index) => {
-            if (isEditing && index === forcedInScreenData.length - 1) return;
+            if (index === forcedInScreenData.length - 1) return;
             return (
               <StickyNote
                 key={key}
                 {...{ text, color, x, y, rotate }}
-                dragging={
-                  isChildMouseDown && index === forcedInScreenData.length - 1
-                }
                 onMouseDown={
                   isDraggable ? () => handleChildMouseDown(index) : () => {}
-                }
-                onDoubleClick={
-                  isDraggable ? () => setIsEditing(true) : () => {}
                 }
               />
             );
@@ -80,43 +71,51 @@ export function StickyBoard({
         )}
       </div>
 
-      <div className={cx("w-full", "h-full")}>
-        <div
-          className={cx(
-            "absolute",
-            "w-full",
-            "h-full",
-            { "backdrop-blur-x10": isEditing },
-            { "pointer-events-none": !isEditing },
-            "transition-all"
-          )}
-        />
+      <div
+        className={cx(
+          "absolute",
+          "w-full",
+          "h-full",
+          "transition-all",
+          { "backdrop-blur-x10": isEditing },
+          { "pointer-events-none": !isEditing }
+        )}
+        onClick={() => setIsEditing(false)}
+      />
 
-        <div
-          className={cx(
-            "absolute",
-            "w-full",
-            "h-full",
-            "bg-black-light",
-            isEditing ? "opacity-50" : "opacity-0",
-            { "pointer-events-none": !isEditing },
-            "transition-all"
-          )}
-          onClick={() => setIsEditing(false)}
-        />
-        {isEditing ? (
-          forcedInScreenData
-            .slice(-1)
-            ?.map(({ text, color, x, y, rotate, key }) => (
+      <div
+        className={cx(
+          "absolute",
+          "w-full",
+          "h-full",
+          "transition-all",
+          "bg-black-light",
+          isEditing ? "opacity-50" : "opacity-0",
+          { "pointer-events-none": !isEditing }
+        )}
+        onClick={() => setIsEditing(false)}
+      />
+
+      <div className={cx()}>
+        {forcedInScreenData.map(
+          ({ text, color, x, y, rotate, key, isDraggable }, index) => {
+            if (index !== forcedInScreenData.length - 1) return;
+            return (
               <StickyNote
                 key={key}
                 {...{ text, color, x, y, rotate }}
-                editing
+                dragging={isChildMouseDown}
+                onMouseDown={
+                  isDraggable ? () => handleChildMouseDown(index) : () => {}
+                }
+                onDoubleClick={
+                  isDraggable ? () => setIsEditing(true) : () => {}
+                }
+                editing={isEditing}
                 onInput={handleInput}
               />
-            ))
-        ) : (
-          <></>
+            );
+          }
         )}
       </div>
     </div>
