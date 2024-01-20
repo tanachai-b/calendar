@@ -36,8 +36,16 @@ export function StickyBoard({
     handleMouseUp,
   } = useHandleDrag(data, onDataChanged ?? (() => {}), isEditing);
 
-  function handleInput(text: string): void {
+  function handleTextChange(text: string): void {
     onDataChanged?.([...data.slice(0, -1), { ...data[data.length - 1], text }]);
+  }
+
+  function handleColorChange(color: number): void {
+    onDataChanged?.([
+      ...data.slice(0, -1),
+      { ...data[data.length - 1], color },
+    ]);
+    setIsEditing(false);
   }
 
   return (
@@ -93,7 +101,8 @@ export function StickyBoard({
                 onDoubleClick={
                   isDraggable ? () => setIsEditing(true) : () => {}
                 }
-                onInput={handleInput}
+                onTextChange={handleTextChange}
+                onColorChange={handleColorChange}
               />
             );
           }

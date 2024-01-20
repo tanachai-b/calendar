@@ -50,7 +50,7 @@ export function Paper({
           "bg-white",
         ][color],
         editing ? "shadow-x50" : dragging ? "shadow-x20" : "shadow-x10",
-        "transition-shadow",
+        "transition-all",
 
         "pointer-events-auto"
       )}

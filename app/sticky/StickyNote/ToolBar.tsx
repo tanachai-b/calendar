@@ -1,6 +1,14 @@
 import cx from "classnames";
 
-export function ToolBar({ isEditing }: { isEditing?: boolean }) {
+export function ToolBar({
+  isEditing,
+  onPreviewColor,
+  onSelectColor,
+}: {
+  isEditing?: boolean;
+  onPreviewColor?: (colorIndex?: number) => void;
+  onSelectColor?: (colorIndex: number) => void;
+}) {
   const bgColors = [
     "bg-yellow-light",
     "bg-orange-light",
@@ -18,21 +26,25 @@ export function ToolBar({ isEditing }: { isEditing?: boolean }) {
         "ml-x20",
         "flex",
         "flex-col",
-        "gap-x5",
         isEditing ? "opacity-100" : "opacity-0",
-        "transition-all"
+        "transition-all",
+        { "pointer-events-auto": isEditing }
       )}
+      onMouseLeave={() => onPreviewColor?.()}
     >
       {bgColors.map((bgColor, index) => (
         <div
           key={index}
-          className={cx("relative", "size-x30", "group", "pointer-events-auto")}
+          className={cx("relative", "p-x2", "group")}
+          onMouseOver={() => onPreviewColor?.(index)}
+          onClick={() => onSelectColor?.(index)}
         >
           <div
             className={cx(
               "relative",
               "size-full",
               "rounded-full",
+              "size-x30",
               "border",
               "border-black-light",
               "bg-white",

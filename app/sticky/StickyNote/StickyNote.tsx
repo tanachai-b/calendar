@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Paper } from "./Paper";
 import { Shadings } from "./Shadings";
@@ -16,7 +16,8 @@ export function StickyNote({
   isEditing,
   onMouseDown,
   onDoubleClick,
-  onInput,
+  onTextChange,
+  onColorChange,
 }: {
   text?: string;
   color?: number;
@@ -27,9 +28,12 @@ export function StickyNote({
   isEditing?: boolean;
   onMouseDown?: () => void;
   onDoubleClick?: () => void;
-  onInput?: (text: string) => void;
+  onTextChange?: (text: string) => void;
+  onColorChange?: (color: number) => void;
 } = {}) {
   const ref = useRef<HTMLTextAreaElement>(null);
+
+  const [previewColor, setPreviewColor] = useState<number>();
 
   useEffect(() => {
     ref.current?.focus();
@@ -45,7 +49,7 @@ export function StickyNote({
       style={{ left: x, top: y }}
     >
       <Paper
-        color={color}
+        color={previewColor ?? color}
         rotate={rotate}
         isDragging={isDragging}
         isEditing={isEditing}
@@ -57,10 +61,14 @@ export function StickyNote({
           ref={ref}
           text={text}
           isEditing={isEditing}
-          onInput={onInput}
+          onChange={onTextChange}
         ></TextEdit>
       </Paper>
-      <ToolBar isEditing={isEditing} />
+      <ToolBar
+        isEditing={isEditing}
+        onPreviewColor={(color) => setPreviewColor(color)}
+        onSelectColor={(color) => onColorChange?.(color)}
+      />
     </div>
   );
 }

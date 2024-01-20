@@ -5,12 +5,12 @@ export function TextEdit({
   ref,
   text,
   isEditing,
-  onInput,
+  onChange,
 }: {
   ref?: RefObject<HTMLTextAreaElement>;
   text?: string;
   isEditing?: boolean;
-  onInput?: (text: string) => void;
+  onChange?: (text: string) => void;
 } = {}) {
   return (
     <div
@@ -37,7 +37,7 @@ export function TextEdit({
         )}
         hidden={!isEditing}
         value={text}
-        onChange={(e) => onInput?.(e.target.value ?? "")}
+        onChange={(e) => onChange?.(e.target.value ?? "")}
       />
     </div>
   );
