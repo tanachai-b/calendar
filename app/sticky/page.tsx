@@ -6,29 +6,31 @@ import { useEffect, useState } from "react";
 import { Board, NoteData } from "./Board/Board";
 import { ToolBar, ToolButton } from "./ToolBar";
 import { sampleData } from "./sampleData";
+import { NavBar } from "../components";
+import { useFileSystemApi } from "./useFileSystemApi";
 
 export default function StickyPage() {
-  const STORAGE_KEY = "sticky_data";
+  // const STORAGE_KEY = "sticky_data";
 
   const [notes, setNotes] = useState<NoteData[]>([]);
 
-  useEffect(() => retrieveStorageOrSampleData(STORAGE_KEY, setNotes), []);
+  const { fileHandle, handleNew, handleOpen, handleSaveAs, resetWriteTimer } =
+    useFileSystemApi({ notes, setNotes });
 
-  function handleNotesChange(notes: NoteData[]): void {
+  useEffect(
+    () =>
+      retrieveStorageOrSampleData(
+        // STORAGE_KEY,
+        setNotes
+      ),
+    []
+  );
+
+  async function handleNotesChange(notes: NoteData[]) {
     setNotes(notes);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
-  }
+    // localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
 
-  function handleNew() {
-    console.log("handleNew");
-  }
-
-  function handleOpen() {
-    console.log("handleOpen");
-  }
-
-  function handleSave() {
-    console.log("handleSave");
+    resetWriteTimer();
   }
 
   return (
@@ -48,24 +50,28 @@ export default function StickyPage() {
         <ToolBar className={cx("absolute", "size-full")}>
           <ToolButton icon="note_add" text="New" onClick={handleNew} />
           <ToolButton icon="folder_open" text="Open" onClick={handleOpen} />
-          <ToolButton icon="save" text="Save" onClick={handleSave} />
+          <ToolButton icon="save_as" text="Save As" onClick={handleSaveAs} />
         </ToolBar>
+
+        <div className={cx("absolute", "size-full", "pointer-events-none")}>
+          {fileHandle?.name}
+        </div>
       </div>
     </div>
   );
 }
 
 function retrieveStorageOrSampleData(
-  STORAGE_KEY: string,
+  // STORAGE_KEY: string,
   setNotes: (notes: NoteData[]) => void
 ) {
-  const storage = localStorage.getItem(STORAGE_KEY);
+  // const storage = localStorage.getItem(STORAGE_KEY);
 
-  if (storage) {
-    setNotes(JSON.parse(storage));
-    return;
-  }
+  // if (storage) {
+  //   setNotes(JSON.parse(storage));
+  //   return;
+  // }
 
   setNotes(sampleData);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
+  // localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
 }
