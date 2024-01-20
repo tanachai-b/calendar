@@ -25,7 +25,7 @@ export function Board({
   notes?: NoteData[];
   onNotesChange?: (notes: NoteData[]) => void;
 } = {}) {
-  const { boardRef, inScreenNotes } = useInScreenNotes(notes);
+  const { boardRef, inScreenNotes, boardSize } = useInScreenNotes(notes);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -56,7 +56,9 @@ export function Board({
     addNote(x, y);
   }
 
-  function handleBoardMouseDown({ button, clientX, clientY }: MouseEvent) {
+  function handleBoardMouseDown(e: MouseEvent) {
+    const { button, clientX, clientY } = e;
+    if (button === 0) handleMouseDown(e);
     if (button === 2) addNote(clientX, clientY);
   }
 
@@ -64,6 +66,18 @@ export function Board({
   function addNote(x: number, y: number) {
     onNotesChange?.([...notes, getNewNote(x, y)]);
     setIsEditing(true);
+  }
+
+  function moveTo(index: number) {
+    const targetX = notes[index].x;
+    const targetY = notes[index].y;
+    onNotesChange?.(
+      notes.map((note) => ({
+        ...note,
+        x: note.x - targetX + boardSize.w / 2 - 250 / 2,
+        y: note.y - targetY + boardSize.h / 2 - 250 / 2,
+      }))
+    );
   }
 
   return (
@@ -77,15 +91,14 @@ export function Board({
         className
       )}
       onContextMenu={(e) => e.preventDefault()}
-      onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
     >
       <div
         className={cx("absolute", "size-full")}
-        onDoubleClick={(e) => handleBoardDoubleClick(e.clientX, e.clientY)}
         onMouseDown={handleBoardMouseDown}
+        onDoubleClick={(e) => handleBoardDoubleClick(e.clientX, e.clientY)}
       />
 
       <div>
@@ -99,7 +112,7 @@ export function Board({
                 onMouseDown={
                   isDraggable
                     ? (e) => handleNoteMouseDown(e.button, index)
-                    : () => {}
+                    : () => moveTo(index)
                 }
               />
             );
@@ -122,7 +135,7 @@ export function Board({
                 onMouseDown={
                   isDraggable
                     ? (e) => handleNoteMouseDown(e.button, index)
-                    : () => {}
+                    : () => moveTo(index)
                 }
                 onDoubleClick={
                   isDraggable ? () => setIsEditing(true) : () => {}

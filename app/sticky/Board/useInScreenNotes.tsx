@@ -17,7 +17,7 @@ export function useInScreenNotes(notes: NoteData[]) {
     [boardSize, notes]
   );
 
-  return { boardRef, inScreenNotes };
+  return { boardRef, inScreenNotes, boardSize };
 }
 
 function observeBoardSize(

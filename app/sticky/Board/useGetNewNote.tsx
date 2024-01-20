@@ -17,8 +17,8 @@ export function useGetNewNote() {
     return {
       text: "",
       color: newColor,
-      x: x - 125,
-      y: y - 125,
+      x: x - 250 / 2,
+      y: y - 250 / 2,
       rotate: Math.floor((10 * Math.random() - 10 / 2) * 10) / 10,
       key: Math.floor(Math.random() * 1000000).toString(36),
     };

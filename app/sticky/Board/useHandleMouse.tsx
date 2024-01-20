@@ -24,13 +24,11 @@ export function useHandleMouse(
     }
   }
 
-  function handleMouseDown({ button, clientX, clientY }: MouseEvent) {
+  function handleMouseDown({ clientX, clientY }: MouseEvent) {
     if (isEditing) return;
 
-    if (button === 0) {
-      setIsBoardMouseDown(true);
-      setMouse({ x: clientX, y: clientY });
-    }
+    setIsBoardMouseDown(true);
+    setMouse({ x: clientX, y: clientY });
   }
 
   function handleMouseMove({ clientX, clientY }: MouseEvent) {
