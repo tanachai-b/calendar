@@ -15,17 +15,6 @@ export function Editor({
   onSelectColor?: (colorIndex: number) => void;
   onDelete?: () => void;
 } = {}) {
-  const colors = [
-    "bg-yellow-light",
-    "bg-orange-light",
-    "bg-red-light",
-    "bg-purple-light",
-    "bg-blue-light",
-    "bg-green-bluish-light",
-    "bg-green-yellowish-light",
-    "bg-white",
-  ];
-
   return (
     <div
       className={cx(
@@ -38,17 +27,12 @@ export function Editor({
         "transition-all",
         { "pointer-events-auto": visible }
       )}
-      onMouseLeave={() => onPreviewColor?.()}
     >
-      {colors.map((color, index) => (
-        <Color
-          key={index}
-          color={color}
-          isSelected={selectedColor === index}
-          onMouseOver={() => onPreviewColor?.(index)}
-          onClick={() => onSelectColor?.(index)}
-        />
-      ))}
+      <ColorSelector
+        selectedColor={selectedColor}
+        onPreviewColor={onPreviewColor}
+        onSelectColor={onSelectColor}
+      />
 
       <div className={cx("h-x10")} />
 
@@ -62,7 +46,7 @@ export function Editor({
         )}
         onClick={onDelete}
       >
-        <div className={cx("p-x2", "group", "hover:z-50", "peer")}>
+        <div className={cx("p-x2", "group", "peer")}>
           <div
             className={cx(
               "size-x30",
@@ -87,17 +71,54 @@ export function Editor({
         <div
           className={cx(
             "absolute",
-            "text-white",
-            "text-x15",
-            "font",
-            "transition-all",
+            "left-[40px]",
             "peer-hover:left-[45px]",
-            "left-[40px]"
+            "transition-all",
+            "text-white",
+            "text-x15"
           )}
         >
           Delete
         </div>
       </div>
+    </div>
+  );
+}
+
+function ColorSelector({
+  selectedColor,
+  onPreviewColor,
+  onSelectColor,
+}: {
+  selectedColor?: number;
+  onPreviewColor?: (colorIndex?: number) => void;
+  onSelectColor?: (colorIndex: number) => void;
+}) {
+  const colors = [
+    "bg-yellow-light",
+    "bg-orange-light",
+    "bg-red-light",
+    "bg-purple-light",
+    "bg-blue-light",
+    "bg-green-bluish-light",
+    "bg-green-yellowish-light",
+    "bg-white",
+  ];
+
+  return (
+    <div
+      className={cx("flex", "flex-col")}
+      onMouseLeave={() => onPreviewColor?.()}
+    >
+      {colors.map((color, index) => (
+        <Color
+          key={index}
+          color={color}
+          isSelected={selectedColor === index}
+          onMouseOver={() => onPreviewColor?.(index)}
+          onClick={() => onSelectColor?.(index)}
+        />
+      ))}
     </div>
   );
 }
@@ -115,7 +136,7 @@ function Color({
 } = {}) {
   return (
     <div
-      className={cx("p-x2", "group", "hover:z-50")}
+      className={cx("p-x2", "group")}
       onMouseOver={onMouseOver}
       onClick={onClick}
     >
