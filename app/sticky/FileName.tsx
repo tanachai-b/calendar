@@ -1,5 +1,6 @@
 "use client";
 import cx from "classnames";
+import { useEffect, useRef, useState } from "react";
 
 export function FileName({
   className,
@@ -10,6 +11,8 @@ export function FileName({
   fileName?: string;
   isSaving?: boolean;
 } = {}) {
+  const { ref, size } = useObserveSize();
+
   return (
     <div
       className={cx(
@@ -32,56 +35,64 @@ export function FileName({
           "bg-black-light",
           "bg-opacity-75",
 
-          "text-white-dark",
-          "text-opacity-50",
-
           "backdrop-blur-x2",
 
-          "px-x10",
-          "py-x5",
+          "transition-all",
 
           "flex",
-          "flex-row"
+          "flex-row",
+
+          "whitespace-pre",
+          "overflow-hidden"
         )}
+        style={{ width: `${size.w + 2}px` }}
       >
-        {fileName ?? "Unsaved"}
-        {fileName ? (
-          <>
-            <StatusText isVisible={isSaving} text="saving..." />
-            <StatusText isVisible={!isSaving} text="saved" />
-          </>
-        ) : (
-          <></>
-        )}
+        <div
+          ref={ref}
+          className={cx(
+            "px-x10",
+            "py-x5",
+
+            "flex",
+            "flex-row",
+            "gap-x10"
+          )}
+        >
+          <div className={cx("text-white-dark", "text-opacity-50")}>
+            {fileName ?? "Unsaved"}
+          </div>
+
+          {fileName ? (
+            <div
+              className={cx("text-white-dark", "text-opacity-100", "italic")}
+            >
+              {isSaving ? "saving..." : "saved"}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-function StatusText({
-  isVisible,
-  text,
-}: {
-  isVisible?: boolean;
-  text?: string;
-} = {}) {
-  return (
-    <div
-      className={cx(
-        isVisible ? "px-x10" : "",
-        isVisible ? "max-w-[60px]" : "max-w-x0",
-        "transition-all",
+function useObserveSize() {
+  const ref = useRef<HTMLDivElement>(null);
 
-        "flex",
-        "flex-row",
-        "overflow-hidden",
+  const [size, setSize] = useState({ w: 0, h: 0 });
 
-        "italic",
-        "text-white-dark",
-        "text-opacity-100"
-      )}
-    >
-      {text}
-    </div>
-  );
+  useEffect(() => observeSize(ref.current, setSize), [ref.current]);
+
+  function observeSize(
+    component: HTMLDivElement | null,
+    onChange: (size: { w: number; h: number }) => void
+  ) {
+    if (!component) return;
+    new ResizeObserver(() =>
+      onChange({ w: component.offsetWidth, h: component.offsetHeight })
+    ).observe(component);
+  }
+
+  return { ref, size };
 }
