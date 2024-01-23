@@ -14,8 +14,14 @@ export default function StickyPage() {
 
   const [notes, setNotes] = useState<NoteData[]>([]);
 
-  const { fileHandle, handleNew, handleOpen, handleSaveAs, resetWriteTimer } =
-    useFileSystemApi({ notes, setNotes });
+  const {
+    fileHandle,
+    isSaving,
+    handleNew,
+    handleOpen,
+    handleSaveAs,
+    resetWriteTimer,
+  } = useFileSystemApi({ notes, setNotes });
 
   useEffect(
     () =>
@@ -53,40 +59,101 @@ export default function StickyPage() {
           <ToolButton icon="save_as" text="Save As" onClick={handleSaveAs} />
         </ToolBar>
 
-        <div
-          className={cx(
-            "absolute",
-            "size-full",
-            "pointer-events-none",
-            "p-x30",
-            "flex",
-            "items-start",
-            "justify-center"
-          )}
-        >
-          <div
-            className={cx(
-              "rounded-full",
+        <FileName
+          className={cx("absolute", "size-full")}
+          fileName={fileHandle?.name}
+          isSaving={isSaving}
+        />
+      </div>
+    </div>
+  );
+}
 
-              "border",
-              "border-white-dark",
-              "border-opacity-50",
+function FileName({
+  className,
+  fileName,
+  isSaving,
+}: {
+  className?: string;
+  fileName?: string;
+  isSaving?: boolean;
+} = {}) {
+  return (
+    <div
+      className={cx(
+        "pointer-events-none",
+        "p-x30",
+        "flex",
+        "items-start",
+        "justify-center",
+        className
+      )}
+    >
+      <div
+        className={cx(
+          "rounded-full",
 
-              "bg-black-light",
-              "bg-opacity-75",
+          "border",
+          "border-white-dark",
+          "border-opacity-25",
 
-              "text-white-dark",
-              "text-opacity-50",
+          "bg-black-light",
+          "bg-opacity-75",
 
-              "backdrop-blur-x2",
+          "text-white-dark",
+          "text-opacity-50",
 
-              "px-x10",
-              "py-x5"
-            )}
-          >
-            {fileHandle?.name ?? "Unsaved"}
-          </div>
-        </div>
+          "backdrop-blur-x2",
+
+          "px-x10",
+          "py-x5",
+
+          "flex",
+          "flex-row"
+        )}
+      >
+        {fileName ?? "Unsaved"}
+        {fileName ? (
+          <>
+            <div
+              className={cx(
+                isSaving ? "px-x10" : "",
+                isSaving ? "max-w-[60px]" : "max-w-x0",
+                "transition-all",
+
+                "flex",
+                "flex-row",
+                "overflow-hidden",
+
+                "italic",
+                "text-white-dark",
+                "text-opacity-100"
+              )}
+            >
+              saving...
+            </div>
+
+            <div
+              className={cx(
+                !isSaving ? "px-x10" : "",
+                !isSaving ? "max-w-[60px]" : "max-w-x0",
+                "transition-all",
+
+                "flex",
+                "flex-row",
+                "overflow-hidden",
+
+                "italic",
+                "text-white-dark",
+                "text-opacity-100"
+              )}
+            >
+              saved
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

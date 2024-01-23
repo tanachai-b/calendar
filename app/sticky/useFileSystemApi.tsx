@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { NoteData } from "./Board/Board";
 
@@ -11,6 +11,7 @@ export function useFileSystemApi({
 }) {
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
   const [writeTimer, setWriteTimer] = useState<NodeJS.Timeout>();
+  const isSaving = useMemo(() => writeTimer != null, [writeTimer]);
 
   async function handleNew() {
     setFileHandle(undefined);
@@ -48,17 +49,25 @@ export function useFileSystemApi({
 
   function resetWriteTimer(notes: NoteData[]) {
     clearTimeout(writeTimer);
+
+    if (!fileHandle) return;
+
     setWriteTimer(
       setTimeout(async () => {
-        console.log("save");
-
-        const writable = await fileHandle?.createWritable();
-        await writable?.write(JSON.stringify(notes, undefined, 4));
-        await writable?.close();
+        const writable = await fileHandle.createWritable();
+        await writable.write(JSON.stringify(notes, undefined, 4));
+        await writable.close();
         setWriteTimer(undefined);
       }, 1000)
     );
   }
 
-  return { fileHandle, handleNew, handleOpen, handleSaveAs, resetWriteTimer };
+  return {
+    fileHandle,
+    isSaving,
+    handleNew,
+    handleOpen,
+    handleSaveAs,
+    resetWriteTimer,
+  };
 }
