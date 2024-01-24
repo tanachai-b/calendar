@@ -13,13 +13,23 @@ export function useFileSystemApi({
   const [writeTimer, setWriteTimer] = useState<NodeJS.Timeout>();
   const isSaving = useMemo(() => writeTimer != null, [writeTimer]);
 
+  const haveUnsavedChanges = isSaving || (!fileHandle && notes.length > 0);
+
+  function confirmUnsavedChanges() {
+    return confirm("There's some unsaved changes!");
+  }
+
   async function handleNew() {
+    if (haveUnsavedChanges && !confirmUnsavedChanges()) return;
+
     setFileHandle(undefined);
     clearTimeout(writeTimer);
     setNotes([]);
   }
 
   async function handleOpen() {
+    if (haveUnsavedChanges && !confirmUnsavedChanges) return;
+
     const [fileHandle] = await window.showOpenFilePicker({
       types: [
         { description: "JSON", accept: { "application/json": [".json"] } },
@@ -34,6 +44,8 @@ export function useFileSystemApi({
   }
 
   async function handleSaveAs() {
+    if (haveUnsavedChanges && !confirmUnsavedChanges) return;
+
     const fileHandle = await window.showSaveFilePicker({
       types: [
         { description: "JSON", accept: { "application/json": [".json"] } },

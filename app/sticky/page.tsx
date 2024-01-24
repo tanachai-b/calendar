@@ -33,6 +33,12 @@ export default function StickyPage() {
     []
   );
 
+  useEffect(() => {
+    window.onbeforeunload = isSaving
+      ? () => "There are unsaved changes!"
+      : () => {};
+  }, [isSaving]);
+
   async function handleNotesChange(notes: NoteData[]) {
     setNotes(notes);
     // localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
