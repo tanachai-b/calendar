@@ -9,6 +9,10 @@ export function useFileSystemApi({
   notes: NoteData[];
   setNotes: (notes: NoteData[]) => void;
 }) {
+  const filePickerOptions: OpenFilePickerOptions = {
+    types: [{ description: "JSON", accept: { "application/json": [".json"] } }],
+  };
+
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
   const [writeTimer, setWriteTimer] = useState<NodeJS.Timeout>();
   const isSaving = useMemo(() => writeTimer != null, [writeTimer]);
@@ -28,35 +32,35 @@ export function useFileSystemApi({
   }
 
   async function handleOpen() {
-    if (haveUnsavedChanges && !confirmUnsavedChanges) return;
+    if (haveUnsavedChanges && !confirmUnsavedChanges()) return;
 
-    const [fileHandle] = await window.showOpenFilePicker({
-      types: [
-        { description: "JSON", accept: { "application/json": [".json"] } },
-      ],
-    });
-    await fileHandle?.createWritable();
-    setFileHandle(fileHandle);
+    try {
+      const [fileHandle] = await window.showOpenFilePicker(filePickerOptions);
+      await fileHandle?.createWritable();
+      setFileHandle(fileHandle);
 
-    const file = await fileHandle.getFile();
-    const text = await file.text();
-    setNotes(JSON.parse(text));
+      const file = await fileHandle.getFile();
+      const text = await file.text();
+      setNotes(JSON.parse(text));
+    } catch (e) {
+      return;
+    }
   }
 
   async function handleSaveAs() {
-    if (haveUnsavedChanges && !confirmUnsavedChanges) return;
+    if (haveUnsavedChanges && !confirmUnsavedChanges()) return;
 
-    const fileHandle = await window.showSaveFilePicker({
-      types: [
-        { description: "JSON", accept: { "application/json": [".json"] } },
-      ],
-    });
-    await fileHandle?.createWritable();
-    setFileHandle(fileHandle);
+    try {
+      const fileHandle = await window.showSaveFilePicker(filePickerOptions);
+      await fileHandle?.createWritable();
+      setFileHandle(fileHandle);
 
-    const writable = await fileHandle?.createWritable();
-    await writable?.write(JSON.stringify(notes, undefined, 4));
-    await writable?.close();
+      const writable = await fileHandle?.createWritable();
+      await writable.write(JSON.stringify(notes, undefined, 4));
+      await writable.close();
+    } catch (e) {
+      return;
+    }
   }
 
   function resetWriteTimer(notes: NoteData[]) {
