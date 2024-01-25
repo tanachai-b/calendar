@@ -11,6 +11,8 @@ export default function Draw() {
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
   const [value, setValue] = useState<number>(360 * 60 * 12 * Math.random());
 
+  const [timer, setTimer] = useState<NodeJS.Timeout>();
+
   function move({ movementX, movementY }: MouseEvent): void {
     if (!isMouseDown) return;
     setValue(
@@ -34,6 +36,20 @@ export default function Draw() {
     };
   }, [document, isMouseDown]);
 
+  useEffect(() => {
+    clearInterval(timer);
+    setTimer(
+      setInterval(() => {
+        const val =
+          new Date().getHours() * 360 * 60 +
+          new Date().getMinutes() * 360 +
+          (new Date().getSeconds() * 360) / 60 +
+          (new Date().getMilliseconds() * 360) / 60 / 1000;
+        setValue(val);
+      }, 1000 / 60)
+    );
+  }, []);
+
   return (
     <div
       className={cx("h-full", "flex", "flex-col", "bg-black", "select-none")}
@@ -48,7 +64,7 @@ export default function Draw() {
           ref.current?.requestPointerLock();
         }}
       >
-        <div className={cx("w-x500", "h-x500")}>
+        <div className={cx("w-x700", "h-x700")}>
           <svg viewBox="0 0 500 500">
             <filter id="shadow">
               <feDropShadow
@@ -116,11 +132,11 @@ export default function Draw() {
               {Array.from({ length: 12 }).map((v, i) => (
                 <text
                   key={i}
-                  x={250 + 175 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
-                  y={250 - 175 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
+                  x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
+                  y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className={cx("text-x70", "font-extralight")}
+                  className={cx("text-x50", "font-medium")}
                   transform={`translate(0, 7)`}
                 >
                   {i + 1}
@@ -145,7 +161,7 @@ export default function Draw() {
                 y={250 - 80}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={cx("text-x30", "font-light")}
+                className={cx("text-x30", "font-semibold")}
               >
                 JAN 28
               </text>
@@ -153,9 +169,9 @@ export default function Draw() {
 
             <g fill="#e0e0e0">
               <rect
-                x="-3.5"
+                x="-5"
                 y="-150"
-                width="7"
+                width="10"
                 height="150"
                 transform={cx(
                   `rotate(${value / 60 / 12}, 250, 250)`,
@@ -166,9 +182,9 @@ export default function Draw() {
 
             <g fill="#e0e0e0">
               <rect
-                x="-3.5"
+                x="-5"
                 y="-200"
-                width="7"
+                width="10"
                 height="200"
                 transform={cx(
                   `rotate(${value / 60}, 250, 250)`,
@@ -181,9 +197,9 @@ export default function Draw() {
 
             <g fill="#e00000">
               <rect
-                x="-2.5"
+                x="-3.5"
                 y="-220"
-                width="5"
+                width="7"
                 height="300"
                 transform={cx(
                   `rotate(${value}, 250, 250)`,
