@@ -10,8 +10,6 @@ import { sampleData } from "./sampleData";
 import { useFileSystemApi } from "./useFileSystemApi";
 
 export default function StickyPage() {
-  // const STORAGE_KEY = "sticky_data";
-
   const [notes, setNotes] = useState<NoteData[]>([]);
 
   const {
@@ -23,14 +21,7 @@ export default function StickyPage() {
     resetWriteTimer,
   } = useFileSystemApi({ notes, setNotes });
 
-  useEffect(
-    () =>
-      retrieveStorageOrSampleData(
-        // STORAGE_KEY,
-        setNotes
-      ),
-    []
-  );
+  useEffect(() => setNotes(sampleData), []);
 
   useEffect(() => {
     window.onbeforeunload = isSaving
@@ -40,7 +31,6 @@ export default function StickyPage() {
 
   async function handleNotesChange(notes: NoteData[]) {
     setNotes(notes);
-    // localStorage.setItem(STORAGE_KEY, JSON.stringify(notes, undefined, 4));
 
     resetWriteTimer(notes);
   }
@@ -73,19 +63,4 @@ export default function StickyPage() {
       </div>
     </div>
   );
-}
-
-function retrieveStorageOrSampleData(
-  // STORAGE_KEY: string,
-  setNotes: (notes: NoteData[]) => void
-) {
-  // const storage = localStorage.getItem(STORAGE_KEY);
-
-  // if (storage) {
-  //   setNotes(JSON.parse(storage));
-  //   return;
-  // }
-
-  setNotes(sampleData);
-  // localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleData, undefined, 4));
 }
