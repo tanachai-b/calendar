@@ -1,6 +1,6 @@
 export const sampleData = [
   {
-    text: "Buy\neggs, pork,\npancake flour",
+    text: "Buy\neggs, pork, pancake mix",
     color: 0,
     rotate: -1.4,
     key: "k06p",
@@ -12,15 +12,15 @@ export const sampleData = [
     color: 6,
     rotate: 1.7,
     key: "b4pl",
-    x: 281,
+    x: 279,
     y: 311,
   },
   {
-    text: "call Peter\n123-456-7809",
+    text: "call Fred\n123-456-7809",
     color: 4,
     rotate: -0.3,
     key: "jo9f",
-    x: 234,
-    y: 524,
+    x: 244,
+    y: 527,
   },
 ];

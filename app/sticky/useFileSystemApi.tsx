@@ -5,9 +5,11 @@ import { NoteData } from "./Board/Board";
 export function useFileSystemApi({
   notes,
   setNotes,
+  isSampleData,
 }: {
   notes: NoteData[];
   setNotes: (notes: NoteData[]) => void;
+  isSampleData: boolean;
 }) {
   const filePickerOptions: OpenFilePickerOptions = {
     types: [{ description: "JSON", accept: { "application/json": [".json"] } }],
@@ -17,7 +19,8 @@ export function useFileSystemApi({
   const [writeTimer, setWriteTimer] = useState<NodeJS.Timeout>();
   const isSaving = useMemo(() => writeTimer != null, [writeTimer]);
 
-  const haveUnsavedChanges = isSaving || (!fileHandle && notes.length > 0);
+  const haveUnsavedChanges =
+    isSaving || (!fileHandle && notes.length > 0 && !isSampleData);
 
   function confirmUnsavedChanges() {
     return confirm("There's some unsaved changes!");

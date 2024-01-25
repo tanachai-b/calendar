@@ -11,6 +11,7 @@ import { useFileSystemApi } from "./useFileSystemApi";
 
 export default function StickyPage() {
   const [notes, setNotes] = useState<NoteData[]>([]);
+  const [isSampleData, setIsSampleData] = useState<boolean>(true);
 
   const {
     fileHandle,
@@ -19,7 +20,7 @@ export default function StickyPage() {
     handleOpen,
     handleSaveAs,
     resetWriteTimer,
-  } = useFileSystemApi({ notes, setNotes });
+  } = useFileSystemApi({ notes, setNotes, isSampleData });
 
   useEffect(() => setNotes(sampleData), []);
 
@@ -31,6 +32,7 @@ export default function StickyPage() {
 
   async function handleNotesChange(notes: NoteData[]) {
     setNotes(notes);
+    setIsSampleData(false);
 
     resetWriteTimer(notes);
   }
