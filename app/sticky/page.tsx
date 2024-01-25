@@ -3,6 +3,7 @@
 import cx from "classnames";
 import { useEffect, useState } from "react";
 
+import { NavBar } from "../components";
 import { Board, NoteData } from "./Board/Board";
 import { FileName } from "./FileName";
 import { ToolBar, ToolButton } from "./ToolBar";
@@ -42,7 +43,7 @@ export default function StickyPage() {
       className={cx("h-full", "flex", "flex-col", "select-none")}
       onContextMenu={(e) => e.preventDefault()}
     >
-      {/* <NavBar className={cx("border-b", "border-highlight-yellow")} /> */}
+      <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
       <div className={cx("grow", "relative", "size-full", "flex")}>
         <Board
