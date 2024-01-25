@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { NoteData } from "./Board/Board";
+import { sampleData } from "./sampleData";
 
 export function useFileSystemApi({
   notes,
@@ -16,6 +17,39 @@ export function useFileSystemApi({
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
   const [writeTimer, setWriteTimer] = useState<NodeJS.Timeout>();
   const isSaving = useMemo(() => writeTimer != null, [writeTimer]);
+
+  // const [db, setDb] = useState<IDBDatabase>();
+
+  // useEffect(() => {
+  //   const request = indexedDB.open("StickyNotes");
+  //   request.onerror = (event) => {
+  //     console.error("Unable to open indexedDB!");
+  //   };
+  //   request.onupgradeneeded = (event) => {
+  //     const db = (event.target as IDBRequest).result as IDBDatabase;
+  //     db.createObjectStore("fileHandle", { keyPath: "key" });
+  //   };
+  //   request.onsuccess = (event) => {
+  //     const db = (event.target as IDBRequest).result as IDBDatabase;
+  //     setDb(db);
+
+  //     const transaction = db.transaction("fileHandle");
+  //     const objectStore = transaction.objectStore("fileHandle");
+  //     const request = objectStore.get("fileHandle");
+  //     request.onerror = (event) => {};
+  //     request.onsuccess = async (event) => {
+  //       const fileHandle = request.result.fileHandle as FileSystemFileHandle;
+  //       confirm("xx");
+  //       await fileHandle.requestPermission({ mode: "readwrite" });
+  //       await fileHandle.createWritable();
+  //       setFileHandle(fileHandle);
+
+  //       const file = await fileHandle.getFile();
+  //       const text = await file.text();
+  //       setNotes(JSON.parse(text));
+  //     };
+  //   };
+  // }, []);
 
   const haveUnsavedChanges = isSaving || (!fileHandle && notes.length > 0);
 
@@ -42,6 +76,22 @@ export function useFileSystemApi({
       const file = await fileHandle.getFile();
       const text = await file.text();
       setNotes(JSON.parse(text));
+
+      // if (!db) return;
+      // const transaction = db.transaction("fileHandle", "readwrite");
+
+      // transaction.oncomplete = (event) => {
+      //   console.log("All done!");
+      // };
+      // transaction.onerror = (event) => {
+      //   console.log("Error!");
+      // };
+
+      // const objectStore = transaction.objectStore("fileHandle");
+      // const request = objectStore.add({
+      //   key: "fileHandle",
+      //   fileHandle: fileHandle,
+      // });
     } catch (e) {
       return;
     }

@@ -4,11 +4,10 @@ import cx from "classnames";
 import { useEffect, useState } from "react";
 
 import { Board, NoteData } from "./Board/Board";
+import { FileName } from "./FileName";
 import { ToolBar, ToolButton } from "./ToolBar";
 import { sampleData } from "./sampleData";
-import { NavBar } from "../components";
 import { useFileSystemApi } from "./useFileSystemApi";
-import { FileName } from "./FileName";
 
 export default function StickyPage() {
   // const STORAGE_KEY = "sticky_data";
