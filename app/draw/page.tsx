@@ -11,8 +11,6 @@ export default function Draw() {
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
   const [value, setValue] = useState<number>(360 * 60 * 12 * Math.random());
 
-  const [timer, setTimer] = useState<NodeJS.Timeout>();
-
   function move({ movementX, movementY }: MouseEvent): void {
     if (!isMouseDown) return;
     setValue(
@@ -37,18 +35,19 @@ export default function Draw() {
   }, [document, isMouseDown]);
 
   useEffect(() => {
-    clearInterval(timer);
-    setTimer(
-      setInterval(() => {
-        const val =
-          new Date().getHours() * 360 * 60 +
-          new Date().getMinutes() * 360 +
-          (new Date().getSeconds() * 360) / 60 +
-          (new Date().getMilliseconds() * 360) / 60 / 1000;
-        setValue(val);
-      }, 1000 / 60)
-    );
-  }, []);
+    const timer = setInterval(() => {
+      if (isMouseDown) return;
+
+      const val =
+        new Date().getHours() * 360 * 60 +
+        new Date().getMinutes() * 360 +
+        (new Date().getSeconds() * 360) / 60 +
+        (new Date().getMilliseconds() * 360) / 60 / 1000;
+      setValue(val);
+    }, 1000 / 60);
+
+    return () => clearInterval(timer);
+  }, [isMouseDown]);
 
   return (
     <div
@@ -90,9 +89,9 @@ export default function Draw() {
               {Array.from({ length: 60 * 4 }).map((v, i) => (
                 <rect
                   key={i}
-                  x="-0.5"
+                  x="-1"
                   y="-240"
-                  width="1"
+                  width="2"
                   height="10"
                   transform={cx(
                     `rotate(${(i / 60 / 4) * 360}, 250, 250)`,
