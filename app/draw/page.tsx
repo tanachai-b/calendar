@@ -67,10 +67,19 @@ export default function Draw() {
           <svg viewBox="0 0 500 500">
             <filter id="shadow">
               <feDropShadow
-                dx="3"
-                dy="3"
-                stdDeviation="5"
-                floodOpacity="0.75"
+                dx={5}
+                dy={5}
+                stdDeviation={3}
+                floodOpacity={0.75}
+              />
+            </filter>
+
+            <filter id="shadow2">
+              <feDropShadow
+                dx={3}
+                dy={3}
+                stdDeviation={2}
+                floodOpacity={0.75}
               />
             </filter>
 
@@ -113,34 +122,61 @@ export default function Draw() {
                   )}
                 />
               ))}
+            </g>
 
-              {Array.from({ length: 12 }).map((v, i) => (
-                <rect
-                  key={i}
-                  x={-15 / 2}
-                  y={-235}
-                  width={15}
-                  height={i % 3 === 0 ? 20 : 50}
-                  transform={cx(
-                    `rotate(${(i / 12) * 360}, 250, 250)`,
-                    "translate(250, 250)"
-                  )}
-                />
-              ))}
+            <g>
+              <defs>
+                <g id="backgro">
+                  {Array.from({ length: 12 }).map((v, i) => (
+                    <rect
+                      key={i}
+                      x={-10 / 2}
+                      y={-235}
+                      width={10}
+                      height={i % 3 === 0 ? 20 : 50}
+                      transform={cx(
+                        `rotate(${(i / 12) * 360}, 250, 250)`,
+                        "translate(250, 250)"
+                      )}
+                    />
+                  ))}
 
-              {Array.from({ length: 12 }).map((v, i) => (
-                <text
-                  key={i}
-                  x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
-                  y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className={cx("text-x70", "font-semibold")}
-                  transform={`translate(0, 7)`}
-                >
-                  {(i + 1) % 3 === 0 ? i + 1 : ""}
-                </text>
-              ))}
+                  {Array.from({ length: 12 }).map((v, i) => (
+                    <text
+                      key={i}
+                      x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
+                      y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      className={cx("text-x70", "font-normal")}
+                      transform={`translate(0, 7)`}
+                    >
+                      {(i + 1) % 3 === 0 ? i + 1 : ""}
+                    </text>
+                  ))}
+                </g>
+              </defs>
+
+              <g
+                fill="#c0c0c0"
+                stroke="#c0c0c0"
+                strokeWidth={3}
+                filter="url(#shadow2)"
+              >
+                <use href="#backgro" />
+              </g>
+
+              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
+                <use href="#backgro" />
+              </g>
+
+              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+                <use href="#backgro" />
+              </g>
+
+              <g fill="#e0e0e0">
+                <use href="#backgro" />
+              </g>
             </g>
 
             {/* <g fill="#e0e0e0">
@@ -166,95 +202,130 @@ export default function Draw() {
               </text>
             </g> */}
 
-            <g fill="#e0e0e0" stroke="#e0e0e0">
-              <polygon
-                points={cx(
-                  `${-20 / 2},${-140}`,
-                  `${0},${-150}`,
-                  `${20 / 2},${-140}`,
-                  `${20 / 2},${0}`,
-                  `${-20 / 2},${0}`
-                )}
-                transform={cx(
-                  `rotate(${value / 60 / 12}, 250, 250)`,
-                  "translate(250, 250)"
-                )}
-              />
-            </g>
-
             <g>
-              {/* <g fill="#101010" stroke="#101010" strokeWidth={5}>
-                <polygon
-                  points={cx(
-                    `${-20 / 2},${-230}`,
-                    `${0},${-240}`,
-                    `${20 / 2},${-230}`,
-                    `${20 / 2},${0}`,
-                    `${-20 / 2},${0}`
-                  )}
-                  transform={cx(
-                    `rotate(${value / 60}, 250, 250)`,
-                    "translate(250, 250)"
-                  )}
-                />
+              <defs>
+                <g id="hour-hand">
+                  <polygon
+                    points={cx(
+                      `${-20 / 2},${-140}`,
+                      `${0},${-150}`,
+                      `${20 / 2},${-140}`,
+                      `${20 / 2},${0}`,
+                      `${-20 / 2},${0}`
+                    )}
+                    transform={cx(
+                      `rotate(${value / 60 / 12}, 250, 250)`,
+                      "translate(250, 250)"
+                    )}
+                  />
+                </g>
+              </defs>
 
-                <circle cx="250" cy="250" r="20" />
-              </g> */}
+              <g
+                fill="#c0c0c0"
+                stroke="#c0c0c0"
+                strokeWidth={3}
+                filter="url(#shadow)"
+              >
+                <use href="#hour-hand" />
+              </g>
+
+              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
+                <use href="#hour-hand" />
+              </g>
+
+              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+                <use href="#hour-hand" />
+              </g>
 
               <g fill="#e0e0e0">
-                <polygon
-                  points={cx(
-                    `${-20 / 2},${-230}`,
-                    `${0},${-240}`,
-                    `${20 / 2},${-230}`,
-                    `${20 / 2},${0}`,
-                    `${-20 / 2},${0}`
-                  )}
-                  transform={cx(
-                    `rotate(${value / 60}, 250, 250)`,
-                    "translate(250, 250)"
-                  )}
-                />
-
-                <circle cx="250" cy="250" r="20" />
+                <use href="#hour-hand" />
               </g>
             </g>
 
             <g>
-              {/* <g fill="#101010" stroke="#101010" strokeWidth={5}>
-                <polygon
-                  points={cx(
-                    `${-10 / 2},${-235}`,
-                    `${0},${-240}`,
-                    `${10 / 2},${-235}`,
-                    `${10 / 2},${70}`,
-                    `${-10 / 2},${70}`
-                  )}
-                  transform={cx(
-                    `rotate(${value}, 250, 250)`,
-                    "translate(250, 250)"
-                  )}
-                />
+              <defs>
+                <g id="minute-hand">
+                  <polygon
+                    points={cx(
+                      `${-20 / 2},${-230}`,
+                      `${0},${-240}`,
+                      `${20 / 2},${-230}`,
+                      `${20 / 2},${0}`,
+                      `${-20 / 2},${0}`
+                    )}
+                    transform={cx(
+                      `rotate(${value / 60}, 250, 250)`,
+                      "translate(250, 250)"
+                    )}
+                  />
 
-                <circle cx="250" cy="250" r="15" />
-              </g> */}
+                  <circle cx="250" cy="250" r="20" />
+                </g>
+              </defs>
+
+              <g
+                fill="#c0c0c0"
+                stroke="#c0c0c0"
+                strokeWidth={3}
+                filter="url(#shadow)"
+              >
+                <use href="#minute-hand" />
+              </g>
+
+              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
+                <use href="#minute-hand" />
+              </g>
+
+              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+                <use href="#minute-hand" />
+              </g>
+
+              <g fill="#e0e0e0">
+                <use href="#minute-hand" />
+              </g>
+            </g>
+
+            <g>
+              <defs>
+                <g id="second-hand">
+                  <polygon
+                    points={cx(
+                      `${-7 / 2},${-235}`,
+                      `${0},${-240}`,
+                      `${7 / 2},${-235}`,
+                      `${7 / 2},${70}`,
+                      `${-7 / 2},${70}`
+                    )}
+                    transform={cx(
+                      `rotate(${value}, 250, 250)`,
+                      "translate(250, 250)"
+                    )}
+                  />
+
+                  <circle cx="250" cy="250" r="12" />
+                </g>
+              </defs>
+
+              <g
+                fill="#c00000"
+                stroke="#c00000"
+                strokeWidth={3}
+                filter="url(#shadow)"
+              >
+                <use href="#second-hand" />
+              </g>
+
+              <g fill="#800000" transform={`translate(${2 / 2}, ${2 / 2})`}>
+                <use href="#second-hand" />
+              </g>
+
+              <g fill="#ff8080" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+                <use href="#second-hand" />
+              </g>
 
               <g fill="#e00000">
-                <polygon
-                  points={cx(
-                    `${-10 / 2},${-235}`,
-                    `${0},${-240}`,
-                    `${10 / 2},${-235}`,
-                    `${10 / 2},${70}`,
-                    `${-10 / 2},${70}`
-                  )}
-                  transform={cx(
-                    `rotate(${value}, 250, 250)`,
-                    "translate(250, 250)"
-                  )}
-                />
-
-                <circle cx="250" cy="250" r="15" />
+                <use href="#second-hand" />
               </g>
             </g>
           </svg>
