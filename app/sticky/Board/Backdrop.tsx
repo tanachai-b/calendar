@@ -20,6 +20,6 @@ export function Backdrop({
         { "pointer-events-none": !isEditing }
       )}
       onMouseDown={onMouseDown}
-    ></div>
+    />
   );
 }

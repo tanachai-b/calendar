@@ -74,25 +74,25 @@ export default function Draw() {
               />
             </filter>
 
-            <circle cx="250" cy="250" r="240" fill="#101010" />
+            <circle cx="250" cy="250" r="250" fill="#101010" />
 
             <g fill="#e0e0e0">
               <circle
-                cx="250"
-                cy="250"
-                r="240"
+                cx={250}
+                cy={250}
+                r={250 - 2 / 2}
                 fill="transparent"
                 stroke="#e0e0e0"
-                strokeWidth="3"
+                strokeWidth={2}
               />
 
               {Array.from({ length: 60 * 4 }).map((v, i) => (
                 <rect
                   key={i}
-                  x="-1"
-                  y="-240"
-                  width="2"
-                  height="10"
+                  x={-2 / 2}
+                  y={-250}
+                  width={2}
+                  height={10}
                   transform={cx(
                     `rotate(${(i / 60 / 4) * 360}, 250, 250)`,
                     "translate(250, 250)"
@@ -103,10 +103,10 @@ export default function Draw() {
               {Array.from({ length: 60 }).map((v, i) => (
                 <rect
                   key={i}
-                  x="-1.5"
-                  y="-240"
-                  width="3"
-                  height="20"
+                  x={-3 / 2}
+                  y={-250}
+                  width={3}
+                  height={25}
                   transform={cx(
                     `rotate(${(i / 60) * 360}, 250, 250)`,
                     "translate(250, 250)"
@@ -117,10 +117,10 @@ export default function Draw() {
               {Array.from({ length: 12 }).map((v, i) => (
                 <rect
                   key={i}
-                  x="-7.5"
-                  y="-240"
-                  width="15"
-                  height="20"
+                  x={-15 / 2}
+                  y={-235}
+                  width={15}
+                  height={i % 3 === 0 ? 20 : 50}
                   transform={cx(
                     `rotate(${(i / 12) * 360}, 250, 250)`,
                     "translate(250, 250)"
@@ -135,25 +135,25 @@ export default function Draw() {
                   y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className={cx("text-x50", "font-medium")}
+                  className={cx("text-x70", "font-semibold")}
                   transform={`translate(0, 7)`}
                 >
-                  {i + 1}
+                  {(i + 1) % 3 === 0 ? i + 1 : ""}
                 </text>
               ))}
             </g>
 
-            <g fill="#e0e0e0">
+            {/* <g fill="#e0e0e0">
               <rect
-                x="-60"
-                y="-20"
-                width="120"
-                height="40"
+                x={-60}
+                y={-20}
+                width={120}
+                height={40}
                 fill="transparent"
                 stroke="#404040"
                 strokeWidth="1"
                 transform={cx("translate(250.5,167.5)")}
-              ></rect>
+              />
 
               <text
                 x={250}
@@ -164,14 +164,17 @@ export default function Draw() {
               >
                 JAN 28
               </text>
-            </g>
+            </g> */}
 
-            <g fill="#e0e0e0">
-              <rect
-                x="-5"
-                y="-150"
-                width="10"
-                height="150"
+            <g fill="#e0e0e0" stroke="#e0e0e0">
+              <polygon
+                points={cx(
+                  `${-20 / 2},${-140}`,
+                  `${0},${-150}`,
+                  `${20 / 2},${-140}`,
+                  `${20 / 2},${0}`,
+                  `${-20 / 2},${0}`
+                )}
                 transform={cx(
                   `rotate(${value / 60 / 12}, 250, 250)`,
                   "translate(250, 250)"
@@ -179,34 +182,80 @@ export default function Draw() {
               />
             </g>
 
-            <g fill="#e0e0e0">
-              <rect
-                x="-5"
-                y="-200"
-                width="10"
-                height="200"
-                transform={cx(
-                  `rotate(${value / 60}, 250, 250)`,
-                  "translate(250, 250)"
-                )}
-              />
+            <g>
+              {/* <g fill="#101010" stroke="#101010" strokeWidth={5}>
+                <polygon
+                  points={cx(
+                    `${-20 / 2},${-230}`,
+                    `${0},${-240}`,
+                    `${20 / 2},${-230}`,
+                    `${20 / 2},${0}`,
+                    `${-20 / 2},${0}`
+                  )}
+                  transform={cx(
+                    `rotate(${value / 60}, 250, 250)`,
+                    "translate(250, 250)"
+                  )}
+                />
 
-              <circle cx="250" cy="250" r="15" />
+                <circle cx="250" cy="250" r="20" />
+              </g> */}
+
+              <g fill="#e0e0e0">
+                <polygon
+                  points={cx(
+                    `${-20 / 2},${-230}`,
+                    `${0},${-240}`,
+                    `${20 / 2},${-230}`,
+                    `${20 / 2},${0}`,
+                    `${-20 / 2},${0}`
+                  )}
+                  transform={cx(
+                    `rotate(${value / 60}, 250, 250)`,
+                    "translate(250, 250)"
+                  )}
+                />
+
+                <circle cx="250" cy="250" r="20" />
+              </g>
             </g>
 
-            <g fill="#e00000">
-              <rect
-                x="-3.5"
-                y="-220"
-                width="7"
-                height="300"
-                transform={cx(
-                  `rotate(${value}, 250, 250)`,
-                  "translate(250, 250)"
-                )}
-              />
+            <g>
+              {/* <g fill="#101010" stroke="#101010" strokeWidth={5}>
+                <polygon
+                  points={cx(
+                    `${-10 / 2},${-235}`,
+                    `${0},${-240}`,
+                    `${10 / 2},${-235}`,
+                    `${10 / 2},${70}`,
+                    `${-10 / 2},${70}`
+                  )}
+                  transform={cx(
+                    `rotate(${value}, 250, 250)`,
+                    "translate(250, 250)"
+                  )}
+                />
 
-              <circle cx="250" cy="250" r="10" />
+                <circle cx="250" cy="250" r="15" />
+              </g> */}
+
+              <g fill="#e00000">
+                <polygon
+                  points={cx(
+                    `${-10 / 2},${-235}`,
+                    `${0},${-240}`,
+                    `${10 / 2},${-235}`,
+                    `${10 / 2},${70}`,
+                    `${-10 / 2},${70}`
+                  )}
+                  transform={cx(
+                    `rotate(${value}, 250, 250)`,
+                    "translate(250, 250)"
+                  )}
+                />
+
+                <circle cx="250" cy="250" r="15" />
+              </g>
             </g>
           </svg>
         </div>

@@ -28,6 +28,7 @@ const config: Config = {
       x30: ["30px", { lineHeight: "50px" }],
       x50: ["50px", { lineHeight: "70px" }],
       x70: ["70px", { lineHeight: "100px" }],
+      x100: ["100px", { lineHeight: "150px" }],
     },
     spacing: {
       "0": "0px",
