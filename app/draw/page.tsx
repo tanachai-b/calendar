@@ -63,15 +63,15 @@ export default function Draw() {
           ref.current?.requestPointerLock();
         }}
       >
-        <div className={cx("w-x200", "h-x200")}>
+        <div className={cx("w-x700", "h-x700", "xblur-[0.3px]")}>
           <svg viewBox="0 0 500 500">
             <defs>
               <filter id="shadow">
                 <feDropShadow
-                  dx={3}
-                  dy={3}
-                  stdDeviation={5}
-                  floodOpacity={0.75}
+                  dx={5}
+                  dy={5}
+                  stdDeviation={1}
+                  floodOpacity={0.5}
                 />
               </filter>
 
@@ -79,8 +79,8 @@ export default function Draw() {
                 <feDropShadow
                   dx={3}
                   dy={3}
-                  stdDeviation={5}
-                  floodOpacity={0.75}
+                  stdDeviation={1}
+                  floodOpacity={0.5}
                 />
               </filter>
             </defs>
@@ -124,11 +124,25 @@ export default function Draw() {
                   )}
                 />
               ))}
+
+              {Array.from({ length: 12 }).map((v, i) => (
+                <text
+                  key={i}
+                  x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
+                  y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className={cx("text-x70", "font-semibold")}
+                  transform={`translate(0, 7)`}
+                >
+                  {(i + 1) % 3 === 0 ? i + 1 : ""}
+                </text>
+              ))}
             </g>
 
             <g>
               <defs>
-                <g id="backgro">
+                <g id="hatch-marks">
                   {Array.from({ length: 12 }).map((v, i) => (
                     <rect
                       key={i}
@@ -142,42 +156,28 @@ export default function Draw() {
                       )}
                     />
                   ))}
-
-                  {Array.from({ length: 12 }).map((v, i) => (
-                    <text
-                      key={i}
-                      x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
-                      y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      className={cx("text-x70", "font-normal")}
-                      transform={`translate(0, 7)`}
-                    >
-                      {(i + 1) % 3 === 0 ? i + 1 : ""}
-                    </text>
-                  ))}
                 </g>
               </defs>
 
               <g
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
-                strokeWidth={2}
+                strokeWidth={5}
                 filter="url(#shadow2)"
               >
-                <use href="#backgro" />
+                <use href="#hatch-marks" />
               </g>
 
-              <g fill="#808080" transform={`translate(${2 / 2}, ${2 / 2})`}>
-                <use href="#backgro" />
+              <g fill="#c0c0c0" transform={`translate(${5 / 2}, ${5 / 2})`}>
+                <use href="#hatch-marks" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
-                <use href="#backgro" />
+              <g fill="#ffffff" transform={`translate(${-5 / 2}, ${-5 / 2})`}>
+                <use href="#hatch-marks" />
               </g>
 
               <g fill="#e0e0e0">
-                <use href="#backgro" />
+                <use href="#hatch-marks" />
               </g>
             </g>
 
@@ -209,16 +209,30 @@ export default function Draw() {
                 <g id="hour-hand">
                   <polygon
                     points={cx(
-                      `${-20 / 2},${-140}`,
+                      `${-30 / 2},${-130}`,
                       `${0},${-150}`,
-                      `${20 / 2},${-140}`,
-                      `${20 / 2},${0}`,
-                      `${-20 / 2},${0}`
+                      `${30 / 2},${-130}`,
+                      `${30 / 2},${0}`,
+                      `${-30 / 2},${0}`
                     )}
                     transform={cx(
                       `rotate(${value / 60 / 12}, 250, 250)`,
                       "translate(250, 250)"
                     )}
+                  />
+
+                  <polygon
+                    points={cx(
+                      `${-15 / 2},${-110}`,
+                      `${15 / 2},${-110}`,
+                      `${15 / 2},${-20}`,
+                      `${-15 / 2},${-20}`
+                    )}
+                    transform={cx(
+                      `rotate(${value / 60 / 12}, 250, 250)`,
+                      "translate(250, 250)"
+                    )}
+                    fill="#101010"
                   />
                 </g>
               </defs>
@@ -226,17 +240,17 @@ export default function Draw() {
               <g
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
-                strokeWidth={2}
+                strokeWidth={5}
                 filter="url(#shadow)"
               >
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#808080" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#c0c0c0" transform={`translate(${5 / 2}, ${5 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#ffffff" transform={`translate(${-5 / 2}, ${-5 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
@@ -250,11 +264,11 @@ export default function Draw() {
                 <g id="minute-hand">
                   <polygon
                     points={cx(
-                      `${-20 / 2},${-230}`,
+                      `${-30 / 2},${-220}`,
                       `${0},${-240}`,
-                      `${20 / 2},${-230}`,
-                      `${20 / 2},${0}`,
-                      `${-20 / 2},${0}`
+                      `${30 / 2},${-220}`,
+                      `${30 / 2},${0}`,
+                      `${-30 / 2},${0}`
                     )}
                     transform={cx(
                       `rotate(${value / 60}, 250, 250)`,
@@ -262,24 +276,38 @@ export default function Draw() {
                     )}
                   />
 
-                  <circle cx="250" cy="250" r="20" />
+                  <polygon
+                    points={cx(
+                      `${-15 / 2},${-200}`,
+                      `${15 / 2},${-200}`,
+                      `${15 / 2},${-20}`,
+                      `${-15 / 2},${-20}`
+                    )}
+                    transform={cx(
+                      `rotate(${value / 60}, 250, 250)`,
+                      "translate(250, 250)"
+                    )}
+                    fill="#101010"
+                  />
+
+                  <circle cx="250" cy="250" r={30 / 2} />
                 </g>
               </defs>
 
               <g
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
-                strokeWidth={2}
+                strokeWidth={5}
                 filter="url(#shadow)"
               >
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#808080" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#c0c0c0" transform={`translate(${5 / 2}, ${5 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#ffffff" transform={`translate(${-5 / 2}, ${-5 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
@@ -293,9 +321,9 @@ export default function Draw() {
                 <g id="second-hand">
                   <polygon
                     points={cx(
-                      `${-3 / 2},${-235}`,
+                      `${-3 / 2},${-240}`,
                       `${0},${-240}`,
-                      `${3 / 2},${-235}`,
+                      `${3 / 2},${-240}`,
                       `${3 / 2},${70}`,
                       `${-3 / 2},${70}`
                     )}
@@ -305,7 +333,7 @@ export default function Draw() {
                     )}
                   />
 
-                  <circle cx="250" cy="250" r="12" />
+                  <circle cx="250" cy="250" r={20 / 2} />
                 </g>
               </defs>
 
