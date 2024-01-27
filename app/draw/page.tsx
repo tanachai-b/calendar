@@ -112,7 +112,7 @@ export default function Draw() {
                 cx={250}
                 cy={250}
                 r={250 - 2 / 2}
-                fill="transparent"
+                fill="none"
                 stroke="#e0e0e0"
                 strokeWidth={2}
               />
@@ -151,9 +151,8 @@ export default function Draw() {
                   x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
                   y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
                   textAnchor="middle"
-                  dominantBaseline="middle"
+                  alignmentBaseline="central"
                   className={cx("text-x70", "font-semibold")}
-                  transform={`translate(0, 7)`}
                 >
                   {(i + 1) % 12 === 0 ? i + 1 : ""}
                 </text>
@@ -180,53 +179,65 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#e0e0e0"
-                stroke="#e0e0e0"
-                strokeWidth={5}
+                fill="#c00000"
+                stroke="#c00000"
+                strokeWidth={2}
                 filter="url(#shadow2)"
               >
                 <use href="#hatch-marks" />
               </g>
 
-              <g fill="#c0c0c0" transform={`translate(${5 / 2}, ${5 / 2})`}>
+              <g fill="#400000" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#hatch-marks" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-5 / 2}, ${-5 / 2})`}>
+              <g fill="#ff4040" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#hatch-marks" />
               </g>
 
-              <g fill="#e0e0e0">
+              <g fill="#c00000">
                 <use href="#hatch-marks" />
               </g>
             </g>
 
-            {/* <g fill="#e0e0e0">
+            <g fill="#e0e0e0" transform={cx("translate(250.5, 160.5)")}>
               <rect
-                x={-60}
-                y={-20}
-                width={120}
+                x={-60 / 2}
+                y={-40 / 2}
+                width={60}
                 height={40}
-                fill="transparent"
-                stroke="#404040"
-                strokeWidth="1"
-                transform={cx("translate(250.5,167.5)")}
+                fill="none"
+                stroke="#e0e0e0"
+                strokeWidth="3"
               />
 
               <text
-                x={250}
-                y={250 - 80}
                 textAnchor="middle"
-                dominantBaseline="middle"
+                alignmentBaseline="central"
                 className={cx("text-x30", "font-semibold")}
               >
-                JAN 28
+                {new Date().getDate()}
               </text>
-            </g> */}
+            </g>
 
-            <g stroke="#808080" strokeWidth={3}>
-              <g transform={cx(`translate(${250 - 125}, ${250})`)}>
-                <circle cx={0} cy={0} r={80} fill="transparent" />
+            <g stroke="#e0e0e0" strokeWidth={3}>
+              <path
+                id="textpath"
+                fill="none"
+                stroke="none"
+                d="M -65 0 A 65 65 0 0 1 65 0"
+              />
+
+              <path
+                id="textpath-reverse"
+                fill="none"
+                stroke="none"
+                d="M 65 0 A 65 65 0 0 0 -65 0"
+              />
+
+              <g transform={`translate(${250 - 125}, ${250})`}>
+                <circle cx={0} cy={0} r={80} fill="none" />
+                {/* <circle cx={0} cy={0} r={80 - 30} fill="none" /> */}
 
                 {Array.from({ length: 12 }).map((v, i) => (
                   <line
@@ -234,17 +245,83 @@ export default function Draw() {
                     x1={0}
                     y1={-80}
                     x2={0}
-                    y2={-80 + 15}
-                    transform={cx(
-                      `translate(${0}, ${0})`,
-                      `rotate(${(i / 12) * 360}, 0, 0)`
-                    )}
+                    y2={-80 + 30}
+                    strokeWidth={i % 3 === 0 ? 7 : ""}
+                    transform={`rotate(${(i / 12) * 360}, 0, 0)`}
                   />
                 ))}
+
+                {[
+                  "♑",
+                  "♒",
+                  "♓",
+                  "♈",
+                  "♉",
+                  "♊",
+                  "♋",
+                  "♌",
+                  "♍",
+                  "♎",
+                  "♏",
+                  "♐",
+                ].map((v, i) => {
+                  const flip = i >= 3 && i <= 8;
+                  return (
+                    <text
+                      key={i}
+                      transform={`rotate(${(-(i + 0.5) / 12) * 360})`}
+                    >
+                      <textPath
+                        strokeWidth={0}
+                        fill={i === 0 ? "#e0e0e0" : "#e0e0e0"}
+                        className={cx("text-x20", "font-bold")}
+                        textAnchor={"middle"}
+                        startOffset="50%"
+                        alignmentBaseline={"central"}
+                        href={flip ? "#textpath-reverse" : "#textpath"}
+                      >
+                        {i + 1}
+                        {/* {v + "\uFE0E"} */}
+                      </textPath>
+                    </text>
+                  );
+                })}
+
+                <g
+                  fill="#c00000"
+                  stroke="none"
+                  transform={`rotate(${
+                    -(
+                      (new Date().getMonth() +
+                        (new Date().getDate() - 1) /
+                          new Date(
+                            new Date().getFullYear(),
+                            new Date().getMonth() + 1,
+                            0
+                          ).getDate()) /
+                      12
+                    ) * 360
+                  })`}
+                  filter="url(#shadow1)"
+                >
+                  <polygon
+                    points={cx(
+                      `${-15 / 2},${-45}`,
+                      `${0},${-55}`,
+                      `${15 / 2},${-45}`,
+                      `${30 / 2},${0}`,
+                      `${-30 / 2},${0}`,
+                      `${-15 / 2},${-45}`
+                    )}
+                  />
+
+                  <circle r={30 / 2} />
+                </g>
               </g>
 
-              <g transform={cx(`translate(${250}, ${250 + 125})`)}>
-                <circle cx={0} cy={0} r={80} fill="transparent" />
+              <g transform={`translate(${250}, ${250 + 125})`}>
+                <circle cx={0} cy={0} r={80} fill="none" />
+                {/* <circle cx={0} cy={0} r={80 - 30} fill="none" /> */}
 
                 {Array.from({ length: 4 }).map((v, i) => (
                   <line
@@ -252,17 +329,47 @@ export default function Draw() {
                     x1={0}
                     y1={-80}
                     x2={0}
-                    y2={-80 + 15}
-                    transform={cx(
-                      `translate(${0}, ${0})`,
-                      `rotate(${(i / 4) * 360}, 0, 0)`
-                    )}
+                    y2={-80 + 30}
+                    strokeWidth="7"
+                    transform={`rotate(${(i / 4) * 360}, 0, 0)`}
                   />
                 ))}
+
+                {Array.from({ length: 28 }).map((v, i) => (
+                  <line
+                    key={i}
+                    x1={0}
+                    y1={-80}
+                    x2={0}
+                    y2={-80 + 10}
+                    transform={`rotate(${(i / 28) * 360}, 0, 0)`}
+                  />
+                ))}
+
+                <g
+                  fill="#c00000"
+                  stroke="none"
+                  transform={`rotate(${135})`}
+                  filter="url(#shadow1)"
+                >
+                  <polygon
+                    points={cx(
+                      `${-15 / 2},${-45}`,
+                      `${0},${-55}`,
+                      `${15 / 2},${-45}`,
+                      `${30 / 2},${0}`,
+                      `${-30 / 2},${0}`,
+                      `${-15 / 2},${-45}`
+                    )}
+                  />
+
+                  <circle r={30 / 2} />
+                </g>
               </g>
 
-              <g transform={cx(`translate(${250 + 125}, ${250})`)}>
-                <circle cx={0} cy={0} r={80} fill="transparent" />
+              <g transform={`translate(${250 + 125}, ${250})`}>
+                <circle cx={0} cy={0} r={80} fill="none" />
+                {/* <circle cx={0} cy={0} r={80 - 30} fill="none" /> */}
 
                 {Array.from({ length: 7 }).map((v, i) => (
                   <line
@@ -270,13 +377,55 @@ export default function Draw() {
                     x1={0}
                     y1={-80}
                     x2={0}
-                    y2={-80 + 15}
-                    transform={cx(
-                      `translate(${0}, ${0})`,
-                      `rotate(${(i / 7) * 360}, 0, 0)`
-                    )}
+                    y2={-80 + 30}
+                    strokeWidth={i % 7 === 0 ? 7 : ""}
+                    transform={`rotate(${(i / 7) * 360}, 0, 0)`}
                   />
                 ))}
+
+                {["S", "M", "T", "W", "T", "F", "S"].map((v, i) => {
+                  const flip = i >= 2 && i <= 4;
+                  return (
+                    <text
+                      key={i}
+                      transform={`rotate(${(-(i + 0.5) / 7) * 360})`}
+                    >
+                      <textPath
+                        strokeWidth={0}
+                        fill={i === 0 ? "#e0e0e0" : "#e0e0e0"}
+                        className={cx("text-x20", "font-bold")}
+                        textAnchor={"middle"}
+                        startOffset="50%"
+                        alignmentBaseline={"central"}
+                        href={flip ? "#textpath-reverse" : "#textpath"}
+                      >
+                        {v}
+                      </textPath>
+                    </text>
+                  );
+                })}
+
+                <g
+                  fill="#c00000"
+                  stroke="none"
+                  transform={`rotate(${
+                    -((new Date().getDay() + value / 360 / 60 / 24) / 7) * 360
+                  })`}
+                  filter="url(#shadow1)"
+                >
+                  <polygon
+                    points={cx(
+                      `${-15 / 2},${-45}`,
+                      `${0},${-55}`,
+                      `${15 / 2},${-45}`,
+                      `${30 / 2},${0}`,
+                      `${-30 / 2},${0}`,
+                      `${-15 / 2},${-45}`
+                    )}
+                  />
+
+                  <circle r={30 / 2} />
+                </g>
               </g>
             </g>
 
@@ -285,18 +434,18 @@ export default function Draw() {
                 <g id="hour-hand">
                   <polygon
                     points={cx(
-                      `${-30 / 2},${-130}`,
+                      `${-30 / 2},${-140}`,
                       `${0},${-150}`,
-                      `${30 / 2},${-130}`,
-                      `${30 / 2},${0}`,
-                      `${-30 / 2},${0}`,
-                      `${-30 / 2},${-130}`,
+                      `${30 / 2},${-140}`,
+                      `${50 / 2},${0}`,
+                      `${-50 / 2},${0}`,
+                      `${-30 / 2},${-140}`,
 
-                      `${-25 / 2},${-110}`,
-                      `${-25 / 2},${-20}`,
-                      `${25 / 2},${-20}`,
-                      `${25 / 2},${-110}`,
-                      `${-25 / 2},${-110}`
+                      `${-20 / 2},${-110}`,
+                      `${-30 / 2},${-30}`,
+                      `${30 / 2},${-30}`,
+                      `${20 / 2},${-110}`,
+                      `${-20 / 2},${-110}`
                     )}
                     transform={cx(
                       `rotate(${value / 60 / 12}, 250, 250)`,
@@ -309,17 +458,17 @@ export default function Draw() {
               <g
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
-                strokeWidth={5}
+                strokeWidth={2}
                 filter="url(#shadow1)"
               >
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#c0c0c0" transform={`translate(${5 / 2}, ${5 / 2})`}>
+              <g fill="#c0c0c0" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-5 / 2}, ${-5 / 2})`}>
+              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
@@ -333,18 +482,18 @@ export default function Draw() {
                 <g id="minute-hand">
                   <polygon
                     points={cx(
-                      `${-30 / 2},${-220}`,
+                      `${-30 / 2},${-230}`,
                       `${0},${-240}`,
-                      `${30 / 2},${-220}`,
-                      `${30 / 2},${0}`,
-                      `${-30 / 2},${0}`,
-                      `${-30 / 2},${-220}`,
+                      `${30 / 2},${-230}`,
+                      `${50 / 2},${0}`,
+                      `${-50 / 2},${0}`,
+                      `${-30 / 2},${-230}`,
 
-                      `${-25 / 2},${-200}`,
-                      `${-25 / 2},${-20}`,
-                      `${25 / 2},${-20}`,
-                      `${25 / 2},${-200}`,
-                      `${-25 / 2},${-200}`
+                      `${-20 / 2},${-200}`,
+                      `${-30 / 2},${-30}`,
+                      `${30 / 2},${-30}`,
+                      `${20 / 2},${-200}`,
+                      `${-20 / 2},${-200}`
                     )}
                     transform={cx(
                       `rotate(${value / 60}, 250, 250)`,
@@ -352,24 +501,24 @@ export default function Draw() {
                     )}
                   />
 
-                  <circle cx="250" cy="250" r={30 / 2} />
+                  <circle cx="250" cy="250" r={50 / 2} />
                 </g>
               </defs>
 
               <g
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
-                strokeWidth={5}
+                strokeWidth={2}
                 filter="url(#shadow1)"
               >
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#c0c0c0" transform={`translate(${5 / 2}, ${5 / 2})`}>
+              <g fill="#c0c0c0" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-5 / 2}, ${-5 / 2})`}>
+              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
@@ -383,11 +532,11 @@ export default function Draw() {
                 <g id="second-hand">
                   <polygon
                     points={cx(
-                      `${-3 / 2},${-240}`,
+                      `${-0 / 2},${-240}`,
                       `${0},${-240}`,
-                      `${3 / 2},${-240}`,
-                      `${3 / 2},${70}`,
-                      `${-3 / 2},${70}`
+                      `${0 / 2},${-240}`,
+                      `${15 / 2},${70}`,
+                      `${-15 / 2},${70}`
                     )}
                     transform={cx(
                       `rotate(${value}, 250, 250)`,
@@ -395,20 +544,20 @@ export default function Draw() {
                     )}
                   />
 
-                  <circle cx="250" cy="250" r={20 / 2} />
+                  <circle cx="250" cy="250" r={30 / 2} />
                 </g>
               </defs>
 
               <g
-                fill="#e00000"
-                stroke="#e00000"
+                fill="#c00000"
+                stroke="#c00000"
                 strokeWidth={2}
                 filter="url(#shadow1)"
               >
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#c00000" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#400000" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#second-hand" />
               </g>
 
@@ -416,7 +565,7 @@ export default function Draw() {
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#e00000">
+              <g fill="#c00000">
                 <use href="#second-hand" />
               </g>
             </g>
