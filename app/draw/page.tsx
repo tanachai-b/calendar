@@ -107,13 +107,13 @@ export default function Draw() {
               />
             </foreignObject> */}
 
-            <g fill="#e0e0e0">
+            <g fill="#808080">
               <circle
                 cx={250}
                 cy={250}
                 r={250 - 2 / 2}
                 fill="none"
-                stroke="#e0e0e0"
+                stroke="#808080"
                 strokeWidth={2}
               />
 
@@ -200,14 +200,14 @@ export default function Draw() {
               </g>
             </g>
 
-            <g fill="#e0e0e0" transform={cx("translate(250.5, 160.5)")}>
+            <g fill="#808080" transform={cx("translate(250.5, 160.5)")}>
               <rect
                 x={-60 / 2}
                 y={-40 / 2}
                 width={60}
                 height={40}
                 fill="none"
-                stroke="#e0e0e0"
+                stroke="#808080"
                 strokeWidth="3"
               />
 
@@ -220,7 +220,7 @@ export default function Draw() {
               </text>
             </g>
 
-            <g stroke="#e0e0e0" strokeWidth={3}>
+            <g stroke="#808080" strokeWidth={3}>
               <path
                 id="textpath"
                 fill="none"
@@ -273,7 +273,7 @@ export default function Draw() {
                     >
                       <textPath
                         strokeWidth={0}
-                        fill={i === 0 ? "#e0e0e0" : "#e0e0e0"}
+                        fill={i === 0 ? "#808080" : "#808080"}
                         className={cx("text-x20", "font-bold")}
                         textAnchor={"middle"}
                         startOffset="50%"
@@ -347,7 +347,7 @@ export default function Draw() {
                   <text key={i} transform={`rotate(${(-i / 8) * 360})`}>
                     <textPath
                       strokeWidth={0}
-                      fill={i === 0 ? "#e0e0e0" : "#e0e0e0"}
+                      fill={i === 0 ? "#808080" : "#808080"}
                       className={cx("text-x20", "font-bold")}
                       textAnchor={"middle"}
                       startOffset="50%"
@@ -415,7 +415,7 @@ export default function Draw() {
                     >
                       <textPath
                         strokeWidth={0}
-                        fill={i === 0 ? "#e0e0e0" : "#e0e0e0"}
+                        fill={i === 0 ? "#808080" : "#808080"}
                         className={cx("text-x20", "font-bold")}
                         textAnchor={"middle"}
                         startOffset="50%"
@@ -479,25 +479,41 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#e0e0e0"
-                stroke="#e0e0e0"
+                fill="#808080"
+                stroke="#808080"
                 strokeWidth={2}
                 filter="url(#shadow1)"
               >
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#c0c0c0" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#c0c0c0" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#e0e0e0">
+              <g fill="#808080">
                 <use href="#hour-hand" />
               </g>
+
+              <polygon
+                points={cx(
+                  `${-27 / 2},${-140}`,
+                  `${0},${-149}`,
+                  `${27 / 2},${-140}`,
+                  `${30 / 2},${-120}`,
+                  `${-30 / 2},${-120}`,
+                  `${-27 / 2},${-140}`
+                )}
+                transform={cx(
+                  `rotate(${value / 60 / 12}, 250, 250)`,
+                  "translate(250, 250)"
+                )}
+                fill="#ffc000"
+              />
             </g>
 
             <g>
@@ -529,25 +545,41 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#e0e0e0"
-                stroke="#e0e0e0"
+                fill="#808080"
+                stroke="#808080"
                 strokeWidth={2}
                 filter="url(#shadow1)"
               >
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#c0c0c0" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#ffffff" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#c0c0c0" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#e0e0e0">
+              <g fill="#808080">
                 <use href="#minute-hand" />
               </g>
+
+              <polygon
+                points={cx(
+                  `${-27 / 2},${-230}`,
+                  `${0},${-240}`,
+                  `${27 / 2},${-230}`,
+                  `${30 / 2},${-210}`,
+                  `${-30 / 2},${-210}`,
+                  `${-27 / 2},${-230}`
+                )}
+                transform={cx(
+                  `rotate(${value / 60}, 250, 250)`,
+                  "translate(250, 250)"
+                )}
+                fill="#ffc000"
+              />
             </g>
 
             <g>
