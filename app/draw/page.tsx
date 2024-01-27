@@ -63,10 +63,10 @@ export default function Draw() {
           ref.current?.requestPointerLock();
         }}
       >
-        <div className={cx("w-x700", "h-x700", "xblur-[0.3px]")}>
+        <div className={cx("w-x700", "h-x700")}>
           <svg viewBox="0 0 500 500">
             <defs>
-              <filter id="shadow">
+              <filter id="shadow1">
                 <feDropShadow
                   dx={5}
                   dy={5}
@@ -83,9 +83,29 @@ export default function Draw() {
                   floodOpacity={0.5}
                 />
               </filter>
+
+              <radialGradient id="radial1">
+                <stop offset="0%" stopColor="#404040" />
+                <stop offset="100%" stopColor="#101010" />
+              </radialGradient>
             </defs>
 
-            <circle cx="250" cy="250" r="250" fill="#101010" />
+            <circle
+              cx="250"
+              cy="250"
+              r="250"
+              fill="#101010"
+              // fill="url(#radial1)"
+            />
+
+            {/* <foreignObject x="0" y="0" width="500" height="500">
+              <div
+                className={cx("size-full", "bg-text_red", "rounded-full")}
+                style={{
+                  background: `conic-gradient(#000000,#404040,#000000,#404040,#000000)`,
+                }}
+              />
+            </foreignObject> */}
 
             <g fill="#e0e0e0">
               <circle
@@ -234,7 +254,7 @@ export default function Draw() {
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
                 strokeWidth={5}
-                filter="url(#shadow)"
+                filter="url(#shadow1)"
               >
                 <use href="#hour-hand" />
               </g>
@@ -284,7 +304,7 @@ export default function Draw() {
                 fill="#e0e0e0"
                 stroke="#e0e0e0"
                 strokeWidth={5}
-                filter="url(#shadow)"
+                filter="url(#shadow1)"
               >
                 <use href="#minute-hand" />
               </g>
@@ -327,7 +347,7 @@ export default function Draw() {
                 fill="#e00000"
                 stroke="#e00000"
                 strokeWidth={2}
-                filter="url(#shadow)"
+                filter="url(#shadow1)"
               >
                 <use href="#second-hand" />
               </g>
