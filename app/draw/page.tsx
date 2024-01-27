@@ -155,7 +155,7 @@ export default function Draw() {
                   className={cx("text-x70", "font-semibold")}
                   transform={`translate(0, 7)`}
                 >
-                  {(i + 1) % 3 === 0 ? i + 1 : ""}
+                  {(i + 1) % 12 === 0 ? i + 1 : ""}
                 </text>
               ))}
             </g>
@@ -223,6 +223,62 @@ export default function Draw() {
                 JAN 28
               </text>
             </g> */}
+
+            <g stroke="#808080" strokeWidth={3}>
+              <g transform={cx(`translate(${250 - 125}, ${250})`)}>
+                <circle cx={0} cy={0} r={80} fill="transparent" />
+
+                {Array.from({ length: 12 }).map((v, i) => (
+                  <line
+                    key={i}
+                    x1={0}
+                    y1={-80}
+                    x2={0}
+                    y2={-80 + 15}
+                    transform={cx(
+                      `translate(${0}, ${0})`,
+                      `rotate(${(i / 12) * 360}, 0, 0)`
+                    )}
+                  />
+                ))}
+              </g>
+
+              <g transform={cx(`translate(${250}, ${250 + 125})`)}>
+                <circle cx={0} cy={0} r={80} fill="transparent" />
+
+                {Array.from({ length: 4 }).map((v, i) => (
+                  <line
+                    key={i}
+                    x1={0}
+                    y1={-80}
+                    x2={0}
+                    y2={-80 + 15}
+                    transform={cx(
+                      `translate(${0}, ${0})`,
+                      `rotate(${(i / 4) * 360}, 0, 0)`
+                    )}
+                  />
+                ))}
+              </g>
+
+              <g transform={cx(`translate(${250 + 125}, ${250})`)}>
+                <circle cx={0} cy={0} r={80} fill="transparent" />
+
+                {Array.from({ length: 7 }).map((v, i) => (
+                  <line
+                    key={i}
+                    x1={0}
+                    y1={-80}
+                    x2={0}
+                    y2={-80 + 15}
+                    transform={cx(
+                      `translate(${0}, ${0})`,
+                      `rotate(${(i / 7) * 360}, 0, 0)`
+                    )}
+                  />
+                ))}
+              </g>
+            </g>
 
             <g>
               <defs>
