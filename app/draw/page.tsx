@@ -179,23 +179,23 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#c00000"
-                stroke="#c00000"
+                fill="#ffc000"
+                stroke="#ffc000"
                 strokeWidth={2}
                 filter="url(#shadow2)"
               >
                 <use href="#hatch-marks" />
               </g>
 
-              <g fill="#400000" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#805000" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#hatch-marks" />
               </g>
 
-              <g fill="#ff4040" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#fff080" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#hatch-marks" />
               </g>
 
-              <g fill="#c00000">
+              <g fill="#ffc000">
                 <use href="#hatch-marks" />
               </g>
             </g>
@@ -288,7 +288,7 @@ export default function Draw() {
                 })}
 
                 <g
-                  fill="#c00000"
+                  fill="#ffc000"
                   stroke="none"
                   transform={`rotate(${
                     -(
@@ -361,7 +361,7 @@ export default function Draw() {
                 ))}
 
                 <g
-                  fill="#c00000"
+                  fill="#ffc000"
                   stroke="none"
                   transform={`rotate(${
                     -(
@@ -429,7 +429,7 @@ export default function Draw() {
                 })}
 
                 <g
-                  fill="#c00000"
+                  fill="#ffc000"
                   stroke="none"
                   transform={`rotate(${
                     -((new Date().getDay() + value / 360 / 60 / 24) / 7) * 360
@@ -572,23 +572,23 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#c00000"
-                stroke="#c00000"
+                fill="#ffc000"
+                stroke="#ffc000"
                 strokeWidth={2}
                 filter="url(#shadow1)"
               >
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#400000" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#805000" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#ff4040" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#fff080" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#c00000">
+              <g fill="#ffc000">
                 <use href="#second-hand" />
               </g>
             </g>
