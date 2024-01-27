@@ -63,25 +63,27 @@ export default function Draw() {
           ref.current?.requestPointerLock();
         }}
       >
-        <div className={cx("w-x700", "h-x700")}>
+        <div className={cx("w-x200", "h-x200")}>
           <svg viewBox="0 0 500 500">
-            <filter id="shadow">
-              <feDropShadow
-                dx={5}
-                dy={5}
-                stdDeviation={3}
-                floodOpacity={0.75}
-              />
-            </filter>
+            <defs>
+              <filter id="shadow">
+                <feDropShadow
+                  dx={3}
+                  dy={3}
+                  stdDeviation={5}
+                  floodOpacity={0.75}
+                />
+              </filter>
 
-            <filter id="shadow2">
-              <feDropShadow
-                dx={3}
-                dy={3}
-                stdDeviation={2}
-                floodOpacity={0.75}
-              />
-            </filter>
+              <filter id="shadow2">
+                <feDropShadow
+                  dx={3}
+                  dy={3}
+                  stdDeviation={5}
+                  floodOpacity={0.75}
+                />
+              </filter>
+            </defs>
 
             <circle cx="250" cy="250" r="250" fill="#101010" />
 
@@ -158,15 +160,15 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#c0c0c0"
-                stroke="#c0c0c0"
-                strokeWidth={3}
+                fill="#e0e0e0"
+                stroke="#e0e0e0"
+                strokeWidth={2}
                 filter="url(#shadow2)"
               >
                 <use href="#backgro" />
               </g>
 
-              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#808080" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#backgro" />
               </g>
 
@@ -222,15 +224,15 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#c0c0c0"
-                stroke="#c0c0c0"
-                strokeWidth={3}
+                fill="#e0e0e0"
+                stroke="#e0e0e0"
+                strokeWidth={2}
                 filter="url(#shadow)"
               >
                 <use href="#hour-hand" />
               </g>
 
-              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#808080" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#hour-hand" />
               </g>
 
@@ -265,15 +267,15 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#c0c0c0"
-                stroke="#c0c0c0"
-                strokeWidth={3}
+                fill="#e0e0e0"
+                stroke="#e0e0e0"
+                strokeWidth={2}
                 filter="url(#shadow)"
               >
                 <use href="#minute-hand" />
               </g>
 
-              <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#808080" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#minute-hand" />
               </g>
 
@@ -291,11 +293,11 @@ export default function Draw() {
                 <g id="second-hand">
                   <polygon
                     points={cx(
-                      `${-7 / 2},${-235}`,
+                      `${-3 / 2},${-235}`,
                       `${0},${-240}`,
-                      `${7 / 2},${-235}`,
-                      `${7 / 2},${70}`,
-                      `${-7 / 2},${70}`
+                      `${3 / 2},${-235}`,
+                      `${3 / 2},${70}`,
+                      `${-3 / 2},${70}`
                     )}
                     transform={cx(
                       `rotate(${value}, 250, 250)`,
@@ -308,19 +310,19 @@ export default function Draw() {
               </defs>
 
               <g
-                fill="#c00000"
-                stroke="#c00000"
-                strokeWidth={3}
+                fill="#e00000"
+                stroke="#e00000"
+                strokeWidth={2}
                 filter="url(#shadow)"
               >
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#800000" transform={`translate(${2 / 2}, ${2 / 2})`}>
+              <g fill="#c00000" transform={`translate(${2 / 2}, ${2 / 2})`}>
                 <use href="#second-hand" />
               </g>
 
-              <g fill="#ff8080" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
+              <g fill="#ff4040" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
                 <use href="#second-hand" />
               </g>
 
