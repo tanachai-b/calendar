@@ -29,7 +29,7 @@ export function MoonDial() {
           x2={0}
           y2={30 - 5}
           transform={cx(
-            `rotate(${((i + 0.5) / 8) * 360}, 0, 0)`,
+            `rotate(${((i + 0.5) / 8) * 360})`,
             "translate(0, -80)"
           )}
           stroke="#ffffff40"

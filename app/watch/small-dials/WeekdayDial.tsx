@@ -22,7 +22,7 @@ export function WeekdayDial({ value }: { value: number }) {
           x2={0}
           y2={30 - 5}
           strokeWidth={i % 7 === 0 ? 10 : ""}
-          transform={cx(`rotate(${(i / 7) * 360}, 0, 0)`, "translate(0, -80)")}
+          transform={cx(`rotate(${(i / 7) * 360})`, "translate(0, -80)")}
           stroke="#ffffff40"
         />
       ))}

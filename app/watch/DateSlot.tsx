@@ -4,7 +4,7 @@ import cx from "classnames";
 
 export function DateSlot() {
   return (
-    <g transform="translate(0.5, -90.5)">
+    <g transform="translate(0.5, -125.5)">
       <rect
         x={-60 / 2}
         y={-40 / 2}

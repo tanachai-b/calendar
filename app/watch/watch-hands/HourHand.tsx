@@ -24,7 +24,7 @@ export function HourHand({ value }: { value: number }) {
               `${15 / 2},${-120}`,
               `${-15 / 2},${-120}`
             )}
-            transform={`rotate(${value / 60 / 12}, 0, 0)`}
+            transform={`rotate(${value / 60 / 12})`}
           />
         </g>
 

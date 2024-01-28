@@ -39,7 +39,7 @@ export function FineScale() {
         ))}
       </g>
 
-      {Array.from({ length: 12 }).map((v, i) => (
+      {/* {Array.from({ length: 12 }).map((v, i) => (
         <text
           key={i}
           x={180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
@@ -51,7 +51,7 @@ export function FineScale() {
         >
           {(i + 1) % 12 === 0 ? i + 1 : ""}
         </text>
-      ))}
+      ))} */}
     </g>
   );
 }

@@ -32,7 +32,7 @@ export function MonthDial() {
           x2={0}
           y2={30 - 5}
           strokeWidth={i % 3 === 0 ? 7 : ""}
-          transform={cx(`rotate(${(i / 12) * 360}, 0, 0)`, "translate(0, -80)")}
+          transform={cx(`rotate(${(i / 12) * 360})`, "translate(0, -80)")}
           stroke="#ffffff40"
         />
       ))}

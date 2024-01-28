@@ -9,16 +9,35 @@ export function CoarseScale() {
     <g filter="url(#shadow2)">
       <defs>
         <g id={`shape-${rand}`}>
-          {Array.from({ length: 12 }).map((v, i) => (
-            <rect
-              key={i}
-              x={-15 / 2}
-              y={-230}
-              width={15}
-              height={i % 3 === 0 ? 20 : 50}
-              transform={`rotate(${(i / 12) * 360}, 0, 0)`}
-            />
-          ))}
+          {Array.from({ length: 12 }).map((v, i) => {
+            if (i === 0) return;
+            return (
+              <rect
+                key={i}
+                x={-15 / 2}
+                y={-230}
+                width={15}
+                height={i % 3 === 0 ? 20 : 50}
+                transform={`rotate(${(i / 12) * 360}, 0, 0)`}
+              />
+            );
+          })}
+
+          <rect
+            x={-15 / 2}
+            y={-230}
+            width={15}
+            height={50}
+            transform={`translate(-12,0)`}
+          />
+
+          <rect
+            x={-15 / 2}
+            y={-230}
+            width={15}
+            height={50}
+            transform={`translate(12,0)`}
+          />
         </g>
 
         <filter id={`erode-${rand}`}>
