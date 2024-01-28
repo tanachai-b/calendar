@@ -17,9 +17,9 @@ export function NavBar({ className }: { className?: string }) {
 
       <IconButton
         icon={<Icon className="text-xl" icon="sticky_note" />}
-        text="Sticky"
-        active={pathname === "/sticky"}
-        onClick={() => router.push("/sticky")}
+        text="Sticky Notes"
+        active={pathname === "/sticky-notes"}
+        onClick={() => router.push("/sticky-notes")}
       />
 
       <IconButton
@@ -39,10 +39,10 @@ export function NavBar({ className }: { className?: string }) {
       <div className="grow" />
 
       <IconButton
-        icon={<Icon className="text-xl" icon="sticky_note" />}
-        text="Sticky Notes"
-        active={pathname === "/sticky-notes"}
-        onClick={() => router.push("/sticky-notes")}
+        icon={<Icon className="text-xl" icon="partly_cloudy_day" />}
+        text="Diary Reader"
+        active={pathname === "/diary-reader"}
+        onClick={() => router.push("/diary-reader")}
       />
 
       <IconButton

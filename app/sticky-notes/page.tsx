@@ -1,53 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import cx from "classnames";
+import { useEffect, useState } from "react";
 
-import { Icon, IconButton, NavBar } from "../components";
-import { initialInput } from "./initialInput";
-import { Editor } from "./Editor";
+import { NavBar } from "../components";
+import { Board, NoteData } from "./Board/Board";
+import { FileName } from "./FileName";
+import { ToolBar, ToolButton } from "./ToolBar";
+import { sampleData } from "./sampleData";
+import { useFileSystemApi } from "./useFileSystemApi";
 
-export default function Sticky() {
-  const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
-  const [writable, setWritable] = useState<FileSystemWritableFileStream>();
-  const [saveTimer, setSaveTimer] = useState<NodeJS.Timeout>();
+export default function StickyNotes() {
+  const [notes, setNotes] = useState<NoteData[]>([]);
+  const [isSampleData, setIsSampleData] = useState<boolean>(true);
 
-  const [inputText, setInputText] = useState(initialInput);
+  const {
+    fileHandle,
+    isSaving,
+    handleNew,
+    handleOpen,
+    handleSaveAs,
+    resetWriteTimer,
+  } = useFileSystemApi({ notes, setNotes, isSampleData });
 
-  async function handleOpenClicked() {
-    const [fileHandle] = await window.showOpenFilePicker();
-    setFileHandle(fileHandle);
-    // setWritable(await fileHandle.createWritable());
+  useEffect(() => setNotes(sampleData), []);
 
-    const file = await fileHandle.getFile();
-    const text = await file.text();
-    setInputText(text);
+  useEffect(() => {
+    window.onbeforeunload = isSaving
+      ? () => "There are unsaved changes!"
+      : () => {};
+  }, [isSaving]);
+
+  async function handleNotesChange(notes: NoteData[]) {
+    setNotes(notes);
+    setIsSampleData(false);
+
+    resetWriteTimer(notes);
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <NavBar />
+    <div
+      className={cx("h-full", "flex", "flex-col", "select-none")}
+      onContextMenu={(e) => e.preventDefault()}
+    >
+      <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
-      <div className="flex flex-wrap px-2.5 border-b border-highlight_yellow">
-        <IconButton
-          icon={<Icon className="text-base" icon="folder_open" />}
-          text="Open"
-          onClick={handleOpenClicked}
+      <div className={cx("grow", "relative", "size-full", "flex")}>
+        <Board
+          className={cx("absolute", "size-full")}
+          notes={notes}
+          onNotesChange={(notes) => handleNotesChange(notes)}
         />
 
-        <IconButton
-          icon={<Icon className="text-base" icon="edit" />}
-          text="Edit"
-          onClick={() => {}}
-        />
+        <ToolBar className={cx("absolute", "size-full")}>
+          <ToolButton icon="note_add" text="New" onClick={handleNew} />
+          <ToolButton icon="folder_open" text="Open" onClick={handleOpen} />
+          <ToolButton icon="save_as" text="Save As" onClick={handleSaveAs} />
+        </ToolBar>
 
-        <IconButton
-          icon={<Icon className="text-base" icon="save" />}
-          text="Save"
-          onClick={() => {}}
+        <FileName
+          className={cx("absolute", "size-full")}
+          fileName={fileHandle?.name}
+          isSaving={isSaving}
         />
       </div>
-
-      <Editor inputText={inputText} onChange={setInputText} />
     </div>
   );
 }
