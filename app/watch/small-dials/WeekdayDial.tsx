@@ -5,7 +5,7 @@ import cx from "classnames";
 import { SmallDialHand } from "./SmallDialHand";
 
 export function WeekdayDial({ value }: { value: number }) {
-  const angle = -((new Date().getDay() + value / 360 / 60 / 24) / 7) * 360;
+  const angle = (-(((value / (1000 * 60 * 60 * 24)) % 7) - 3) / 7) * 360;
 
   return (
     <g transform={`translate(${125}, ${0})`}>

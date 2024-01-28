@@ -5,6 +5,8 @@ import cx from "classnames";
 export function MinuteHand({ value }: { value: number }) {
   const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
 
+  const angle = (((value / 1000 / 60) % 60) / 60) * 360;
+
   return (
     <g filter="url(#shadow1)">
       <defs>
@@ -24,7 +26,7 @@ export function MinuteHand({ value }: { value: number }) {
               `${15 / 2},${-190}`,
               `${-15 / 2},${-190}`
             )}
-            transform={`rotate(${value / 60})`}
+            transform={`rotate(${angle})`}
           />
 
           <circle cx="0" cy="0" r={50 / 2} />

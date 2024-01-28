@@ -5,6 +5,8 @@ import cx from "classnames";
 export function SecondHand({ value }: { value: number }) {
   const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
 
+  const angle = (((value / 1000) % 60) / 60) * 360;
+
   return (
     <g filter="url(#shadow1)">
       <defs>
@@ -17,7 +19,7 @@ export function SecondHand({ value }: { value: number }) {
               `${15 / 2},${70}`,
               `${-15 / 2},${70}`
             )}
-            transform={`rotate(${value})`}
+            transform={`rotate(${angle})`}
           />
 
           <circle cx="0" cy="0" r={30 / 2} />
@@ -45,7 +47,7 @@ export function SecondHand({ value }: { value: number }) {
           width={50}
           height={150}
           fill="#e0a000"
-          transform={`rotate(${value})`}
+          transform={`rotate(${angle})`}
         />
       </g>
 

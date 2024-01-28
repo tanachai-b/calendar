@@ -1,11 +1,12 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 
 export function useWatchDrag() {
   const ref = useRef<HTMLDivElement>(null);
 
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
-  const [value, setValue] = useState<number>(360 * 60 * 12 * Math.random());
+  const [value, setValue] = useState<number>(0);
 
   function handleMouseDown() {
     setIsMouseDown(true);
@@ -17,7 +18,9 @@ export function useWatchDrag() {
     setValue(
       (value) =>
         value +
-        Math.abs(movementX + movementY) ** 2 * Math.sign(movementX + movementY)
+        1000 *
+          Math.abs(movementX + movementY) ** 2 *
+          Math.sign(movementX + movementY)
     );
   }
 
@@ -38,12 +41,9 @@ export function useWatchDrag() {
   useEffect(() => {
     const timer = setInterval(() => {
       if (isMouseDown) return;
-      const val =
-        new Date().getHours() * 360 * 60 +
-        new Date().getMinutes() * 360 +
-        (new Date().getSeconds() * 360) / 60 +
-        (new Date().getMilliseconds() * 360) / 60 / 1000;
-      setValue(val);
+      setValue(
+        new Date().getTime() - 1000 * 60 * new Date().getTimezoneOffset()
+      );
     }, 1000 / 60);
     return () => clearInterval(timer);
   }, [isMouseDown]);

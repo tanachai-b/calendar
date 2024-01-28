@@ -5,6 +5,8 @@ import cx from "classnames";
 export function HourHand({ value }: { value: number }) {
   const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
 
+  const angle = (((value / 1000 / 60 / 60) % 12) / 12) * 360;
+
   return (
     <g filter="url(#shadow1)">
       <defs>
@@ -24,7 +26,7 @@ export function HourHand({ value }: { value: number }) {
               `${15 / 2},${-120}`,
               `${-15 / 2},${-120}`
             )}
-            transform={`rotate(${value / 60 / 12})`}
+            transform={`rotate(${angle})`}
           />
         </g>
 

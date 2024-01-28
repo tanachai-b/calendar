@@ -4,14 +4,14 @@ import cx from "classnames";
 
 import { SmallDialHand } from "./SmallDialHand";
 
-export function MoonDial() {
+export function MoonDial({ value }: { value: number }) {
+  const offset = 1000 * 60 * new Date().getTimezoneOffset();
+
+  const newMoonDate = new Date(2024, 0, 11, 18, 57).getTime();
   const angle =
     -(
-      (new Date() - new Date(2024, 0, 11, 18, 57)) /
-      1000 /
-      60 /
-      60 /
-      24 /
+      (new Date(value + offset).getTime() - newMoonDate) /
+      (1000 * 60 * 60 * 24) /
       29.53059
     ) * 360;
   return (

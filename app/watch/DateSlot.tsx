@@ -2,7 +2,7 @@
 
 import cx from "classnames";
 
-export function DateSlot() {
+export function DateSlot({ value }: { value: number }) {
   return (
     <g transform="translate(0, -110)">
       <circle r={50} fill="url(#radial1)" />
@@ -16,7 +16,7 @@ export function DateSlot() {
         alignmentBaseline="central"
         className={cx("text-x30", "font-semibold")}
       >
-        {new Date().getDate()}
+        {new Date(value + 1000 * 60 * new Date().getTimezoneOffset()).getDate()}
       </text>
     </g>
   );

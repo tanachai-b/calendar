@@ -4,18 +4,20 @@ import cx from "classnames";
 
 import { SmallDialHand } from "./SmallDialHand";
 
-export function MonthDial() {
+export function MonthDial({ value }: { value: number }) {
+  const offset = 1000 * 60 * new Date().getTimezoneOffset();
+
+  const curMonth = new Date(value + offset).getMonth();
+  const lapsedDayCount = new Date(value + offset).getDate() - 1;
+  const lapsedDay = (value % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60 * 24);
+  const daysInMonth = new Date(
+    new Date(value + offset).getFullYear(),
+    curMonth + 1,
+    0
+  ).getDate();
+
   const angle =
-    -(
-      (new Date().getMonth() +
-        (new Date().getDate() - 1) /
-          new Date(
-            new Date().getFullYear(),
-            new Date().getMonth() + 1,
-            0
-          ).getDate()) /
-      12
-    ) * 360;
+    -((curMonth + (lapsedDayCount + lapsedDay) / daysInMonth) / 12) * 360;
 
   return (
     <g transform={`translate(${-125}, ${0})`}>

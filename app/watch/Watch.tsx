@@ -36,11 +36,11 @@ export function Watch({
             <CoarseScale />
           </g>
 
-          <DateSlot />
+          <DateSlot value={value} />
 
           <g strokeWidth={3}>
-            <MonthDial />
-            <MoonDial />
+            <MonthDial value={value} />
+            <MoonDial value={value} />
             <WeekdayDial value={value} />
           </g>
 
