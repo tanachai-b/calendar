@@ -4,16 +4,11 @@ import cx from "classnames";
 
 export function DateSlot() {
   return (
-    <g transform="translate(0.5, -125.5)">
-      <rect
-        x={-60 / 2}
-        y={-40 / 2}
-        width={60}
-        height={40}
-        fill="none"
-        stroke="#ffffff40"
-        strokeWidth="3"
-      />
+    <g transform="translate(0, -110)">
+      <circle r={50} fill="url(#radial1)" />
+      <circle r={48} fill="url(#radial2)" />
+      <circle r={30} fill="url(#radial1)" />
+      <circle r={28} fill="#000000" />
 
       <text
         fill="#ffffff40"
