@@ -43,7 +43,7 @@ export function SmallDialHand({ angle }: { angle: number }) {
       </defs>
 
       <g>
-        <use href={`#shape-${rand}`} fill="#808080" />
+        <use href={`#shape-${rand}`} fill="#202020" />
 
         <g fill="#e0a000" clipPath={`url(#clip-${rand})`}>
           <rect

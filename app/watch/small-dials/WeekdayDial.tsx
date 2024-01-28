@@ -23,7 +23,7 @@ export function WeekdayDial({ value }: { value: number }) {
           y2={30 - 5}
           strokeWidth={i % 7 === 0 ? 10 : ""}
           transform={cx(`rotate(${(i / 7) * 360}, 0, 0)`, "translate(0, -80)")}
-          stroke="#ffffff60"
+          stroke="#ffffff40"
         />
       ))}
 
@@ -33,7 +33,7 @@ export function WeekdayDial({ value }: { value: number }) {
           <text key={i} transform={`rotate(${(-(i + 0.5) / 7) * 360})`}>
             <textPath
               strokeWidth={0}
-              fill="#ffffff60"
+              fill="#ffffff40"
               className={cx("text-x20", "font-bold")}
               textAnchor={"middle"}
               startOffset="50%"

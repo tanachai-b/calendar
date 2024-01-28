@@ -32,7 +32,7 @@ export function MoonDial() {
             `rotate(${((i + 0.5) / 8) * 360}, 0, 0)`,
             "translate(0, -80)"
           )}
-          stroke="#ffffff60"
+          stroke="#ffffff40"
         />
       ))}
 
@@ -49,7 +49,7 @@ export function MoonDial() {
         <text key={i} transform={`rotate(${(-i / 8) * 360})`}>
           <textPath
             strokeWidth={0}
-            fill="#ffffff60"
+            fill="#ffffff40"
             className={cx("text-x20", "font-bold")}
             textAnchor={"middle"}
             startOffset="50%"

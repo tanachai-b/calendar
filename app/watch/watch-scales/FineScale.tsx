@@ -5,7 +5,7 @@ import cx from "classnames";
 export function FineScale() {
   return (
     <g>
-      <g opacity={0.375}>
+      <g opacity={1 / 4}>
         {Array.from({ length: 60 * 4 }).map((v, i) => (
           <line
             key={i}
@@ -47,7 +47,7 @@ export function FineScale() {
           textAnchor="middle"
           alignmentBaseline="central"
           className={cx("text-x70", "font-semibold")}
-          fill="#ffffff60"
+          fill="#ffffff40"
         >
           {(i + 1) % 12 === 0 ? i + 1 : ""}
         </text>
