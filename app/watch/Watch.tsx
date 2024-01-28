@@ -24,13 +24,11 @@ export function Watch({
         <SvgDefinitions />
 
         <g transform={`translate(${500 / 2}, ${500 / 2})`}>
-          <circle cx="0" cy="0" r="250" fill="#101010" />
-
           <g>
-            <circle cx={0} cy={0} r={250} stroke="none" fill="url(#radial1)" />
-            <circle cx={0} cy={0} r={249} stroke="none" fill="url(#radial2)" />
-            <circle cx={0} cy={0} r={220} stroke="none" fill="url(#radial1)" />
-            <circle cx={0} cy={0} r={219} stroke="none" fill="#101010" />
+            <circle r={250} fill="url(#radial1)" />
+            <circle r={248} fill="url(#radial2)" />
+            <circle r={220} fill="url(#radial1)" />
+            <circle r={218} fill="#101010" />
           </g>
 
           <g>
@@ -40,7 +38,7 @@ export function Watch({
 
           <DateSlot />
 
-          <g stroke="#808080" strokeWidth={3}>
+          <g strokeWidth={3}>
             <MonthDial />
             <MoonDial />
             <WeekdayDial value={value} />

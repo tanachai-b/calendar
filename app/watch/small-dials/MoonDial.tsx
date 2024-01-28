@@ -5,10 +5,10 @@ import cx from "classnames";
 export function MoonDial() {
   return (
     <g transform={`translate(${0}, ${125})`}>
-      <circle cx={0} cy={0} r={80} stroke="none" fill="url(#radial1)" />
-      <circle cx={0} cy={0} r={79} stroke="none" fill="url(#radial2)" />
-      <circle cx={0} cy={0} r={50} stroke="none" fill="url(#radial1)" />
-      <circle cx={0} cy={0} r={49} stroke="none" fill="#101010" />
+      <circle r={80} fill="url(#radial1)" />
+      <circle r={78} fill="url(#radial2)" />
+      <circle r={50} fill="url(#radial1)" />
+      <circle r={48} fill="#101010" />
 
       {Array.from({ length: 8 }).map((v, i) => (
         <line
@@ -63,7 +63,7 @@ export function MoonDial() {
           ) * 360
         })`}
       >
-        <g fill="#808080" stroke="none" filter="url(#shadow1)">
+        <g fill="#808080" filter="url(#shadow1)">
           <polygon
             points={cx(
               `${-15 / 2},${-47}`,
@@ -80,7 +80,6 @@ export function MoonDial() {
 
         <polygon
           fill="#e0a000"
-          stroke="none"
           points={cx(
             `${-15 / 2},${-47}`,
             `${0},${-55}`,

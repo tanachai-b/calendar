@@ -5,15 +5,6 @@ import cx from "classnames";
 export function FineScale() {
   return (
     <g>
-      {/* <circle
-        cx={250}
-        cy={250}
-        r={250 - 2 / 2}
-        fill="none"
-        stroke="#808080"
-        strokeWidth={2}
-      /> */}
-
       <g opacity={0.375}>
         {Array.from({ length: 60 * 4 }).map((v, i) => (
           <line
