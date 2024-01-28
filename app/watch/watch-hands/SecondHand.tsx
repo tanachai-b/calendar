@@ -22,7 +22,7 @@ export function SecondHand({ value }: { value: number }) {
         </g>
       </defs>
 
-      <g fill="#ffc000" stroke="#ffc000" strokeWidth={2} filter="url(#shadow1)">
+      <g fill="#e0a000" stroke="#e0a000" strokeWidth={2} filter="url(#shadow1)">
         <use href="#second-hand" />
       </g>
 
@@ -34,7 +34,7 @@ export function SecondHand({ value }: { value: number }) {
         <use href="#second-hand" />
       </g>
 
-      <g fill="#ffc000">
+      <g fill="#e0a000">
         <use href="#second-hand" />
       </g>
     </g>

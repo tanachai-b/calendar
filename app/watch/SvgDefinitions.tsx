@@ -24,6 +24,16 @@ export function SvgDefinitions() {
         stroke="none"
         d="M 65 0 A 65 65 0 0 0 -65 0"
       />
+
+      <radialGradient id="radial1" cx="0.80" cy="0.80" r="0.8">
+        <stop offset="0%" stopColor="#606060" />
+        <stop offset="100%" stopColor="#101010" />
+      </radialGradient>
+
+      <radialGradient id="radial2" cx="0.80" cy="0.80" r="0.8">
+        <stop offset="0%" stopColor="#404040" />
+        <stop offset="100%" stopColor="#000000" />
+      </radialGradient>
     </defs>
   );
 }

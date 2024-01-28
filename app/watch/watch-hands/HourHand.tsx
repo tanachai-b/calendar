@@ -59,7 +59,7 @@ export function HourHand({ value }: { value: number }) {
           `rotate(${value / 60 / 12}, 250, 250)`,
           "translate(250, 250)"
         )}
-        fill="#ffc000"
+        fill="#e0a000"
       />
     </g>
   );

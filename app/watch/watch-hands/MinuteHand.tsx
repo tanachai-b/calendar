@@ -58,7 +58,7 @@ export function MinuteHand({ value }: { value: number }) {
           `${-27 / 2},${-230}`
         )}
         transform={cx(`rotate(${value / 60}, 250, 250)`, "translate(250, 250)")}
-        fill="#ffc000"
+        fill="#e0a000"
       />
     </g>
   );
