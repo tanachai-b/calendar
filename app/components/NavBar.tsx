@@ -37,10 +37,10 @@ export function NavBar({ className }: { className?: string }) {
       />
 
       <IconButton
-        icon={<Icon className="text-xl" icon="draw" />}
-        text="Draw"
-        active={pathname === "/draw"}
-        onClick={() => router.push("/draw")}
+        icon={<Icon className="text-xl" icon="schedule" />}
+        text="Watch"
+        active={pathname === "/watch"}
+        onClick={() => router.push("/watch")}
       />
 
       <div className="grow" />

@@ -6,7 +6,7 @@ import { NavBar } from "../components";
 import { Watch } from "./Watch";
 import { useWatchDrag } from "./useWatchDrag";
 
-export default function Draw() {
+export default function WatchPage() {
   const { ref, value, handleMouseDown } = useWatchDrag();
 
   return (
