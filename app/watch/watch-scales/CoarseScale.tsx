@@ -3,38 +3,76 @@
 import cx from "classnames";
 
 export function CoarseScale() {
+  const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
+
   return (
-    <g>
+    <g filter="url(#shadow2)">
       <defs>
-        <g id="hatch-marks">
+        <g id={`shape-${rand}`}>
           {Array.from({ length: 12 }).map((v, i) => (
             <rect
               key={i}
-              x={-10 / 2}
+              x={-15 / 2}
               y={-230}
-              width={10}
+              width={15}
               height={i % 3 === 0 ? 20 : 50}
               transform={`rotate(${(i / 12) * 360}, 0, 0)`}
             />
           ))}
         </g>
+
+        <filter id={`erode-${rand}`}>
+          <feMorphology operator="erode" radius="1.25" />
+        </filter>
+
+        <filter id={`blur-${rand}`}>
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+        </filter>
       </defs>
 
-      <g fill="#e0a000" stroke="#e0a000" strokeWidth={2} filter="url(#shadow2)">
-        <use href="#hatch-marks" />
-      </g>
+      <use href={`#shape-${rand}`} fill="#e0a000" />
 
-      <g fill="#805000" transform={`translate(${2 / 2}, ${2 / 2})`}>
-        <use href="#hatch-marks" />
-      </g>
+      <mask id={`light-${rand}`}>
+        <use
+          href={`#shape-${rand}`}
+          fill="#ffffff"
+          filter={`url(#erode-${rand}) url(#blur-${rand})`}
+          transform="translate(-2,-2)"
+        />
 
-      <g fill="#fff080" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
-        <use href="#hatch-marks" />
-      </g>
+        <use
+          href={`#shape-${rand}`}
+          fill="#000000"
+          filter={`url(#erode-${rand})`}
+        />
+      </mask>
 
-      <g fill="#e0a000">
-        <use href="#hatch-marks" />
-      </g>
+      <mask id={`shadow-${rand}`}>
+        <use
+          href={`#shape-${rand}`}
+          fill="#ffffff"
+          filter={`url(#erode-${rand}) url(#blur-${rand})`}
+          transform="translate(2,2)"
+        />
+
+        <use
+          href={`#shape-${rand}`}
+          fill="#000000"
+          filter={`url(#erode-${rand})`}
+        />
+      </mask>
+
+      <use
+        href={`#shape-${rand}`}
+        fill="#ffffff80"
+        mask={`url(#light-${rand})`}
+      />
+
+      <use
+        href={`#shape-${rand}`}
+        fill="#00000080"
+        mask={`url(#shadow-${rand})`}
+      />
     </g>
   );
 }

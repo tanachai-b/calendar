@@ -3,10 +3,12 @@
 import cx from "classnames";
 
 export function HourHand({ value }: { value: number }) {
+  const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
+
   return (
-    <g>
+    <g filter="url(#shadow1)">
       <defs>
-        <g id="hour-hand">
+        <g id={`shape-${rand}`}>
           <polygon
             points={cx(
               `${-30 / 2},${-140}`,
@@ -25,35 +27,58 @@ export function HourHand({ value }: { value: number }) {
             transform={`rotate(${value / 60 / 12}, 0, 0)`}
           />
         </g>
+
+        <filter id={`erode-${rand}`}>
+          <feMorphology operator="erode" radius="1.25" />
+        </filter>
+
+        <filter id={`blur-${rand}`}>
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+        </filter>
       </defs>
 
-      <g fill="#808080" stroke="#808080" strokeWidth={2} filter="url(#shadow1)">
-        <use href="#hour-hand" />
-      </g>
+      <use href={`#shape-${rand}`} fill="#e0a000" />
 
-      <g fill="#404040" transform={`translate(${2 / 2}, ${2 / 2})`}>
-        <use href="#hour-hand" />
-      </g>
+      <mask id={`light-${rand}`}>
+        <use
+          href={`#shape-${rand}`}
+          fill="#ffffff"
+          filter={`url(#erode-${rand}) url(#blur-${rand})`}
+          transform="translate(-2,-2)"
+        />
 
-      <g fill="#c0c0c0" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
-        <use href="#hour-hand" />
-      </g>
+        <use
+          href={`#shape-${rand}`}
+          fill="#000000"
+          filter={`url(#erode-${rand})`}
+        />
+      </mask>
 
-      <g fill="#808080">
-        <use href="#hour-hand" />
-      </g>
+      <mask id={`shadow-${rand}`}>
+        <use
+          href={`#shape-${rand}`}
+          fill="#ffffff"
+          filter={`url(#erode-${rand}) url(#blur-${rand})`}
+          transform="translate(2,2)"
+        />
 
-      <polygon
-        points={cx(
-          `${-27 / 2},${-140}`,
-          `${0},${-149}`,
-          `${27 / 2},${-140}`,
-          `${30 / 2},${-120}`,
-          `${-30 / 2},${-120}`,
-          `${-27 / 2},${-140}`
-        )}
-        transform={`rotate(${value / 60 / 12}, 0, 0)`}
-        fill="#e0a000"
+        <use
+          href={`#shape-${rand}`}
+          fill="#000000"
+          filter={`url(#erode-${rand})`}
+        />
+      </mask>
+
+      <use
+        href={`#shape-${rand}`}
+        fill="#ffffff80"
+        mask={`url(#light-${rand})`}
+      />
+
+      <use
+        href={`#shape-${rand}`}
+        fill="#00000080"
+        mask={`url(#shadow-${rand})`}
       />
     </g>
   );

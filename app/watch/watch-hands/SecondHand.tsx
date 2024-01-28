@@ -3,40 +3,93 @@
 import cx from "classnames";
 
 export function SecondHand({ value }: { value: number }) {
+  const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
+
   return (
-    <g>
+    <g filter="url(#shadow1)">
       <defs>
-        <g id="second-hand">
+        <g id={`shape-${rand}`}>
           <polygon
             points={cx(
-              `${-0 / 2},${-240}`,
+              `${-2 / 2},${-240}`,
               `${0},${-240}`,
-              `${0 / 2},${-240}`,
+              `${2 / 2},${-240}`,
               `${15 / 2},${70}`,
               `${-15 / 2},${70}`
             )}
-            transform={`rotate(${value}, 0, 0)`}
+            transform={`rotate(${value})`}
           />
 
           <circle cx="0" cy="0" r={30 / 2} />
         </g>
+
+        <mask id={`mask-${rand}`}>
+          <use href={`#shape-${rand}`} fill="#ffffff" />
+        </mask>
+
+        <filter id={`erode-${rand}`}>
+          <feMorphology operator="erode" radius="1.25" />
+        </filter>
+
+        <filter id={`blur-${rand}`}>
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+        </filter>
       </defs>
 
-      <g fill="#e0a000" stroke="#e0a000" strokeWidth={2} filter="url(#shadow1)">
-        <use href="#second-hand" />
+      <use href={`#shape-${rand}`} fill="#202020" />
+
+      <g mask={`url(#mask-${rand})`}>
+        <rect
+          x={-25}
+          y={-250}
+          width={50}
+          height={150}
+          fill="#e0a000"
+          transform={`rotate(${value})`}
+        />
       </g>
 
-      <g fill="#805000" transform={`translate(${2 / 2}, ${2 / 2})`}>
-        <use href="#second-hand" />
-      </g>
+      <mask id={`light-${rand}`}>
+        <use
+          href={`#shape-${rand}`}
+          fill="#ffffff"
+          filter={`url(#erode-${rand}) url(#blur-${rand})`}
+          transform="translate(-2,-2)"
+        />
 
-      <g fill="#fff080" transform={`translate(${-2 / 2}, ${-2 / 2})`}>
-        <use href="#second-hand" />
-      </g>
+        <use
+          href={`#shape-${rand}`}
+          fill="#000000"
+          filter={`url(#erode-${rand})`}
+        />
+      </mask>
 
-      <g fill="#e0a000">
-        <use href="#second-hand" />
-      </g>
+      <mask id={`shadow-${rand}`}>
+        <use
+          href={`#shape-${rand}`}
+          fill="#ffffff"
+          filter={`url(#erode-${rand}) url(#blur-${rand})`}
+          transform="translate(2,2)"
+        />
+
+        <use
+          href={`#shape-${rand}`}
+          fill="#000000"
+          filter={`url(#erode-${rand})`}
+        />
+      </mask>
+
+      <use
+        href={`#shape-${rand}`}
+        fill="#ffffff80"
+        mask={`url(#light-${rand})`}
+      />
+
+      <use
+        href={`#shape-${rand}`}
+        fill="#00000080"
+        mask={`url(#shadow-${rand})`}
+      />
     </g>
   );
 }
