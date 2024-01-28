@@ -23,36 +23,34 @@ export function Watch({
       <svg viewBox="0 0 500 500">
         <SvgDefinitions />
 
-        <circle cx="250" cy="250" r="250" fill="#101010" />
+        <g transform={`translate(${500 / 2}, ${500 / 2})`}>
+          <circle cx="0" cy="0" r="250" fill="#101010" />
 
-        <g transform={`translate(${250}, ${250})`}>
-          <circle cx={0} cy={0} r={250} stroke="none" fill="url(#radial1)" />
-          <circle cx={0} cy={0} r={249} stroke="none" fill="url(#radial2)" />
-          <circle cx={0} cy={0} r={220} stroke="none" fill="url(#radial1)" />
-          <circle cx={0} cy={0} r={219} stroke="none" fill="#101010" />
-        </g>
+          <g>
+            <circle cx={0} cy={0} r={250} stroke="none" fill="url(#radial1)" />
+            <circle cx={0} cy={0} r={249} stroke="none" fill="url(#radial2)" />
+            <circle cx={0} cy={0} r={220} stroke="none" fill="url(#radial1)" />
+            <circle cx={0} cy={0} r={219} stroke="none" fill="#101010" />
+          </g>
 
-        <g>
-          <FineScale />
-          <CoarseScale />
-        </g>
+          <g>
+            <FineScale />
+            <CoarseScale />
+          </g>
 
-        <DateSlot />
+          <DateSlot />
 
-        <g
-          stroke="#808080"
-          strokeWidth={3}
-          transform={`translate(${250}, ${250})`}
-        >
-          <MonthDial />
-          <MoonDial />
-          <WeekdayDial value={value} />
-        </g>
+          <g stroke="#808080" strokeWidth={3}>
+            <MonthDial />
+            <MoonDial />
+            <WeekdayDial value={value} />
+          </g>
 
-        <g>
-          <HourHand value={value} />
-          <MinuteHand value={value} />
-          <SecondHand value={value} />
+          <g>
+            <HourHand value={value} />
+            <MinuteHand value={value} />
+            <SecondHand value={value} />
+          </g>
         </g>
       </svg>
     </div>

@@ -24,7 +24,6 @@ export function FineScale() {
             y2={15}
             strokeWidth={2}
             transform={cx(
-              "translate(250,250)",
               `rotate(${(i / 60 / 4) * 360}, 0, 0)`,
               "translate(0, -250)"
             )}
@@ -41,7 +40,6 @@ export function FineScale() {
             y2={25}
             strokeWidth={3}
             transform={cx(
-              "translate(250,250)",
               `rotate(${(i / 60) * 360}, 0, 0)`,
               "translate(0, -250)"
             )}
@@ -53,8 +51,8 @@ export function FineScale() {
       {Array.from({ length: 12 }).map((v, i) => (
         <text
           key={i}
-          x={250 + 180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
-          y={250 - 180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
+          x={180 * Math.sin(((i + 1) / 12) * 2 * Math.PI)}
+          y={-180 * Math.cos(((i + 1) / 12) * 2 * Math.PI)}
           textAnchor="middle"
           alignmentBaseline="central"
           className={cx("text-x70", "font-semibold")}

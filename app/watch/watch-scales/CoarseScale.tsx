@@ -14,10 +14,7 @@ export function CoarseScale() {
               y={-230}
               width={10}
               height={i % 3 === 0 ? 20 : 50}
-              transform={cx(
-                "translate(250, 250)",
-                `rotate(${(i / 12) * 360}, 0, 0)`
-              )}
+              transform={`rotate(${(i / 12) * 360}, 0, 0)`}
             />
           ))}
         </g>

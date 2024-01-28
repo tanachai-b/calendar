@@ -15,10 +15,10 @@ export function SecondHand({ value }: { value: number }) {
               `${15 / 2},${70}`,
               `${-15 / 2},${70}`
             )}
-            transform={cx(`rotate(${value}, 250, 250)`, "translate(250, 250)")}
+            transform={`rotate(${value}, 0, 0)`}
           />
 
-          <circle cx="250" cy="250" r={30 / 2} />
+          <circle cx="0" cy="0" r={30 / 2} />
         </g>
       </defs>
 

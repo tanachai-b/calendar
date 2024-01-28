@@ -22,10 +22,7 @@ export function HourHand({ value }: { value: number }) {
               `${20 / 2},${-110}`,
               `${-20 / 2},${-110}`
             )}
-            transform={cx(
-              `rotate(${value / 60 / 12}, 250, 250)`,
-              "translate(250, 250)"
-            )}
+            transform={`rotate(${value / 60 / 12}, 0, 0)`}
           />
         </g>
       </defs>
@@ -55,10 +52,7 @@ export function HourHand({ value }: { value: number }) {
           `${-30 / 2},${-120}`,
           `${-27 / 2},${-140}`
         )}
-        transform={cx(
-          `rotate(${value / 60 / 12}, 250, 250)`,
-          "translate(250, 250)"
-        )}
+        transform={`rotate(${value / 60 / 12}, 0, 0)`}
         fill="#e0a000"
       />
     </g>

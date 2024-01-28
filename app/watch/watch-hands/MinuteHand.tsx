@@ -22,13 +22,10 @@ export function MinuteHand({ value }: { value: number }) {
               `${20 / 2},${-200}`,
               `${-20 / 2},${-200}`
             )}
-            transform={cx(
-              `rotate(${value / 60}, 250, 250)`,
-              "translate(250, 250)"
-            )}
+            transform={`rotate(${value / 60}, 0, 0)`}
           />
 
-          <circle cx="250" cy="250" r={50 / 2} />
+          <circle cx="0" cy="0" r={50 / 2} />
         </g>
       </defs>
 
@@ -57,7 +54,7 @@ export function MinuteHand({ value }: { value: number }) {
           `${-30 / 2},${-210}`,
           `${-27 / 2},${-230}`
         )}
-        transform={cx(`rotate(${value / 60}, 250, 250)`, "translate(250, 250)")}
+        transform={`rotate(${value / 60}, 0, 0)`}
         fill="#e0a000"
       />
     </g>
