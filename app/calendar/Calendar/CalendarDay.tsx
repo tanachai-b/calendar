@@ -19,7 +19,7 @@ export function CalendarDay({
       onClick={onClick}
     >
       <div
-        className={`w-4 h-4 rounded text-center leading-4 ${
+        className={`w-4 h-4 rounded-x3 text-center leading-4 ${
           isToday ? "bg-highlight_yellow font-medium" : ""
         }`}
       >

@@ -105,7 +105,7 @@ function TextBox({
   return (
     <input
       type="text"
-      className="p-2.5 rounded outline-none text-text_grey bg-bg_hover placeholder:text-text_grey focus:text-text_white border border-transparent focus:border-border"
+      className="p-2.5 rounded-x5 outline-none text-text_grey bg-bg_hover placeholder:text-text_grey focus:text-text_white border border-transparent focus:border-border"
       placeholder={placeholder}
       value={value}
       onChange={(e) => onChange(e.target.value)}

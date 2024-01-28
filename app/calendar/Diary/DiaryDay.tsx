@@ -19,7 +19,7 @@ export function DiaryDay({
     <div className="p-2.5 grid grid-cols-[2.5rem_1fr] gap-x-2.5">
       <div className="flex flex-row justify-end">
         <div
-          className={`rounded w-full px-1 text-right text-xl font-extralight tabular-nums ${
+          className={`rounded-x5 w-full px-1 text-right text-xl font-extralight tabular-nums ${
             isToday
               ? "bg-highlight_yellow text-bg font-light"
               : isSunday
@@ -47,7 +47,7 @@ export function DiaryDay({
             {keypoints.map((keypoint, index) => (
               <div
                 key={index}
-                className="rounded px-1 border border-highlight_yellow text-highlight_yellow font-normal cursor-pointer hover:bg-highlight_yellow hover:text-bg"
+                className="rounded-x5 px-1 border border-highlight_yellow text-highlight_yellow font-normal cursor-pointer hover:bg-highlight_yellow hover:text-bg"
               >
                 {keypoint}
               </div>
