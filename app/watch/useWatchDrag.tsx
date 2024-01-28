@@ -14,7 +14,6 @@ export function useWatchDrag() {
 
   function handleDocumentMouseMove({ movementX, movementY }: MouseEvent): void {
     if (!isMouseDown) return;
-    console.log("isMouseDown", isMouseDown);
     setValue(
       (value) =>
         value +

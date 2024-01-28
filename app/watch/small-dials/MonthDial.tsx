@@ -2,7 +2,21 @@
 
 import cx from "classnames";
 
+import { SmallDialHand } from "./SmallDialHand";
+
 export function MonthDial() {
+  const angle =
+    -(
+      (new Date().getMonth() +
+        (new Date().getDate() - 1) /
+          new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + 1,
+            0
+          ).getDate()) /
+      12
+    ) * 360;
+
   return (
     <g transform={`translate(${-125}, ${0})`}>
       <circle r={80} fill="url(#radial1)" />
@@ -56,47 +70,7 @@ export function MonthDial() {
         );
       })}
 
-      <g
-        transform={`rotate(${
-          -(
-            (new Date().getMonth() +
-              (new Date().getDate() - 1) /
-                new Date(
-                  new Date().getFullYear(),
-                  new Date().getMonth() + 1,
-                  0
-                ).getDate()) /
-            12
-          ) * 360
-        })`}
-      >
-        <g fill="#808080" filter="url(#shadow1)">
-          <polygon
-            points={cx(
-              `${-15 / 2},${-47}`,
-              `${0},${-55}`,
-              `${15 / 2},${-47}`,
-              `${30 / 2},${0}`,
-              `${-30 / 2},${0}`,
-              `${-15 / 2},${-47}`
-            )}
-          />
-
-          <circle r={30 / 2} />
-        </g>
-
-        <polygon
-          fill="#e0a000"
-          points={cx(
-            `${-15 / 2},${-47}`,
-            `${0},${-55}`,
-            `${15 / 2},${-47}`,
-            `${20 / 2},${-30}`,
-            `${-20 / 2},${-30}`,
-            `${-15 / 2},${-47}`
-          )}
-        />
-      </g>
+      <SmallDialHand angle={angle} />
     </g>
   );
 }

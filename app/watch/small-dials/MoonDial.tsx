@@ -2,7 +2,18 @@
 
 import cx from "classnames";
 
+import { SmallDialHand } from "./SmallDialHand";
+
 export function MoonDial() {
+  const angle =
+    -(
+      (new Date() - new Date(2024, 0, 11, 18, 57)) /
+      1000 /
+      60 /
+      60 /
+      24 /
+      29.53059
+    ) * 360;
   return (
     <g transform={`translate(${0}, ${125})`}>
       <circle r={80} fill="url(#radial1)" />
@@ -51,45 +62,7 @@ export function MoonDial() {
         </text>
       ))}
 
-      <g
-        transform={`rotate(${
-          -(
-            (new Date() - new Date(2024, 0, 11, 18, 57)) /
-            1000 /
-            60 /
-            60 /
-            24 /
-            29.53059
-          ) * 360
-        })`}
-      >
-        <g fill="#808080" filter="url(#shadow1)">
-          <polygon
-            points={cx(
-              `${-15 / 2},${-47}`,
-              `${0},${-55}`,
-              `${15 / 2},${-47}`,
-              `${30 / 2},${0}`,
-              `${-30 / 2},${0}`,
-              `${-15 / 2},${-47}`
-            )}
-          />
-
-          <circle r={30 / 2} />
-        </g>
-
-        <polygon
-          fill="#e0a000"
-          points={cx(
-            `${-15 / 2},${-47}`,
-            `${0},${-55}`,
-            `${15 / 2},${-47}`,
-            `${20 / 2},${-30}`,
-            `${-20 / 2},${-30}`,
-            `${-15 / 2},${-47}`
-          )}
-        />
-      </g>
+      <SmallDialHand angle={angle} />
     </g>
   );
 }
