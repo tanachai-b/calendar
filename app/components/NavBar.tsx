@@ -10,6 +10,13 @@ export function NavBar({ className }: { className?: string }) {
     <nav className={`flex flex-wrap px-2.5 ${className}`}>
       <IconButton
         icon={<Icon className="text-xl" icon="schedule" />}
+        text="Digital Clock"
+        active={pathname === "/digital-clock"}
+        onClick={() => router.push("/digital-clock")}
+      />
+
+      <IconButton
+        icon={<Icon className="text-xl" icon="watch" />}
         text="Watch"
         active={pathname === "/watch"}
         onClick={() => router.push("/watch")}

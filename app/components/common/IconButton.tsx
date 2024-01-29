@@ -1,3 +1,4 @@
+import cx from "classnames";
 import { ReactElement } from "react";
 
 export function IconButton({
@@ -13,13 +14,21 @@ export function IconButton({
 }) {
   return (
     <button
-      className={`flex flex-row items-center p-2.5 gap-1 hover:text-text_white active:text-highlight_yellow ${
-        active ? "text-highlight_yellow font-bold" : "text-text_grey"
-      }`}
+      className={cx(
+        "flex",
+        "flex-row",
+        "items-center",
+        "p-2.5",
+        "gap-1",
+        `${active ? "text-highlight_yellow" : "text-text_grey"}`,
+        "hover:text-text_white"
+      )}
       onClick={onClick}
     >
       <div>{icon}</div>
-      <div className="text-xs leading-none">{text}</div>
+      <div className={cx("text-xs", "leading-none", { "font-bold": active })}>
+        {text}
+      </div>
     </button>
   );
 }
