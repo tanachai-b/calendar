@@ -29,7 +29,7 @@ export function MinuteHand({ value }: { value: number }) {
             transform={`rotate(${angle})`}
           />
 
-          <circle cx="0" cy="0" r={50 / 2} />
+          <circle r={50 / 2} />
         </g>
 
         <filter id={`erode-${rand}`}>

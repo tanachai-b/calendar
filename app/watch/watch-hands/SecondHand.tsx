@@ -22,7 +22,7 @@ export function SecondHand({ value }: { value: number }) {
             transform={`rotate(${angle})`}
           />
 
-          <circle cx="0" cy="0" r={30 / 2} />
+          <circle r={30 / 2} />
         </g>
 
         <mask id={`mask-${rand}`}>

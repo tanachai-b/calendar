@@ -1,7 +1,5 @@
 "use client";
 
-import cx from "classnames";
-
 export function CoarseScale() {
   const rand = Math.floor(Math.random() * 36 ** 4).toString(36);
 

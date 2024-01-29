@@ -8,30 +8,25 @@ export function SmallDialHand({ angle }: { angle: number }) {
   return (
     <g filter="url(#shadow1)">
       <defs>
-        <polygon
-          id={`hand-${rand}`}
-          points={cx(
-            `${-15 / 2},${-47}`,
-            `${0},${-55}`,
-            `${15 / 2},${-47}`,
-            `${30 / 2},${0}`,
-            `${-30 / 2},${0}`,
-            `${-15 / 2},${-47}`
-          )}
-          transform={`rotate(${angle})`}
-        />
-
-        <circle id={`circle-${rand}`} r={30 / 2} />
-
         <g id={`shape-${rand}`}>
-          <use href={`#hand-${rand}`} />
-          <use href={`#circle-${rand}`} />
+          <polygon
+            points={cx(
+              `${-15 / 2},${-47}`,
+              `${0},${-55}`,
+              `${15 / 2},${-47}`,
+              `${30 / 2},${0}`,
+              `${-30 / 2},${0}`,
+              `${-15 / 2},${-47}`
+            )}
+            transform={`rotate(${angle})`}
+          />
+
+          <circle r={30 / 2} />
         </g>
 
-        <clipPath id={`clip-${rand}`}>
-          <use href={`#hand-${rand}`} />
-          <use href={`#circle-${rand}`} />
-        </clipPath>
+        <mask id={`mask-${rand}`}>
+          <use href={`#shape-${rand}`} fill="#ffffff" />
+        </mask>
 
         <filter id={`erode-${rand}`}>
           <feMorphology operator="erode" radius="1.25" />
@@ -45,14 +40,16 @@ export function SmallDialHand({ angle }: { angle: number }) {
       <g>
         <use href={`#shape-${rand}`} fill="#202020" />
 
-        <g fill="#e0a000" clipPath={`url(#clip-${rand})`}>
-          <rect
-            x={-50 / 2}
-            y={-55}
-            width={50}
-            height={20}
-            transform={`rotate(${angle})`}
-          />
+        <g mask={`url(#mask-${rand})`}>
+          <g fill="#e0a000">
+            <rect
+              x={-50 / 2}
+              y={-55}
+              width={50}
+              height={20}
+              transform={`rotate(${angle})`}
+            />
+          </g>
         </g>
       </g>
 
