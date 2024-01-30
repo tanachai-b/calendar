@@ -6,6 +6,16 @@ import { ReactNode, useEffect, useState } from "react";
 import { NavBar } from "../components";
 
 export default function DigitalClock() {
+  const [time, setTime] = useState<string>("00:00:00");
+
+  useEffect(() => {
+    const timer = setInterval(
+      () => setTime(new Date().toTimeString()),
+      1000 / 60
+    );
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div
       className={cx("h-full", "flex", "flex-col", "bg-black", "select-none")}
@@ -13,28 +23,71 @@ export default function DigitalClock() {
       <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
       <div className={cx("grow", "flex", "items-center", "justify-center")}>
-        <FlipNumber />
+        <div
+          className={cx("flex", "flex-row", "gap-x10", "items-center")}
+          style={{ transform: "scale(0.75) translate(0.5px,0.5px)" }}
+        >
+          <FlipNumber text={time[0]} />
+          <FlipNumber text={time[1]} />
+
+          <Colon />
+
+          <FlipNumber text={time[3]} />
+          <FlipNumber text={time[4]} />
+
+          <Colon />
+
+          <FlipNumber text={time[6]} />
+          <FlipNumber text={time[7]} />
+        </div>
       </div>
     </div>
   );
 }
 
-function FlipNumber() {
-  const [value, setValue] = useState<number>(0);
+function Colon() {
+  return (
+    <div
+      className={cx("w-x50", "flex", "flex-col", "gap-x100", "items-center")}
+    >
+      <div className={cx("size-x30", "bg-[#e0e0e0]")} />
+      <div className={cx("size-x30", "bg-[#e0e0e0]")} />
+    </div>
+  );
+}
+
+function FlipNumber({ text }: { text: string }) {
+  const [currentText, setCurrentText] = useState<string>("0");
+  const [nextText, setNextText] = useState<string>("0");
+
+  const [turn, setTurn] = useState<number>(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setValue(
-        (((((new Date().getTime() / 1000) * -360) % 360) - 360) % 360) / 2
-      );
-    }, 1000 / 60);
+    setNextText(text);
+
+    const timer = setInterval(
+      () =>
+        setTurn((value) => {
+          const newValue = value + 0.05;
+          if (newValue >= 1) {
+            clearInterval(timer);
+            setCurrentText(text);
+            return 0;
+          }
+          return newValue;
+        }),
+      1000 / 60
+    );
     return () => clearInterval(timer);
-  }, []);
+  }, [text]);
+
+  const topFlapAngle = turn >= 0 && turn <= 0.5 ? turn * -180 : -90;
+  const bottomFlapAngle = turn >= 0.5 && turn <= 1 ? turn * -180 - 180 : -270;
 
   return (
-    <div style={{ transform: "scale(1)" }}>
+    <div>
       <div
-        className={cx("size-fit", "w-[200px]", "h-[250px]")}
+        className={cx("size-fit", "w-[200px]", "h-[300px]")}
         style={{
           perspective: "700px",
           perspectiveOrigin: "50% 50%",
@@ -42,39 +95,35 @@ function FlipNumber() {
       >
         <div className={cx("absolute", "w-[100%]", "h-[100%]")}>
           <Flap className={cx("top-x0", "rounded-t-x15")}>
-            <Label className="top-x0">5</Label>
+            <Label className="top-x0">{nextText}</Label>
           </Flap>
         </div>
 
         <div className={cx("absolute", "w-[100%]", "h-[100%]")}>
           <Flap className={cx("bottom-x0", "rounded-b-x15")}>
-            <Label className="bottom-x0">4</Label>
+            <Label className="bottom-x0">{currentText}</Label>
           </Flap>
         </div>
 
         <div
           className={cx("absolute", "w-[100%]", "h-[100%]")}
           style={{
-            transform: `rotate3d(1, 0, 0, ${
-              value <= 0 && value > -90 ? value : 90
-            }deg)`,
+            transform: `rotate3d(1, 0, 0, ${topFlapAngle}deg)`,
           }}
         >
           <Flap className={cx("top-x0", "rounded-t-x15")}>
-            <Label className="top-x0">4</Label>
+            <Label className="top-x0">{currentText}</Label>
           </Flap>
         </div>
 
         <div
           className={cx("absolute", "w-[100%]", "h-[100%]")}
           style={{
-            transform: `rotate3d(1, 0, 0, ${
-              value <= -90 && value > -180 ? value - 180 : 90
-            }deg)`,
+            transform: `rotate3d(1, 0, 0, ${bottomFlapAngle}deg)`,
           }}
         >
           <Flap className={cx("bottom-x0", "rounded-b-x15")}>
-            <Label className="bottom-x0">5</Label>
+            <Label className="bottom-x0">{nextText}</Label>
           </Flap>
         </div>
       </div>
@@ -94,12 +143,13 @@ function Flap({
       className={cx(
         "absolute",
         "w-[100%]",
-        "h-[calc(50%-2px)]",
+        "h-[calc(50%-5px)]",
 
         "bg-[#101010]",
 
         "border",
         "border-[#202020]",
+        "border-x2",
 
         "overflow-hidden",
 
@@ -122,16 +172,16 @@ function Label({
     <div
       className={cx(
         "absolute",
-        "w-[100%]",
-        "h-[200%]",
+        "w-[200px]",
+        "h-[300px]",
 
         "flex",
         "items-center",
         "justify-center",
 
         "text-[#e0e0e0]",
-        "text-[270px]",
-        "font-semibold",
+        "text-[320px]",
+        "font-medium",
 
         className
       )}
