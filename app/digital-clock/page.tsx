@@ -121,9 +121,8 @@ function FlipNumber() {
           className={cx("absolute", "w-[150px]", "h-[200px]", "rounded-x20")}
           style={{
             transform: `rotate3d(1, 0, 0, ${
-              value <= -90 && value > -180 ? value - 180 : 0
+              value <= -90 && value > -180 ? value - 180 : 90
             }deg)`,
-            zIndex: value <= -90 ? 100 : -100,
           }}
         >
           <div
