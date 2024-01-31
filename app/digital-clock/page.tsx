@@ -1,7 +1,7 @@
 "use client";
 
 import cx from "classnames";
-import { ReactNode, useEffect, useState } from "react";
+import { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { NavBar } from "../components";
 
@@ -25,7 +25,7 @@ export default function DigitalClock() {
       <div className={cx("grow", "flex", "items-center", "justify-center")}>
         <div
           className={cx("flex", "flex-row", "gap-x10", "items-center")}
-          style={{ transform: "scale(0.75) translate(0.5px,0.5px)" }}
+          style={{ transform: "scale(0.75)" }}
         >
           <FlipNumber text={time[0]} />
           <FlipNumber text={time[1]} />
@@ -56,7 +56,12 @@ function Colon() {
   );
 }
 
-function FlipNumber({ text }: { text: string }) {
+function FlipNumber({ style, text }: { style?: CSSProperties; text: string }) {
+  const size = {
+    width: style?.width ?? "200px",
+    height: style?.height ?? "300px",
+  };
+
   const [currentText, setCurrentText] = useState<string>("0");
   const [nextText, setNextText] = useState<string>("0");
 
@@ -87,21 +92,27 @@ function FlipNumber({ text }: { text: string }) {
   return (
     <div>
       <div
-        className={cx("size-fit", "w-[200px]", "h-[300px]")}
+        className={cx("size-fit")}
         style={{
           perspective: "700px",
           perspectiveOrigin: "50% 50%",
+          ...style,
+          ...size,
         }}
       >
         <div className={cx("absolute", "w-[100%]", "h-[100%]")}>
           <Flap className={cx("top-x0", "rounded-t-x15")}>
-            <Label className="top-x0">{nextText}</Label>
+            <Label className={cx("top-x0")} style={size}>
+              {nextText}
+            </Label>
           </Flap>
         </div>
 
         <div className={cx("absolute", "w-[100%]", "h-[100%]")}>
           <Flap className={cx("bottom-x0", "rounded-b-x15")}>
-            <Label className="bottom-x0">{currentText}</Label>
+            <Label className={cx("bottom-x0")} style={size}>
+              {currentText}
+            </Label>
           </Flap>
         </div>
 
@@ -112,7 +123,9 @@ function FlipNumber({ text }: { text: string }) {
           }}
         >
           <Flap className={cx("top-x0", "rounded-t-x15")}>
-            <Label className="top-x0">{currentText}</Label>
+            <Label className={cx("top-x0")} style={size}>
+              {currentText}
+            </Label>
           </Flap>
         </div>
 
@@ -123,7 +136,9 @@ function FlipNumber({ text }: { text: string }) {
           }}
         >
           <Flap className={cx("bottom-x0", "rounded-b-x15")}>
-            <Label className="bottom-x0">{nextText}</Label>
+            <Label className={cx("bottom-x0")} style={size}>
+              {nextText}
+            </Label>
           </Flap>
         </div>
       </div>
@@ -163,17 +178,17 @@ function Flap({
 
 function Label({
   className,
+  style,
   children,
 }: {
   className?: string;
+  style?: CSSProperties;
   children?: ReactNode;
 }) {
   return (
     <div
       className={cx(
         "absolute",
-        "w-[200px]",
-        "h-[300px]",
 
         "flex",
         "items-center",
@@ -185,6 +200,7 @@ function Label({
 
         className
       )}
+      style={{ ...style }}
     >
       {children}
     </div>
