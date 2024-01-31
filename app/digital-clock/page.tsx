@@ -4,17 +4,16 @@ import cx from "classnames";
 import { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { NavBar } from "../components";
+import { useClockDrag } from "./useClockDrag";
 
 export default function DigitalClock() {
+  const { ref, value, handleMouseDown } = useClockDrag();
+
   const [time, setTime] = useState<string>("00:00:00");
 
   useEffect(() => {
-    const timer = setInterval(
-      () => setTime(new Date().toTimeString()),
-      1000 / 60
-    );
-    return () => clearInterval(timer);
-  }, []);
+    setTime(new Date(value).toTimeString().slice(0, 8));
+  }, [value]);
 
   return (
     <div
@@ -22,7 +21,11 @@ export default function DigitalClock() {
     >
       <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
-      <div className={cx("grow", "flex", "items-center", "justify-center")}>
+      <div
+        ref={ref}
+        className={cx("grow", "flex", "items-center", "justify-center")}
+        onMouseDown={handleMouseDown}
+      >
         <div
           className={cx("flex", "flex-row", "gap-x10", "items-center")}
           style={{ transform: "scale(0.75)" }}
@@ -73,7 +76,7 @@ function FlipNumber({ style, text }: { style?: CSSProperties; text: string }) {
     const timer = setInterval(
       () =>
         setTurn((value) => {
-          const newValue = value + 0.05;
+          const newValue = value + 0.1;
           if (newValue >= 1) {
             clearInterval(timer);
             setCurrentText(text);
