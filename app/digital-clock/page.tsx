@@ -66,28 +66,50 @@ function FlipNumber({ style, text }: { style?: CSSProperties; text: string }) {
   };
 
   const [currentText, setCurrentText] = useState<string>("0");
-  const [nextText, setNextText] = useState<string>("0");
+  const [nextText, setNextText] = useState<string>();
+  const [queueText, setQueueText] = useState<string>();
 
   const [turn, setTurn] = useState<number>(0);
 
   useEffect(() => {
-    setNextText(text);
+    setQueueText(text);
+  }, [text]);
+
+  useEffect(() => {
+    if (turn !== 0) return;
+    if (queueText == null) return;
+    if (nextText == null) {
+      setQueueText(undefined);
+      setNextText(queueText);
+    }
+  }, [queueText]);
+
+  useEffect(() => {
+    if (turn !== 0) return;
+    if (nextText == null) return;
+    // if (nextText == null && queueText == null) return;
+    // if (nextText == null && queueText != null) {
+    //   setNextText(queueText);
+    //   setQueueText(undefined);
+    //   return;
+    // }
 
     const timer = setInterval(
       () =>
         setTurn((value) => {
           const newValue = value + 0.1;
-          if (newValue >= 1) {
-            clearInterval(timer);
-            setCurrentText(text);
-            return 0;
-          }
-          return newValue;
+          if (newValue < 1) return newValue;
+
+          clearInterval(timer);
+          setCurrentText(nextText);
+          setNextText(queueText);
+          setQueueText(undefined);
+          return 0;
         }),
       1000 / 60
     );
     return () => clearInterval(timer);
-  }, [text]);
+  }, [nextText]);
 
   const topFlapAngle = turn >= 0 && turn <= 0.5 ? turn * -180 : -90;
   const bottomFlapAngle = turn >= 0.5 && turn <= 1 ? turn * -180 - 180 : -270;
