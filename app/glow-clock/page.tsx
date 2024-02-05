@@ -26,13 +26,16 @@ export default function GlowClock() {
         <div
           className={cx(
             "text-[300px]",
+            "leading-none",
             "tabular-nums",
             "font-thin",
             "text-[#ffff00]",
-            "blur-x0.5",
-            "drop-shadow-[0px_0px_15px_#ff0000]"
-            // "scale-[70%]"
+            "blur-x0.5"
           )}
+          style={{
+            textShadow:
+              "0px 0px 15px #ff0000, 0px 0px 30px #ff0000, 0px 0px 70px #ff0000",
+          }}
         >
           {text}
         </div>
