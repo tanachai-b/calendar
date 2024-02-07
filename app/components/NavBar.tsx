@@ -10,6 +10,13 @@ export function NavBar({ className }: { className?: string }) {
     <nav className={`flex flex-wrap px-2.5 ${className}`}>
       <IconButton
         icon={<Icon className="text-xl" icon="schedule" />}
+        text="Color Picker"
+        active={pathname === "/color-picker"}
+        onClick={() => router.push("/color-picker")}
+      />
+
+      <IconButton
+        icon={<Icon className="text-xl" icon="schedule" />}
         text="Spinner"
         active={pathname === "/spinner"}
         onClick={() => router.push("/spinner")}
