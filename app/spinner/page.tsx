@@ -21,7 +21,7 @@ export default function SpinnerPage() {
           "justify-center"
         )}
       >
-        <Spinner xprogress={0.67} size={200} stroke={20} />
+        <Spinner xprogress={0.67} size={200} stroke={20} speed={3} />
       </div>
     </div>
   );
@@ -31,15 +31,20 @@ function Spinner({
   progress,
   size = 30,
   stroke = 3,
+  speed = 5,
 }: {
   progress?: number;
   size?: number;
   stroke?: number;
+  speed?: number;
 }) {
   const radius = (size - stroke) / 2;
 
   const isSpinning = progress == null;
-  const { angle1: spinAngle1, angle2: spinAngle2 } = useSpinning(isSpinning);
+  const { angle1: spinAngle1, angle2: spinAngle2 } = useSpinning(
+    isSpinning,
+    speed
+  );
 
   const angle1 = isSpinning ? spinAngle1 : 0;
   const angle2 = isSpinning ? spinAngle2 : Math.min(progress, 0.9999);
@@ -80,9 +85,9 @@ function Spinner({
   );
 }
 
-function useSpinning(isSpinning: boolean) {
-  const [start, setStart] = useState(0);
-  const [distance, setDistance] = useState(0);
+function useSpinning(isSpinning: boolean, speed: number) {
+  const [start, setStart] = useState(Math.random());
+  const [distance, setDistance] = useState(Math.random() * 2);
 
   const [angle1, setAngle1] = useState(0);
   const [angle2, setAngle2] = useState(0);
@@ -90,24 +95,20 @@ function useSpinning(isSpinning: boolean) {
   useEffect(() => {
     if (!isSpinning) return;
 
-    const interval1 = setInterval(
-      () => setStart((start) => (start + 5 / 360) % 1),
-      1000 / 60
-    );
-    const interval2 = setInterval(
-      () => setDistance((distance) => (distance + 5 / 360) % 2),
-      1000 / 60
-    );
+    const interval = setInterval(() => {
+      setStart((start) => (start + speed / 360) % 1);
+      setDistance((distance) => (distance + speed / 360) % 2);
+    }, 1000 / 60);
 
-    return () => {
-      clearInterval(interval1);
-      clearInterval(interval2);
-    };
-  }, [isSpinning]);
+    return () => clearInterval(interval);
+  }, [isSpinning, speed]);
 
   useEffect(() => {
-    setAngle1((distance < 1 ? start : start + distance) % 1);
-    setAngle2((distance < 1 ? start + distance : start) % 1);
+    const start1 = Math.floor(start * 10000) / 10000;
+    const distance1 = Math.floor(distance * 10000) / 10000;
+
+    setAngle1((distance1 < 1 ? start1 : start1 + distance1) % 1);
+    setAngle2((distance1 < 1 ? start1 + distance1 : start1) % 1);
   }, [start, distance]);
 
   return { angle1, angle2 };
