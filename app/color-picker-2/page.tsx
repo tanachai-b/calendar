@@ -6,7 +6,7 @@ import { NavBar } from "../components";
 import { ColorPalette } from "./ColorPalette";
 
 export default function ColorPickerPage() {
-  const div = 5;
+  const div = 8;
 
   const hexs = Array.from({ length: div + 1 }).map((v, i) =>
     Math.floor(Math.min((i / div) * 256, 255))
@@ -17,12 +17,12 @@ export default function ColorPickerPage() {
   const monoColors = {
     width: div + 1,
     colors: Array.from({ length: div + 1 }).map((v, i) =>
-      getColorMono(hexs, i)
+      getPaletteMono(hexs, i)
     ),
   };
 
   const hues = Array.from({ length: 6 }).map((v, hue) =>
-    getColorCol(div, hexs, hue)
+    getPalette(div, hexs, hue)
   );
 
   const colorCount =
@@ -44,10 +44,10 @@ export default function ColorPickerPage() {
       >
         <div>{colorCount} colors</div>
 
-        <div className={cx("p-x5")}>
-          <div className={cx("flex", "flex-row", "gap-x5")}>
+        <div className={cx("p-x5", "flex", "flex-row", "gap-x5")}>
+          <div className={cx("flex", "flex-col", "gap-x5")}>
             {hues.map((palettes, i) => (
-              <div key={i} className={cx("flex", "flex-col", "gap-x5")}>
+              <div key={i} className={cx("flex", "flex-row", "gap-x5")}>
                 {palettes.map((palette, key) => (
                   <ColorPalette
                     key={key}
@@ -59,17 +59,17 @@ export default function ColorPickerPage() {
             ))}
           </div>
 
-          <ColorPalette colors={monoColors.colors} columns={monoColors.width} />
+          <ColorPalette colors={monoColors.colors} columns={1} />
         </div>
       </div>
     </div>
   );
 }
 
-function getColorCol(div: number, hexs: string[], hue: number) {
-  return Array.from({ length: div + 1 }).map((v, i) => {
+function getPalette(div: number, hexs: string[], hue: number) {
+  return Array.from({ length: div + 0 }).map((v, i) => {
     const saturation = div + 1 - i;
-    return i < div / 2
+    return i >= div / 2
       ? {
           width: saturation - 1,
           colors: Array.from({ length: div + 1 - saturation + 1 }).flatMap(
@@ -96,8 +96,10 @@ function getColorCol(div: number, hexs: string[], hue: number) {
   });
 }
 
-function getColorMono(hexs: string[], step: number) {
-  return `#${hexs[step]}${hexs[step]}${hexs[step]}`;
+function getPaletteMono(hexs: string[], step: number) {
+  return `#${hexs.slice(-step - 1)[0]}${hexs.slice(-step - 1)[0]}${
+    hexs.slice(-step - 1)[0]
+  }`;
 }
 
 function getColor(
