@@ -6,85 +6,28 @@ import { NavBar } from "../components";
 import { ColorPalette } from "./ColorPalette";
 
 export default function ColorPickerPage() {
-  const divisions = 5;
+  const div = 5;
 
-  const hexSteps = Array.from({ length: divisions + 1 }).map((v, i) =>
-    Math.floor(Math.min((i / divisions) * 256, 255))
+  const hexs = Array.from({ length: div + 1 }).map((v, i) =>
+    Math.floor(Math.min((i / div) * 256, 255))
       .toString(16)
       .padStart(2, "0")
   );
 
-  const colorRows = [
-    ...Array.from({ length: divisions })
-      .map((v, i): string[][] => {
-        const saturation = divisions - i;
+  const monoColors = {
+    width: div + 1,
+    colors: Array.from({ length: div + 1 }).map((v, i) =>
+      getColorMono(hexs, i)
+    ),
+  };
 
-        return Array.from({ length: divisions - saturation + 1 }).map(
-          (v, i): string[] => {
-            const brightness = divisions - saturation + 1 - 1 - i;
+  const hues = Array.from({ length: 6 }).map((v, hue) =>
+    getColorCol(div, hexs, hue)
+  );
 
-            const hexSteps2 = hexSteps.slice(
-              0 + brightness,
-              saturation + 1 + brightness
-            );
-
-            const min = hexSteps2[0];
-            const max = hexSteps2.slice(-1)[0];
-            const up = (i: number) => hexSteps2[i];
-            const down = (i: number) => hexSteps2.slice(-1 - i)[0];
-
-            return [
-              ...Array.from({ length: hexSteps2.length - 1 }).map(
-                (v, i): string => `#${max}${down(i)}${min}`
-              ),
-              ...Array.from({ length: divisions - saturation }).map(
-                (v, i): string => "none"
-              ),
-              ...Array.from({ length: hexSteps2.length - 1 }).map(
-                (v, i): string => `#${max}${min}${up(i)}`
-              ),
-              ...Array.from({ length: divisions - saturation }).map(
-                (v, i): string => "none"
-              ),
-              ...Array.from({ length: hexSteps2.length - 1 }).map(
-                (v, i): string => `#${down(i)}${min}${max}`
-              ),
-              ...Array.from({ length: divisions - saturation }).map(
-                (v, i): string => "none"
-              ),
-              ...Array.from({ length: hexSteps2.length - 1 }).map(
-                (v, i): string => `#${min}${up(i)}${max}`
-              ),
-              ...Array.from({ length: divisions - saturation }).map(
-                (v, i): string => "none"
-              ),
-              ...Array.from({ length: hexSteps2.length - 1 }).map(
-                (v, i): string => `#${min}${max}${down(i)}`
-              ),
-              ...Array.from({ length: divisions - saturation }).map(
-                (v, i): string => "none"
-              ),
-              ...Array.from({ length: hexSteps2.length - 1 }).map(
-                (v, i): string => `#${up(i)}${max}${min}`
-              ),
-              ...Array.from({ length: divisions - saturation }).map(
-                (v, i): string => "none"
-              ),
-            ];
-          }
-        );
-      })
-      .flat(),
-    ...Array.from({ length: divisions + 1 }).map((v, i): string[] => {
-      const brightness = hexSteps[divisions - i];
-      return [
-        `#${brightness}${brightness}${brightness}`,
-        ...Array.from({ length: divisions * 6 - 1 }).map(
-          (v, i): string => "none"
-        ),
-      ];
-    }),
-  ];
+  const colorCount =
+    hues.flat(2).flatMap(({ colors }) => colors).length +
+    monoColors.colors.length;
 
   return (
     <div className={cx("h-full", "flex", "flex-col", "bg-black")}>
@@ -99,11 +42,89 @@ export default function ColorPickerPage() {
           "overflow-scroll"
         )}
       >
-        <div>
-          {colorRows.flat().filter((color) => color !== "none").length} colors
+        <div>{colorCount} colors</div>
+
+        <div className={cx("p-x5")}>
+          <div className={cx("flex", "flex-row", "gap-x5")}>
+            {hues.map((palettes, i) => (
+              <div key={i} className={cx("flex", "flex-col", "gap-x5")}>
+                {palettes.map((palette, key) => (
+                  <ColorPalette
+                    key={key}
+                    colors={palette.colors}
+                    columns={palette.width}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <ColorPalette colors={monoColors.colors} columns={monoColors.width} />
         </div>
-        <ColorPalette colorRows={colorRows} />
       </div>
     </div>
+  );
+}
+
+function getColorCol(div: number, hexs: string[], hue: number) {
+  return Array.from({ length: div + 1 }).map((v, i) => {
+    const saturation = div + 1 - i;
+    return i < div / 2
+      ? {
+          width: saturation - 1,
+          colors: Array.from({ length: div + 1 - saturation + 1 }).flatMap(
+            (v, i) => {
+              const brightness = div + 1 - saturation - i;
+              return Array.from({ length: saturation - 1 }).map((v, step) =>
+                getColor(hexs, hue, saturation, brightness, step)
+              );
+            }
+          ),
+        }
+      : {
+          width: div + 1 - saturation + 1,
+          colors: flipArray(
+            saturation - 1,
+            Array.from({ length: div + 1 - saturation + 1 }).flatMap((v, i) => {
+              const brightness = div + 1 - saturation - i;
+              return Array.from({ length: saturation - 1 }).map((v, step) =>
+                getColor(hexs, hue, saturation, brightness, step)
+              );
+            })
+          ),
+        };
+  });
+}
+
+function getColorMono(hexs: string[], step: number) {
+  return `#${hexs[step]}${hexs[step]}${hexs[step]}`;
+}
+
+function getColor(
+  hexs: string[],
+  hue: number,
+  saturation: number,
+  brightness: number,
+  step: number
+) {
+  const min = hexs[brightness];
+  const max = hexs[brightness + saturation - 1];
+
+  const x = [
+    () => `#${max}${hexs[brightness + saturation - 1 - step]}${min}`,
+    () => `#${max}${min}${hexs[brightness + step]}`,
+    () => `#${hexs[brightness + saturation - 1 - step]}${min}${max}`,
+    () => `#${min}${hexs[brightness + step]}${max}`,
+    () => `#${min}${max}${hexs[brightness + saturation - 1 - step]}`,
+    () => `#${hexs[brightness + step]}${max}${min}`,
+  ];
+  return x[hue]();
+}
+
+function flipArray(cols: number, array: string[]) {
+  const rows = Math.ceil(array.length / cols);
+
+  return Array.from({ length: cols }).flatMap((v, col) =>
+    Array.from({ length: rows }).map((v, row) => array[row * cols + col])
   );
 }

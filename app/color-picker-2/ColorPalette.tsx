@@ -2,15 +2,20 @@
 
 import cx from "classnames";
 
-export function ColorPalette({ colorRows }: { colorRows: string[][] }) {
+export function ColorPalette({
+  colors,
+  columns,
+}: {
+  colors: string[];
+  columns: number;
+}) {
   return (
-    <div className={cx("flex", "flex-col", "p-x10", "gap-x5")}>
-      {colorRows.map((colors, key) => (
-        <div key={key} className={cx("size-fit", "flex", "flex-row", "gap-x5")}>
-          {colors.map((color, key) => (
-            <ColorCard key={key} color={color} />
-          ))}
-        </div>
+    <div
+      className={cx("size-fit", "grid", "gap-x5")}
+      style={{ gridTemplateColumns: `repeat(${columns}, auto)` }}
+    >
+      {colors.map((color, key) => (
+        <ColorCard key={key} color={color} />
       ))}
     </div>
   );
@@ -18,7 +23,7 @@ export function ColorPalette({ colorRows }: { colorRows: string[][] }) {
 
 function ColorCard({ color }: { color: string }) {
   return color === "none" ? (
-    <div className={cx("size-x50")} />
+    <div className={cx("xsize-x50")} />
   ) : (
     <div className={cx("size-x50", "bg-black", "p-x1")}>
       <div
