@@ -22,9 +22,7 @@ export function ColorPalette({
 }
 
 function ColorCard({ color }: { color: string }) {
-  return color === "none" ? (
-    <div className={cx("xsize-x50")} />
-  ) : (
+  return (
     <div className={cx("size-x50", "bg-black", "p-x1")}>
       <div
         className={cx(

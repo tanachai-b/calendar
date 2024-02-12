@@ -6,7 +6,7 @@ import { NavBar } from "../components";
 import { ColorPalette } from "./ColorPalette";
 
 export default function ColorPickerPage() {
-  const div = 8;
+  const div = 4;
 
   const hexs = Array.from({ length: div + 1 }).map((v, i) =>
     Math.floor(Math.min((i / div) * 256, 255))
@@ -14,20 +14,20 @@ export default function ColorPickerPage() {
       .padStart(2, "0")
   );
 
-  const monoColors = {
+  const huePalettes = Array.from({ length: 6 }).map((v, hue) =>
+    getPalette(div, hexs, hue)
+  );
+
+  const monoPalette = {
     width: div + 1,
     colors: Array.from({ length: div + 1 }).map((v, i) =>
       getPaletteMono(hexs, i)
     ),
   };
 
-  const hues = Array.from({ length: 6 }).map((v, hue) =>
-    getPalette(div, hexs, hue)
-  );
-
   const colorCount =
-    hues.flat(2).flatMap(({ colors }) => colors).length +
-    monoColors.colors.length;
+    huePalettes.flat(2).flatMap(({ colors }) => colors).length +
+    monoPalette.colors.length;
 
   return (
     <div className={cx("h-full", "flex", "flex-col", "bg-black")}>
@@ -44,11 +44,11 @@ export default function ColorPickerPage() {
       >
         <div>{colorCount} colors</div>
 
-        <div className={cx("p-x5", "flex", "flex-row", "gap-x5")}>
+        <div className={cx("flex", "flex-row", "p-x5", "gap-x5")}>
           <div className={cx("flex", "flex-col", "gap-x5")}>
-            {hues.map((palettes, i) => (
+            {huePalettes.map((huePalette, i) => (
               <div key={i} className={cx("flex", "flex-row", "gap-x5")}>
-                {palettes.map((palette, key) => (
+                {huePalette.map((palette, key) => (
                   <ColorPalette
                     key={key}
                     colors={palette.colors}
@@ -59,7 +59,7 @@ export default function ColorPickerPage() {
             ))}
           </div>
 
-          <ColorPalette colors={monoColors.colors} columns={1} />
+          <ColorPalette colors={monoPalette.colors} columns={1} />
         </div>
       </div>
     </div>
@@ -112,7 +112,7 @@ function getColor(
   const min = hexs[brightness];
   const max = hexs[brightness + saturation - 1];
 
-  const x = [
+  const hueFunctions = [
     () => `#${max}${hexs[brightness + saturation - 1 - step]}${min}`,
     () => `#${max}${min}${hexs[brightness + step]}`,
     () => `#${hexs[brightness + saturation - 1 - step]}${min}${max}`,
@@ -120,7 +120,8 @@ function getColor(
     () => `#${min}${max}${hexs[brightness + saturation - 1 - step]}`,
     () => `#${hexs[brightness + step]}${max}${min}`,
   ];
-  return x[hue]();
+
+  return hueFunctions[hue]();
 }
 
 function flipArray(cols: number, array: string[]) {
