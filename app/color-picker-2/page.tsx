@@ -29,10 +29,10 @@ export default function ColorPickerPage() {
       >
         <div>{colorCount} colors</div>
 
-        <div className={cx("flex", "flex-row", "p-x10", "gap-x10")}>
-          <div className={cx("flex", "flex-col", "gap-x10")}>
+        <div className={cx("flex", "flex-row", "p-x20", "gap-x20")}>
+          <div className={cx("flex", "flex-col", "gap-x20")}>
             {huePalettes.map((huePalette, i) => (
-              <div key={i} className={cx("flex", "flex-row", "gap-x10")}>
+              <div key={i} className={cx("flex", "flex-row", "gap-x20")}>
                 {huePalette.map((saturationPalette, key) => (
                   <ColorPalette
                     key={key}
