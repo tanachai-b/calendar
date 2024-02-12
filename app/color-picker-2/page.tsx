@@ -5,7 +5,7 @@ import cx from "classnames";
 import { NavBar } from "../components";
 
 export default function ColorPickerPage() {
-  const divisions = 6;
+  const divisions = 8;
 
   const hexSteps = Array.from({ length: divisions + 1 }).map((v, i) =>
     Math.round(Math.min((i / divisions) * 256, 255))
@@ -85,14 +85,6 @@ export default function ColorPickerPage() {
     }),
   ];
 
-  function textColor(color: string) {
-    const r = parseInt(color.slice(1, 3), 16);
-    const g = parseInt(color.slice(3, 5), 16);
-    const b = parseInt(color.slice(5, 7), 16);
-
-    return r + g * 2 + b * 0.5 > 128 + 128 + 128 ? "#000000" : "#ffffff";
-  }
-
   return (
     <div
       className={cx("h-full", "flex", "flex-col", "bg-black", "select-none")}
@@ -120,46 +112,54 @@ export default function ColorPickerPage() {
             "overflow-scroll",
 
             "p-x10",
-            "gap-x7"
+            "gap-x5"
           )}
         >
           <div>{colorSets.flat().filter((v) => v !== "none").length}</div>
           {colorSets.map((v, i) => (
             <div
               key={i}
-              className={cx("size-fit", "flex", "flex-row", "gap-x7")}
+              className={cx("size-fit", "flex", "flex-row", "gap-x5")}
             >
-              {v.map((v, i) =>
-                v === "none" ? (
-                  // <></>
-                  <div key={i} className={cx("size-x70")}></div>
-                ) : (
-                  <div
-                    key={i}
-                    className={cx("size-x70", "bg-black", "p-x1", "rounded-x0")}
-                  >
-                    <div
-                      className={cx(
-                        "size-full",
-                        "border-x2",
-                        "border-white",
-                        "rounded-x0",
-                        "p-x2",
-                        "text-x10",
-                        "font-semibold",
-                        "leading-none"
-                      )}
-                      style={{ background: v, color: textColor(v) }}
-                    >
-                      {v.toUpperCase()}
-                    </div>
-                  </div>
-                )
-              )}
+              {v.map((v, i) => (
+                <ColorCard key={i} v={v} />
+              ))}
             </div>
           ))}
         </div>
       </div>
     </div>
   );
+}
+
+function ColorCard({ v }: { v: string }) {
+  return v === "none" ? (
+    <div className={cx("size-x50")} />
+  ) : (
+    <div className={cx("size-x50", "bg-black", "p-x1", "rounded-x0")}>
+      <div
+        className={cx(
+          "size-full",
+          "border-x2",
+          "border-white",
+          "rounded-x0",
+          "p-x2",
+          "text-x10",
+          "font-semibold",
+          "leading-none"
+        )}
+        style={{ background: v, color: textColor(v) }}
+      >
+        {v.toUpperCase().slice(1)}
+      </div>
+    </div>
+  );
+}
+
+function textColor(color: string) {
+  const r = parseInt(color.slice(1, 3), 16);
+  const g = parseInt(color.slice(3, 5), 16);
+  const b = parseInt(color.slice(5, 7), 16);
+
+  return r + g * 2 + b * 0.5 > 128 + 128 + 128 ? "#000000" : "#ffffff";
 }
