@@ -11,7 +11,7 @@ export function ColorPalette({
 }) {
   return (
     <div
-      className={cx("size-fit", "grid", "gap-x5")}
+      className={cx("size-fit", "grid", "gap-x2")}
       style={{ gridTemplateColumns: `repeat(${columns}, auto)` }}
     >
       {colors.map((color, key) => (
