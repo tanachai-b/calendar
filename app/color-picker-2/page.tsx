@@ -5,7 +5,7 @@ import cx from "classnames";
 import { NavBar } from "../components";
 
 export default function ColorPickerPage() {
-  const divisions = 8;
+  const divisions = 4;
 
   const hexSteps = Array.from({ length: divisions + 1 }).map((v, i) =>
     Math.round(Math.min((i / divisions) * 256, 255))
@@ -97,37 +97,35 @@ export default function ColorPickerPage() {
           "bg-black-light",
           "flex",
           "flex-col",
-          "items-center",
-          "justify-center",
-          "overflow-hidden"
+          "overflow-scroll"
         )}
       >
-        <div
-          className={cx(
-            "flex",
-            "flex-col",
+        {ColorPalette(colorSets)}
+      </div>
+    </div>
+  );
+}
 
-            "max-w-full",
-            "max-h-full",
-            "overflow-scroll",
+function ColorPalette(colorSets: string[][]) {
+  return (
+    <div
+      className={cx(
+        "flex",
+        "flex-col",
 
-            "p-x10",
-            "gap-x5"
-          )}
-        >
-          <div>{colorSets.flat().filter((v) => v !== "none").length}</div>
-          {colorSets.map((v, i) => (
-            <div
-              key={i}
-              className={cx("size-fit", "flex", "flex-row", "gap-x5")}
-            >
-              {v.map((v, i) => (
-                <ColorCard key={i} v={v} />
-              ))}
-            </div>
+        "p-x10",
+        "gap-x5"
+      )}
+    >
+      <div>{colorSets.flat().filter((v) => v !== "none").length} colors</div>
+
+      {colorSets.map((v, i) => (
+        <div key={i} className={cx("size-fit", "flex", "flex-row", "gap-x5")}>
+          {v.map((v, i) => (
+            <ColorCard key={i} v={v} />
           ))}
         </div>
-      </div>
+      ))}
     </div>
   );
 }
