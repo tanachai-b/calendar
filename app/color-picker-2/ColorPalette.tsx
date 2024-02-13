@@ -36,7 +36,7 @@ function ColorCard({ color }: { color: string }) {
           "font-semibold",
           "leading-none"
         )}
-        style={{ background: color, color: textColor(color) }}
+        style={{ background: color, color: `${textColor(color)}ff` }}
       >
         {color.toUpperCase().slice(1)}
       </div>
@@ -49,5 +49,5 @@ function textColor(color: string) {
   const g = parseInt(color.slice(3, 5), 16);
   const b = parseInt(color.slice(5, 7), 16);
 
-  return r + g * 2 + b * 0.25 > 128 + 128 + 128 ? "#000000" : "#ffffff";
+  return r * 0.75 + g * 2 + b * 0.25 > 128 * 3 ? "#000000" : "#ffffff";
 }
