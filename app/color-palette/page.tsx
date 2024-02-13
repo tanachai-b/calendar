@@ -6,7 +6,7 @@ import { NavBar } from "../components";
 import { ColorPalette } from "./ColorPalette";
 import { useGetPalettes } from "./useGetPalettes";
 
-export default function ColorPickerPage() {
+export default function ColorPalettePage() {
   const subdivisions = 4;
   const { huePalettes, monoPalette } = useGetPalettes(subdivisions);
 
