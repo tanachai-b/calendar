@@ -27,8 +27,6 @@ function ColorCard({ color }: { color: string }) {
       className={cx(
         "size-x50",
 
-        "border-x1",
-
         "p-x2",
         "text-x10",
         "font-semibold",
