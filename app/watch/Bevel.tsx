@@ -8,19 +8,27 @@ export function Bevel({ shape }: { shape: ReactElement }) {
   return (
     <>
       <defs>
+        <filter id={`dilate-${rand}`}>
+          <feMorphology operator="dilate" radius="1" />
+        </filter>
+
         <filter id={`erode-${rand}`}>
-          <feMorphology operator="erode" radius="1.25" />
+          <feMorphology operator="erode" radius="1" />
         </filter>
 
         <filter id={`blur-${rand}`}>
           <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
         </filter>
 
-        <mask id={`light-${rand}`}>
+        <mask id={`shadow-${rand}`}>
+          <g fill="#ffffff" filter={`url(#dilate-${rand})`}>
+            {shape}
+          </g>
+
           <g
-            fill="#ffffff"
-            filter={`url(#erode-${rand}) url(#blur-${rand})`}
+            fill="#000000"
             transform="translate(-2, -2)"
+            filter={`url(#blur-${rand})`}
           >
             {shape}
           </g>
@@ -30,11 +38,15 @@ export function Bevel({ shape }: { shape: ReactElement }) {
           </g>
         </mask>
 
-        <mask id={`shadow-${rand}`}>
+        <mask id={`light-${rand}`}>
+          <g fill="#ffffff" filter={`url(#dilate-${rand})`}>
+            {shape}
+          </g>
+
           <g
-            fill="#ffffff"
-            filter={`url(#erode-${rand}) url(#blur-${rand})`}
+            fill="#000000"
             transform="translate(2, 2)"
+            filter={`url(#blur-${rand})`}
           >
             {shape}
           </g>
@@ -45,11 +57,11 @@ export function Bevel({ shape }: { shape: ReactElement }) {
         </mask>
       </defs>
 
-      <g fill="#ffffff80" mask={`url(#light-${rand})`}>
+      <g fill="#000000" opacity={0.75} mask={`url(#shadow-${rand})`}>
         {shape}
       </g>
 
-      <g fill="#00000080" mask={`url(#shadow-${rand})`}>
+      <g fill="#ffffff" opacity={0.75} mask={`url(#light-${rand})`}>
         {shape}
       </g>
     </>
