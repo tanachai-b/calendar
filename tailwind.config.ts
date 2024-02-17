@@ -23,6 +23,8 @@ const config: Config = {
 
       x10: ["10px", { lineHeight: "15px" }],
       x12: ["12px", { lineHeight: "17px" }],
+      x13: ["13px", { lineHeight: "18px" }],
+      x14: ["14px", { lineHeight: "19px" }],
       x15: ["15px", { lineHeight: "20px" }],
       x20: ["20px", { lineHeight: "30px" }],
       x30: ["30px", { lineHeight: "50px" }],
