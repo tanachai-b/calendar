@@ -29,10 +29,10 @@ export default function ColorPalettePage() {
       >
         <div>{colorCount} colors</div>
 
-        <div className={cx("flex", "flex-row", "p-x10", "gap-x10")}>
-          <div className={cx("flex", "flex-col", "gap-x10")}>
+        <div className={cx("flex", "flex-row", "size-fit", "p-x50", "gap-x50")}>
+          <div className={cx("flex", "flex-col", "gap-x50")}>
             {huePalettes.map((huePalette, i) => (
-              <div key={i} className={cx("flex", "flex-row", "gap-x10")}>
+              <div key={i} className={cx("flex", "flex-row", "gap-x50")}>
                 {huePalette.map((saturationPalette, key) => (
                   <ColorPalette
                     key={key}

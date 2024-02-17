@@ -11,7 +11,7 @@ export function ColorPalette({
 }) {
   return (
     <div
-      className={cx("size-fit", "grid", "gap-x10")}
+      className={cx("size-fit", "grid", "gap-x50")}
       style={{ gridTemplateColumns: `repeat(${columns}, auto)` }}
     >
       {colors.map((color, key) => (
@@ -31,8 +31,14 @@ function ColorCard({ color }: { color: string }) {
         "text-x10",
         "font-semibold",
         "leading-none"
+
+        // "border-x1"
       )}
-      style={{ background: color, color: `${textColor(color)}ff` }}
+      style={{
+        background: color,
+        color: `${textColor(color)}ff`,
+        // borderColor: `#ffffff40`,
+      }}
     >
       {color.toUpperCase().slice(1)}
     </div>
