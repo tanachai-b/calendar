@@ -1,8 +1,6 @@
-"use client";
-
 import cx from "classnames";
 
-import { Card } from "./Card";
+import { Card } from "./components/Card";
 import { banks } from "./sample-data";
 
 export function BanksCard() {

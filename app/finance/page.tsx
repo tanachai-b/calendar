@@ -3,8 +3,8 @@
 import cx from "classnames";
 
 import { NavBar } from "../components";
+import { AccountsCard } from "./AccountsCard/AccountsCard";
 import { BanksCard } from "./BanksCard";
-import { AccountsCard } from "./AccountsCard";
 
 export default function Finance() {
   return (
