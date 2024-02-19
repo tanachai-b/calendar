@@ -1,6 +1,7 @@
 "use client";
 
 import cx from "classnames";
+import { ReactNode } from "react";
 
 import { Card } from "./Card";
 import { accounts, banks } from "./sample-data";
@@ -8,7 +9,7 @@ import { accounts, banks } from "./sample-data";
 export function AccountsCard() {
   const accountBanks = Array.from(new Set(accounts.map(({ bank }) => bank)));
 
-  const mappedAccounts = accountBanks.map((accountBank) => {
+  const mappedBanks = accountBanks.map((accountBank) => {
     const bank = banks.find(({ name }) => name === accountBank);
     return {
       ...bank,
@@ -24,29 +25,24 @@ export function AccountsCard() {
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
-        {mappedAccounts.map((bank, index) => (
-          <BankListItem
-            key={index}
-            bank={bank.displayName}
-            mappedAccounts={bank.accounts}
-          />
+        {mappedBanks.map((bank, index) => (
+          <BankListItem key={index} bank={bank.displayName}>
+            {bank.accounts.map((account, index) => (
+              <AccountListItem key={index} {...account} />
+            ))}
+          </BankListItem>
         ))}
       </div>
     </Card>
   );
 }
+
 function BankListItem({
   bank,
-  mappedAccounts,
+  children,
 }: {
   bank: string;
-  mappedAccounts: {
-    bank: string;
-    color: string;
-    name: string;
-    number: string;
-    balance: number;
-  }[];
+  children: ReactNode;
 }) {
   return (
     <div>
@@ -65,9 +61,7 @@ function BankListItem({
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
-        {mappedAccounts.map((account, index) => (
-          <AccountListItem key={index} {...account} />
-        ))}
+        {children}
       </div>
     </div>
   );
@@ -89,7 +83,6 @@ function AccountListItem({
       className={cx(
         "grid",
         "grid-flow-col",
-        "grid-rows-[repeat(2,auto)]",
         "grid-cols-[auto,1fr,auto]",
         "gap-x-x10",
         "items-center"

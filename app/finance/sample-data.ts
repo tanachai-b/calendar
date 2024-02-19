@@ -60,13 +60,6 @@ export type Account = {
 
 export const accounts: Account[] = [
   {
-    color: "#40C0FF",
-    name: "KTB NEXT Savings",
-    number: "098-765-4321",
-    bank: "Krungthai Bank",
-    balance: 925000,
-  },
-  {
     color: "#000080",
     name: "BBL Savings",
     number: "123-456-7890",
@@ -74,18 +67,25 @@ export const accounts: Account[] = [
     balance: 25000,
   },
   {
+    color: "#80FFFF",
+    name: "KTB Savings",
+    number: "098-765-4321",
+    bank: "Krungthai Bank",
+    balance: 500,
+  },
+  {
+    color: "#40C0FF",
+    name: "KTB NEXT Savings",
+    number: "098-765-4321",
+    bank: "Krungthai Bank",
+    balance: 925000,
+  },
+  {
     color: "#FF8040",
     name: "GHB All Savings",
     number: "024-681-3467",
     bank: "Government Housing Bank",
     balance: 7500,
-  },
-  {
-    color: "#40C0FF",
-    name: "KTB Savings",
-    number: "098-765-4321",
-    bank: "Krungthai Bank",
-    balance: 500,
   },
 ];
 
