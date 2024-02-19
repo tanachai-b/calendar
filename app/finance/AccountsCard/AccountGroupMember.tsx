@@ -7,13 +7,13 @@ export function AccountGroupMember({
   name,
   number,
   balance,
-  percent,
+  percentage,
 }: {
   color: string;
   name: string;
   number: string;
   balance: number;
-  percent: number;
+  percentage: number;
 }) {
   return (
     <div
@@ -44,10 +44,20 @@ export function AccountGroupMember({
         <span className={cx("text-[#00000080]")}> THB</span>
       </div>
 
-      <div className={cx("flex", "flex-row", "justify-end")}>
+      <div
+        className={cx(
+          "size-full",
+          "pt-x5",
+
+          "flex",
+          "flex-row",
+          "justify-end",
+          "items-start"
+        )}
+      >
         <BarChart
           className={cx("h-x7", "w-x150")}
-          bars={[{ color: color, value: percent }]}
+          bars={[{ color: color, value: percentage }]}
           maxValue={1}
         />
       </div>

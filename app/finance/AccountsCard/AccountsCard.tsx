@@ -23,16 +23,13 @@ export function AccountsCard() {
     }));
 
   return (
-    <Card className={cx("w-x500", "flex", "flex-col")}>
+    <Card className={cx("max-w-x500", "flex", "flex-col")}>
       <div className={cx("p-x10", "pb-x0", "text-x20", "font-light")}>
         Accounts
       </div>
 
       <div className={cx("p-x20")}>
-        <InteractiveBarChart
-          chartData={chartData}
-          totalBalance={totalBalance}
-        />
+        <InteractiveBarChart chartData={chartData} totalValue={totalBalance} />
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
@@ -42,7 +39,7 @@ export function AccountsCard() {
               <AccountGroupMember
                 key={index}
                 {...account}
-                percent={account.balance / totalBalance}
+                percentage={account.balance / totalBalance}
               />
             ))}
           </AccountGroup>

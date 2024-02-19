@@ -12,7 +12,14 @@ export default function Finance() {
       <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
       <div
-        className={cx("grow", "bg-[#202020]", "text-x13", "text-[#000000ff]")}
+        className={cx(
+          "grow",
+          "overflow-scroll",
+
+          "bg-[#202020]",
+          "text-x13",
+          "text-[#000000ff]"
+        )}
       >
         <div className={cx("flex", "flex-col", "p-x20", "gap-x20")}>
           <BanksCard />
