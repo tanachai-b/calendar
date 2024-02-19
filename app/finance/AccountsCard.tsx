@@ -16,7 +16,11 @@ export function AccountsCard() {
 
   const chartData = accountGroups
     .flatMap((group) => group.members)
-    .map((account) => ({ color: account.color, value: account.balance }));
+    .map((account) => ({
+      color: account.color,
+      value: account.balance,
+      label: account.name,
+    }));
 
   return (
     <Card className={cx("w-x500", "flex", "flex-col")}>
@@ -24,27 +28,11 @@ export function AccountsCard() {
         Accounts
       </div>
 
-      <div className={cx("p-x20", "flex", "flex-col")}>
-        <BarChart className={cx("h-x20")} bars={chartData} />
-
-        <div
-          className={cx(
-            "flex",
-            "flex-row",
-            "items-baseline",
-            "justify-between"
-          )}
-        >
-          <div className={cx("text-[#00000080]")}>Total </div>
-          <div>
-            <span className={cx("text-x20", "font-light")}>
-              {totalBalance.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-              })}
-            </span>
-            <span className={cx("text-[#00000080]")}> THB</span>
-          </div>
-        </div>
+      <div className={cx("p-x20")}>
+        <InteractiveBarChart
+          chartData={chartData}
+          totalBalance={totalBalance}
+        />
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
@@ -74,6 +62,34 @@ function group<T>(items: T[], groupBy: (item: T) => string) {
       return groups;
     }
   }, []);
+}
+
+function InteractiveBarChart({
+  chartData,
+  totalBalance,
+}: {
+  chartData: { color: string; value: number; label: string }[];
+  totalBalance: number;
+}) {
+  return (
+    <div className={cx("flex", "flex-col")}>
+      <BarChart className={cx("h-x20")} bars={chartData} />
+
+      <div
+        className={cx("flex", "flex-row", "items-baseline", "justify-between")}
+      >
+        <div className={cx("text-[#00000080]")}>Total </div>
+        <div>
+          <span className={cx("text-x20", "font-light")}>
+            {totalBalance.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
+          </span>
+          <span className={cx("text-[#00000080]")}> THB</span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function AccountGroup({
