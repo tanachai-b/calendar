@@ -4,21 +4,10 @@ import cx from "classnames";
 import { ReactNode } from "react";
 
 import { Card } from "./Card";
-import { Account, accounts } from "./sample-data";
+import { accounts } from "./sample-data";
 
 export function AccountsCard() {
-  const groups = accounts.reduce<{ name: string; accounts: Account[] }[]>(
-    (groups, account) => {
-      const group = groups.find((group) => group.name === account.bank);
-      if (!group) {
-        return [...groups, { name: account.bank, accounts: [account] }];
-      } else {
-        group.accounts.push(account);
-        return groups;
-      }
-    },
-    []
-  );
+  const accountGroups = group(accounts, (account) => account.bank);
 
   return (
     <Card className={cx("size-fit", "flex", "flex-col")}>
@@ -27,19 +16,37 @@ export function AccountsCard() {
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
-        {groups.map((group, index) => (
-          <Group key={index} name={group.name}>
-            {group.accounts.map((account, index) => (
-              <AccountListItem key={index} {...account} />
+        {accountGroups.map((group, index) => (
+          <AccountGroup key={index} name={group.name}>
+            {group.members.map((account, index) => (
+              <AccountGroupMember key={index} {...account} />
             ))}
-          </Group>
+          </AccountGroup>
         ))}
       </div>
     </Card>
   );
 }
 
-function Group({ name, children }: { name: string; children: ReactNode }) {
+function group<T>(items: T[], groupBy: (item: T) => string) {
+  return items.reduce<{ name: string; members: T[] }[]>((groups, item) => {
+    const group = groups.find((group) => group.name === groupBy(item));
+    if (!group) {
+      return [...groups, { name: groupBy(item), members: [item] }];
+    } else {
+      group.members.push(item);
+      return groups;
+    }
+  }, []);
+}
+
+function AccountGroup({
+  name,
+  children,
+}: {
+  name: string;
+  children: ReactNode;
+}) {
   return (
     <div>
       <div
@@ -63,7 +70,7 @@ function Group({ name, children }: { name: string; children: ReactNode }) {
   );
 }
 
-function AccountListItem({
+function AccountGroupMember({
   color,
   name,
   number,
@@ -89,24 +96,13 @@ function AccountListItem({
         style={{ backgroundColor: color }}
       />
       <div />
-
       <div className={cx("font-medium")}>{name}</div>
       <div className={cx("text-[#00000080]")}>{number}</div>
-
-      <div
-        className={cx(
-          "row-span-2",
-          "h-full",
-          "pl-x10",
-
-          "text-x20",
-          "font-light",
-          "leading-none"
-        )}
-      >
-        {balance.toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-        })}
+      <div className={cx("row-span-2", "h-full", "pl-x10")}>
+        <span className={cx("text-x20", "font-light", "leading-none")}>
+          {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        </span>
+        <span className={cx("text-[#00000080]")}> THB</span>
       </div>
     </div>
   );
