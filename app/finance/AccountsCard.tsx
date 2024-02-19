@@ -1,25 +1,42 @@
 "use client";
 
 import cx from "classnames";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 import { Card } from "./Card";
 import { accounts } from "./sample-data";
 
 export function AccountsCard() {
+  const totalBalance = accounts.reduce(
+    (total, account) => total + account.balance,
+    0
+  );
+
   const accountGroups = group(accounts, (account) => account.bank);
 
+  const chartData = accountGroups
+    .flatMap((v) => v.members)
+    .map((v) => ({ color: v.color, value: v.balance }));
+
   return (
-    <Card className={cx("size-fit", "flex", "flex-col")}>
+    <Card className={cx("w-x500", "flex", "flex-col")}>
       <div className={cx("p-x10", "pb-x0", "text-x20", "font-light")}>
         Accounts
+      </div>
+
+      <div className={cx("p-x20")}>
+        <BarChart className={cx("h-x20")} bars={chartData} />
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
         {accountGroups.map((group, index) => (
           <AccountGroup key={index} name={group.name}>
             {group.members.map((account, index) => (
-              <AccountGroupMember key={index} {...account} />
+              <AccountGroupMember
+                key={index}
+                {...account}
+                percent={account.balance / totalBalance}
+              />
             ))}
           </AccountGroup>
         ))}
@@ -75,17 +92,20 @@ function AccountGroupMember({
   name,
   number,
   balance,
+  percent,
 }: {
   color: string;
   name: string;
   number: string;
   balance: number;
+  percent: number;
 }) {
   return (
     <div
       className={cx(
         "grid",
         "grid-flow-col",
+        "grid-rows-[repeat(2,auto)]",
         "grid-cols-[auto,1fr,auto]",
         "gap-x-x10",
         "items-center"
@@ -96,14 +116,67 @@ function AccountGroupMember({
         style={{ backgroundColor: color }}
       />
       <div />
+
       <div className={cx("font-medium")}>{name}</div>
+
       <div className={cx("text-[#00000080]")}>{number}</div>
-      <div className={cx("row-span-2", "h-full", "pl-x10")}>
+
+      <div className={cx("h-full", "pl-x10", "text-right")}>
         <span className={cx("text-x20", "font-light", "leading-none")}>
           {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
         </span>
+
         <span className={cx("text-[#00000080]")}> THB</span>
       </div>
+
+      <div className={cx("flex", "flex-row", "justify-end")}>
+        <BarChart
+          className={cx("h-x7", "w-x150")}
+          bars={[{ color: color, value: percent }]}
+          maxValue={1}
+        />
+      </div>
+    </div>
+  );
+}
+
+function BarChart({
+  className,
+  style,
+  bars,
+  maxValue: inputMax,
+}: {
+  className?: string;
+  style?: CSSProperties;
+  bars: { color: string; value: number }[];
+  maxValue?: number;
+}) {
+  const maxValue =
+    inputMax ?? bars.reduce((total, bar) => total + bar.value, 0);
+
+  return (
+    <div
+      className={cx(
+        "rounded-full",
+        "bg-[#00000020]",
+
+        "flex",
+        "flex-row",
+        "overflow-hidden",
+
+        className
+      )}
+      style={style}
+    >
+      {bars.map((bar, index) => (
+        <div
+          key={index}
+          style={{
+            backgroundColor: bar.color,
+            width: `${(bar.value / maxValue) * 100}%`,
+          }}
+        />
+      ))}
     </div>
   );
 }
