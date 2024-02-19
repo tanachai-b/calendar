@@ -15,8 +15,8 @@ export function AccountsCard() {
   const accountGroups = group(accounts, (account) => account.bank);
 
   const chartData = accountGroups
-    .flatMap((v) => v.members)
-    .map((v) => ({ color: v.color, value: v.balance }));
+    .flatMap((group) => group.members)
+    .map((account) => ({ color: account.color, value: account.balance }));
 
   return (
     <Card className={cx("w-x500", "flex", "flex-col")}>
@@ -24,8 +24,27 @@ export function AccountsCard() {
         Accounts
       </div>
 
-      <div className={cx("p-x20")}>
+      <div className={cx("p-x20", "flex", "flex-col")}>
         <BarChart className={cx("h-x20")} bars={chartData} />
+
+        <div
+          className={cx(
+            "flex",
+            "flex-row",
+            "items-baseline",
+            "justify-between"
+          )}
+        >
+          <div className={cx("text-[#00000080]")}>Total </div>
+          <div>
+            <span className={cx("text-x20", "font-light")}>
+              {totalBalance.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })}
+            </span>
+            <span className={cx("text-[#00000080]")}> THB</span>
+          </div>
+        </div>
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
