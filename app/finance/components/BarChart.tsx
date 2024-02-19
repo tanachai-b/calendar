@@ -5,20 +5,16 @@ export function BarChart({
   className,
   style,
   bars,
-  maxValue: inputMax,
   onMouseOver,
   onMouseLeave,
 }: {
   className?: string;
   style?: CSSProperties;
-  bars: { color: string; value: number }[];
+  bars: { color: string; percentage: number }[];
   maxValue?: number;
   onMouseOver?: (index: number) => void;
   onMouseLeave?: () => void;
 }) {
-  const maxValue =
-    inputMax ?? bars.reduce((total, bar) => total + bar.value, 0);
-
   return (
     <div
       className={cx(
@@ -39,7 +35,7 @@ export function BarChart({
         <Bar
           key={index}
           color={bar.color}
-          percentage={bar.value / maxValue}
+          percentage={bar.percentage}
           onMouseOver={
             onMouseOver
               ? (event) => {

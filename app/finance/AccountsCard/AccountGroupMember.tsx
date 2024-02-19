@@ -57,7 +57,7 @@ export function AccountGroupMember({
       >
         <BarChart
           className={cx("h-x7", "w-x150")}
-          bars={[{ color: color, value: percentage }]}
+          bars={[{ color: color, percentage: percentage }]}
           maxValue={1}
         />
       </div>

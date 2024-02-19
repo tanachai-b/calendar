@@ -18,8 +18,8 @@ export function AccountsCard() {
     .flatMap((group) => group.members)
     .map((account) => ({
       color: account.color,
-      value: account.balance,
       label: account.name,
+      value: account.balance,
     }));
 
   return (

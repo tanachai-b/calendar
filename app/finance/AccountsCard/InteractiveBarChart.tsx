@@ -7,23 +7,24 @@ export function InteractiveBarChart({
   chartData,
   totalValue,
 }: {
-  chartData: { color: string; value: number; label: string }[];
+  chartData: { color: string; label: string; value: number }[];
   totalValue: number;
 }) {
   const [mouseOverIndex, setMouseOverIndex] = useState<number>();
 
-  const color =
-    mouseOverIndex != null ? chartData[mouseOverIndex].color : "#00000020";
-  const label =
-    mouseOverIndex != null ? chartData[mouseOverIndex].label : "Total";
-  const value =
-    mouseOverIndex != null ? chartData[mouseOverIndex].value : totalValue;
+  const { color, label, value } =
+    mouseOverIndex != null
+      ? chartData[mouseOverIndex]
+      : { color: "#00000020", label: "Total", value: totalValue };
 
   return (
     <div className={cx("flex", "flex-col", "w-full")}>
       <BarChart
         className={cx("h-x20")}
-        bars={chartData}
+        bars={chartData.map((bar) => ({
+          color: bar.color,
+          percentage: bar.value / totalValue,
+        }))}
         maxValue={totalValue}
         onMouseOver={(index) => setMouseOverIndex(index)}
         onMouseLeave={() => setMouseOverIndex(undefined)}
