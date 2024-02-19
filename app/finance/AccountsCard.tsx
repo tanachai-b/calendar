@@ -4,19 +4,21 @@ import cx from "classnames";
 import { ReactNode } from "react";
 
 import { Card } from "./Card";
-import { accounts, banks } from "./sample-data";
+import { Account, accounts } from "./sample-data";
 
 export function AccountsCard() {
-  const accountBanks = Array.from(new Set(accounts.map(({ bank }) => bank)));
-
-  const mappedBanks = accountBanks.map((accountBank) => {
-    const bank = banks.find(({ name }) => name === accountBank);
-    return {
-      ...bank,
-      displayName: `${bank?.name} (${bank?.acronym})`,
-      accounts: accounts.filter((account) => account.bank === bank?.name),
-    };
-  });
+  const groups = accounts.reduce<{ name: string; accounts: Account[] }[]>(
+    (groups, account) => {
+      const group = groups.find((group) => group.name === account.bank);
+      if (!group) {
+        return [...groups, { name: account.bank, accounts: [account] }];
+      } else {
+        group.accounts.push(account);
+        return groups;
+      }
+    },
+    []
+  );
 
   return (
     <Card className={cx("size-fit", "flex", "flex-col")}>
@@ -25,25 +27,19 @@ export function AccountsCard() {
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
-        {mappedBanks.map((bank, index) => (
-          <BankListItem key={index} bank={bank.displayName}>
-            {bank.accounts.map((account, index) => (
+        {groups.map((group, index) => (
+          <Group key={index} name={group.name}>
+            {group.accounts.map((account, index) => (
               <AccountListItem key={index} {...account} />
             ))}
-          </BankListItem>
+          </Group>
         ))}
       </div>
     </Card>
   );
 }
 
-function BankListItem({
-  bank,
-  children,
-}: {
-  bank: string;
-  children: ReactNode;
-}) {
+function Group({ name, children }: { name: string; children: ReactNode }) {
   return (
     <div>
       <div
@@ -57,7 +53,7 @@ function BankListItem({
           "text-[#00000080]"
         )}
       >
-        {bank}
+        {name}
       </div>
 
       <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
