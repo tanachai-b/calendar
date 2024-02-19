@@ -42,7 +42,7 @@ export function BanksCard() {
         />
 
         <div>
-          {name} <span className={cx("opacity-50")}>({acronym})</span>
+          {name} <span className={cx("text-[#00000080]")}>({acronym})</span>
         </div>
       </div>
     );

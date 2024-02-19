@@ -1,4 +1,4 @@
-type AccountTransaction =
+export type AccountTransaction =
   | {
       date: string;
       type: "Income/Expense";
@@ -50,49 +50,56 @@ export const accountTransactions: AccountTransaction[] = [
   },
 ];
 
-type BankAccount = {
+export type Account = {
   color: string;
-  bank: string;
   name: string;
   number: string;
+  bank: string;
   balance: number;
 };
 
-export const bankAccounts: BankAccount[] = [
+export const accounts: Account[] = [
+  {
+    color: "#40C0FF",
+    name: "KTB NEXT Savings",
+    number: "098-765-4321",
+    bank: "Krungthai Bank",
+    balance: 925000,
+  },
   {
     color: "#000080",
     name: "BBL Savings",
     number: "123-456-7890",
     bank: "Bangkok Bank",
-    balance: 4500,
-  },
-  {
-    color: "#40C0FF",
-    name: "KTB Savings",
-    number: "098-765-4321",
-    bank: "Krungthai Bank",
-    balance: 7500,
+    balance: 25000,
   },
   {
     color: "#FF8040",
     name: "GHB All Savings",
     number: "024-681-3467",
     bank: "Government Housing Bank",
-    balance: 9500,
+    balance: 7500,
+  },
+  {
+    color: "#40C0FF",
+    name: "KTB Savings",
+    number: "098-765-4321",
+    bank: "Krungthai Bank",
+    balance: 500,
   },
 ];
 
-type Bank = {
+export type Bank = {
+  color: string;
   name: string;
   acronym: string;
-  color: string;
 };
 
 export const banks: Bank[] = [
-  { name: "Bangkok Bank", acronym: "BBL", color: "#000080" },
-  { name: "Krungthai Bank", acronym: "KTB", color: "#40C0FF" },
-  { name: "Government Housing Bank", acronym: "GHB", color: "#FF8040" },
-  { name: "Kasikorn Bank", acronym: "KBank", color: "#008040" },
-  { name: "Bank of Ayudhaya", acronym: "BAY", color: "#FFC040" },
-  { name: "Siam Commercial Bank", acronym: "SCB", color: "#4000C0" },
+  { color: "#000080", name: "Bangkok Bank", acronym: "BBL" },
+  { color: "#40C0FF", name: "Krungthai Bank", acronym: "KTB" },
+  { color: "#FF8040", name: "Government Housing Bank", acronym: "GHB" },
+  { color: "#008040", name: "Kasikorn Bank", acronym: "KBank" },
+  { color: "#FFC040", name: "Bank of Ayudhaya", acronym: "BAY" },
+  { color: "#4000C0", name: "Siam Commercial Bank", acronym: "SCB" },
 ];
