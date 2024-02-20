@@ -12,7 +12,7 @@ export function InteractiveBarChart({
 }) {
   const [mouseOverIndex, setMouseOverIndex] = useState<number>();
 
-  const { color, label, value } =
+  const legend =
     mouseOverIndex != null
       ? chartData[mouseOverIndex]
       : { color: "#00000020", label: "Total", value: totalValue };
@@ -25,20 +25,22 @@ export function InteractiveBarChart({
           color: bar.color,
           percentage: bar.value / totalValue,
         }))}
-        onMouseOver={(index) => setMouseOverIndex(index)}
+        onMouseOver={setMouseOverIndex}
         onMouseLeave={() => setMouseOverIndex(undefined)}
       />
 
-      <LabelValue
-        color={color}
-        label={label}
-        value={value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+      <Legend
+        color={legend.color}
+        label={legend.label}
+        value={legend.value.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+        })}
       />
     </div>
   );
 }
 
-function LabelValue({
+function Legend({
   color,
   label,
   value,

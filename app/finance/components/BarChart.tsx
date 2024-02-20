@@ -14,11 +14,27 @@ export function BarChart({
   onMouseOver?: (index: number) => void;
   onMouseLeave?: () => void;
 }) {
+  const totalPercentage = bars.reduce(
+    (total, bar) => (total += bar.percentage),
+    0
+  );
+
+  const [mouseOverIndex, setMouseOverIndex] = useState<number>();
+
+  function handleMouseOver(index: number) {
+    setMouseOverIndex(index);
+    onMouseOver?.(index);
+  }
+
+  function handleMouseLeave() {
+    setMouseOverIndex(undefined);
+    onMouseLeave?.();
+  }
+
   return (
     <div
       className={cx(
         "rounded-full",
-        "bg-[#00000020]",
 
         "flex",
         "flex-row",
@@ -27,24 +43,23 @@ export function BarChart({
         className
       )}
       style={style}
-      onMouseOver={onMouseLeave}
-      onMouseLeave={onMouseLeave}
+      onMouseLeave={handleMouseLeave}
     >
       {bars.map((bar, index) => (
         <Bar
           key={index}
           color={bar.color}
           percentage={bar.percentage}
-          onMouseOver={
-            onMouseOver
-              ? (event) => {
-                  onMouseOver?.(index);
-                  event.stopPropagation();
-                }
-              : undefined
-          }
+          isTransparent={mouseOverIndex != null && index !== mouseOverIndex}
+          onMouseOver={() => handleMouseOver(index)}
         />
       ))}
+
+      <Bar
+        color={"#00000020"}
+        percentage={1 - totalPercentage}
+        onMouseOver={handleMouseLeave}
+      />
     </div>
   );
 }
@@ -52,31 +67,23 @@ export function BarChart({
 function Bar({
   color,
   percentage,
+  isTransparent,
   onMouseOver,
 }: {
   color: string;
   percentage: number;
-  onMouseOver?: MouseEventHandler<HTMLDivElement>;
+  isTransparent?: boolean;
+  onMouseOver: MouseEventHandler<HTMLDivElement>;
 }) {
-  const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-
   return (
     <div
-      style={{ backgroundColor: color, width: `${percentage * 100}%` }}
-      onMouseOver={
-        onMouseOver
-          ? (event) => {
-              setIsMouseOver(true);
-              onMouseOver?.(event);
-            }
-          : undefined
-      }
-      onMouseLeave={() => setIsMouseOver(false)}
-    >
-      <div
-        className={cx("size-full", "bg-[#ffffff40]")}
-        style={{ visibility: isMouseOver ? "visible" : "hidden" }}
-      />
-    </div>
+      className={cx("transition-all")}
+      style={{
+        backgroundColor: color,
+        opacity: isTransparent ? 0.25 : 1,
+        width: `${percentage * 100}%`,
+      }}
+      onMouseOver={onMouseOver}
+    />
   );
 }

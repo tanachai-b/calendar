@@ -22,9 +22,9 @@ export default function Finance() {
         )}
       >
         <div className={cx("flex", "flex-col", "p-x20", "gap-x20")}>
-          <BanksCard />
-
           <AccountsCard />
+
+          <BanksCard />
         </div>
       </div>
     </div>
