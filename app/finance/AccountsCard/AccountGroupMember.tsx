@@ -16,7 +16,21 @@ export function AccountGroupMember({
   percentage: number;
 }) {
   return (
-    <div className={cx("flex", "flex-row", "flex-wrap", "gap-x10")}>
+    <div
+      className={cx(
+        "flex",
+        "flex-row",
+        "flex-wrap",
+
+        "px-x20",
+        "py-x10",
+        "gap-x10",
+
+        "hover:bg-[#00000010]",
+        "active:bg-[#00000020]",
+        "transition-all"
+      )}
+    >
       <div
         className={cx(
           "grow",

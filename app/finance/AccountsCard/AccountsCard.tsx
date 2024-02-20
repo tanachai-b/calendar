@@ -2,7 +2,6 @@ import cx from "classnames";
 
 import { Card } from "../components/Card";
 import { accounts } from "../sample-data";
-import { AccountGroup } from "./AccountGroup";
 import { AccountGroupMember } from "./AccountGroupMember";
 import { InteractiveBarChart } from "./InteractiveBarChart";
 
@@ -32,9 +31,13 @@ export function AccountsCard() {
         <InteractiveBarChart chartData={chartData} totalValue={totalBalance} />
       </div>
 
-      <div className={cx("flex", "flex-col", "p-x10", "gap-x10")}>
-        {accountGroups.map((group, index) => (
-          <AccountGroup key={index} name={group.name}>
+      <div className={cx("flex", "flex-col", "pb-x10")}>
+        {accountGroups.map((group) => (
+          <>
+            <div className={cx("p-x10", "pb-x0", "text-[#00000080]")}>
+              {group.name}
+            </div>
+
             {group.members.map((account, index) => (
               <AccountGroupMember
                 key={index}
@@ -47,7 +50,7 @@ export function AccountsCard() {
                 percentage={account.balance / totalBalance}
               />
             ))}
-          </AccountGroup>
+          </>
         ))}
       </div>
     </Card>
