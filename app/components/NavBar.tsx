@@ -9,7 +9,7 @@ export function NavBar({ className }: { className?: string }) {
   return (
     <nav className={`flex flex-wrap px-2.5 ${className}`}>
       <IconButton
-        icon={<Icon className="text-xl" icon="palette" />}
+        icon={<Icon className="text-xl" icon="account_balance" />}
         text="Finance"
         active={pathname === "/finance"}
         onClick={() => router.push("/finance")}
