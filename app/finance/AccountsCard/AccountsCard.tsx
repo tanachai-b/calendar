@@ -38,7 +38,12 @@ export function AccountsCard() {
             {group.members.map((account, index) => (
               <AccountGroupMember
                 key={index}
-                {...account}
+                color={account.color}
+                name={account.name}
+                number={account.number}
+                balance={account.balance.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
                 percentage={account.balance / totalBalance}
               />
             ))}

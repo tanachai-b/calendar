@@ -11,7 +11,6 @@ export function BarChart({
   className?: string;
   style?: CSSProperties;
   bars: { color: string; percentage: number }[];
-  maxValue?: number;
   onMouseOver?: (index: number) => void;
   onMouseLeave?: () => void;
 }) {

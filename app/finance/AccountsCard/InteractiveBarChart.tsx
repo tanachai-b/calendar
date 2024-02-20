@@ -25,12 +25,15 @@ export function InteractiveBarChart({
           color: bar.color,
           percentage: bar.value / totalValue,
         }))}
-        maxValue={totalValue}
         onMouseOver={(index) => setMouseOverIndex(index)}
         onMouseLeave={() => setMouseOverIndex(undefined)}
       />
 
-      <LabelValue color={color} label={label} value={value} />
+      <LabelValue
+        color={color}
+        label={label}
+        value={value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+      />
     </div>
   );
 }
@@ -42,7 +45,7 @@ function LabelValue({
 }: {
   color: string;
   label: string;
-  value: number;
+  value: string;
 }) {
   return (
     <div className={cx("flex", "flex-row", "items-center", "gap-x5")}>
@@ -54,9 +57,7 @@ function LabelValue({
       <div className={cx("grow", "text-[#00000080]")}>{label} </div>
 
       <div className={cx("shrink-0", "text-right")}>
-        <span className={cx("text-x20", "font-light")}>
-          {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-        </span>
+        <span className={cx("text-x20", "font-light")}>{value}</span>
 
         <span className={cx("text-[#00000080]")}> THB</span>
       </div>

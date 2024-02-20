@@ -12,16 +12,7 @@ export function Card({
 }) {
   return (
     <div
-      className={cx(
-        "rounded-x10",
-        "bg-[#ffffff]",
-
-        "border",
-        "border-[#00000010]",
-        "shadow-x10",
-
-        className
-      )}
+      className={cx("rounded-x10", "bg-[#ffffff]", "shadow-x10", className)}
       style={style}
     >
       {children}

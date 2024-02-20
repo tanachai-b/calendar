@@ -12,53 +12,45 @@ export function AccountGroupMember({
   color: string;
   name: string;
   number: string;
-  balance: number;
+  balance: string;
   percentage: number;
 }) {
   return (
-    <div
-      className={cx(
-        "grid",
-        "grid-flow-col",
-        "grid-rows-[repeat(2,auto)]",
-        "grid-cols-[auto,1fr,auto]",
-        "gap-x-x10",
-        "items-center"
-      )}
-    >
-      <div
-        className={cx("rounded-full", "size-x15")}
-        style={{ backgroundColor: color }}
-      />
-      <div />
-
-      <div className={cx("font-medium")}>{name}</div>
-
-      <div className={cx("text-[#00000080]")}>{number}</div>
-
-      <div className={cx("h-full", "pl-x10", "text-right")}>
-        <span className={cx("text-x20", "font-light", "leading-none")}>
-          {balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-        </span>
-
-        <span className={cx("text-[#00000080]")}> THB</span>
-      </div>
-
+    <div className={cx("flex", "flex-row", "flex-wrap", "gap-x10")}>
       <div
         className={cx(
-          "size-full",
-          "pt-x5",
+          "grow",
 
-          "flex",
-          "flex-row",
-          "justify-end",
-          "items-start"
+          "grid",
+          "grid-cols-[auto_1fr]",
+          "gap-x-x5",
+          "items-center"
         )}
       >
+        <div
+          className={cx("rounded-full", "size-x15")}
+          style={{ backgroundColor: color }}
+        />
+
+        <div className={cx("font-medium")}>{name}</div>
+
+        <div />
+
+        <div className={cx("text-[#00000080]")}>{number}</div>
+      </div>
+
+      <div className={cx("grow", "flex", "flex-col", "items-end", "gap-x5")}>
+        <div>
+          <span className={cx("text-x20", "font-light", "leading-none")}>
+            {balance}
+          </span>
+
+          <span className={cx("text-[#00000080]")}> THB</span>
+        </div>
+
         <BarChart
           className={cx("h-x7", "w-x150")}
-          bars={[{ color: color, percentage: percentage }]}
-          maxValue={1}
+          bars={[{ color, percentage }]}
         />
       </div>
     </div>
