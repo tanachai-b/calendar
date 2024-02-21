@@ -22,8 +22,9 @@ export default function Finance() {
           "text-[#000000ff]"
         )}
       >
-        <AccountsCard accounts={accounts} />
         <div className={cx("flex", "flex-col", "p-x20", "gap-x20")}>
+          <AccountsCard accounts={accounts} />
+
           <BanksCard />
         </div>
       </div>
