@@ -1,18 +1,3 @@
-export type Bank = {
-  color: string;
-  name: string;
-  acronym: string;
-};
-
-export const banks: Bank[] = [
-  { color: "#0000C0", name: "Bangkok Bank", acronym: "BBL" },
-  { color: "#40C0FF", name: "Krungthai Bank", acronym: "KTB" },
-  { color: "#FF8040", name: "Government Housing Bank", acronym: "GHB" },
-  { color: "#008040", name: "Kasikorn Bank", acronym: "KBank" },
-  { color: "#FFC040", name: "Bank of Ayudhaya", acronym: "BAY" },
-  { color: "#4000C0", name: "Siam Commercial Bank", acronym: "SCB" },
-];
-
 export type Account = {
   bank: string;
   color: string;
@@ -58,12 +43,27 @@ export const accounts: Account[] = [
     balance: 50000,
   },
   {
-    bank: "Kasikorn Bank",
+    bank: "Kasikorn Bank (KBank)",
     color: "#008040",
     name: "KBank Savings",
     number: "098-765-4321",
     balance: 12500,
   },
+];
+
+export type Bank = {
+  color: string;
+  name: string;
+  acronym: string;
+};
+
+export const banks: Bank[] = [
+  { color: "#0000C0", name: "Bangkok Bank", acronym: "BBL" },
+  { color: "#40C0FF", name: "Krungthai Bank", acronym: "KTB" },
+  { color: "#FF8040", name: "Government Housing Bank", acronym: "GHB" },
+  { color: "#008040", name: "Kasikorn Bank", acronym: "KBank" },
+  { color: "#FFC040", name: "Bank of Ayudhaya", acronym: "BAY" },
+  { color: "#4000C0", name: "Siam Commercial Bank", acronym: "SCB" },
 ];
 
 export type AccountTransaction =

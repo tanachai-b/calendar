@@ -2,7 +2,7 @@ import cx from "classnames";
 
 import { BarChart } from "../components/BarChart";
 
-export function AccountGroupMember({
+export function AccountRow({
   color,
   name,
   number,
