@@ -2,11 +2,20 @@ import cx from "classnames";
 import { useState } from "react";
 
 import { Card } from "../components/Card";
-import { accounts } from "../sample-data";
 import { AccountRow } from "./AccountRow";
 import { InteractiveBarChart } from "./InteractiveBarChart";
 
-export function AccountsCard() {
+export function AccountsCard({
+  accounts = [],
+}: {
+  accounts?: {
+    bank: string;
+    color: string;
+    name: string;
+    number: string;
+    balance: number;
+  }[];
+}) {
   const totalBalance = accounts.reduce(
     (total, account) => total + account.balance,
     0

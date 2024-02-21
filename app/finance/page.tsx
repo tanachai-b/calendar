@@ -5,6 +5,7 @@ import cx from "classnames";
 import { NavBar } from "../components";
 import { AccountsCard } from "./AccountsCard/AccountsCard";
 import { BanksCard } from "./BanksCard";
+import { accounts } from "./sample-data";
 
 export default function Finance() {
   return (
@@ -22,7 +23,7 @@ export default function Finance() {
         )}
       >
         <div className={cx("flex", "flex-col", "p-x20", "gap-x20")}>
-          <AccountsCard />
+          <AccountsCard accounts={accounts} />
 
           <BanksCard />
         </div>

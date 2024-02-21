@@ -1,12 +1,6 @@
-export type Account = {
-  bank: string;
-  color: string;
-  name: string;
-  number: string;
-  balance: number;
-};
+import { AccountsCard } from "./AccountsCard/AccountsCard";
 
-export const accounts: Account[] = [
+export const accounts: Parameters<typeof AccountsCard>[0]["accounts"] = [
   {
     bank: "Bangkok Bank (BBL)",
     color: "#4040C0",
@@ -68,17 +62,17 @@ export const banks: Bank[] = [
 
 export type AccountTransaction =
   | {
-      date: string;
       type: "Income/Expense";
+      date: string;
       account: string;
       amount: number;
       balance: number;
       category: string;
-      notes?: string;
+      notes: string;
     }
   | {
+      type: "Internal Movement";
       date: string;
-      type: "Internal";
       accountFrom: string;
       accountTo: string;
       amount: number;
@@ -89,8 +83,8 @@ export type AccountTransaction =
 
 export const accountTransactions: AccountTransaction[] = [
   {
-    date: "2024-02-16",
     type: "Income/Expense",
+    date: "2024-02-16",
     account: "BBL Savings",
     amount: 3000,
     balance: 8500,
@@ -98,8 +92,8 @@ export const accountTransactions: AccountTransaction[] = [
     notes: "savings interest",
   },
   {
-    date: "2024-02-16",
     type: "Income/Expense",
+    date: "2024-02-16",
     account: "BBL Savings",
     amount: -750,
     balance: 7750,
@@ -107,8 +101,8 @@ export const accountTransactions: AccountTransaction[] = [
     notes: "ordering dinner",
   },
   {
+    type: "Internal Movement",
     date: "2024-02-16",
-    type: "Internal",
     accountFrom: "BBL Savings",
     accountTo: "KTB Savings",
     amount: 4500,
