@@ -1,5 +1,7 @@
 import cx from "classnames";
 
+import { HTMLAttributes } from "react";
+
 import { BarChart } from "../components/BarChart";
 
 export function AccountRow({
@@ -8,15 +10,17 @@ export function AccountRow({
   number,
   balance,
   percentage,
+  ...props
 }: {
   color: string;
   name: string;
   number: string;
   balance: string;
   percentage: number;
-}) {
+} & HTMLAttributes<HTMLDivElement>) {
   return (
     <div
+      {...props}
       className={cx(
         "flex",
         "flex-row",
@@ -26,10 +30,11 @@ export function AccountRow({
         "py-x10",
         "gap-x10",
 
-        "hover:bg-[#00000010]",
-        "active:bg-[#00000020]",
-        "transition-all"
+        "transition-all",
+
+        props.className
       )}
+      style={props.style}
     >
       <div
         className={cx(

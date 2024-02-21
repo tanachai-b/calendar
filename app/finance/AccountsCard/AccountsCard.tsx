@@ -1,4 +1,5 @@
 import cx from "classnames";
+import { useState } from "react";
 
 import { Card } from "../components/Card";
 import { accounts } from "../sample-data";
@@ -13,13 +14,16 @@ export function AccountsCard() {
 
   const accountGroups = group(accounts, (account) => account.bank);
 
-  const chartData = accountGroups
+  const chartBars = accountGroups
     .flatMap((group) => group.members)
     .map((account) => ({
       color: account.color,
       label: account.name,
       value: account.balance,
     }));
+
+  const [focusAccount, setFocusAccount] = useState<string>();
+  const focusIndex = chartBars.findIndex((bar) => bar.label === focusAccount);
 
   return (
     <Card className={cx("max-w-x500", "flex", "flex-col")}>
@@ -28,7 +32,14 @@ export function AccountsCard() {
       </div>
 
       <div className={cx("p-x20")}>
-        <InteractiveBarChart chartData={chartData} totalValue={totalBalance} />
+        <InteractiveBarChart
+          bars={chartBars}
+          totalValue={totalBalance}
+          focus={focusIndex >= 0 ? focusIndex : undefined}
+          onFocusChange={(index) =>
+            setFocusAccount(index != null ? chartBars[index].label : undefined)
+          }
+        />
       </div>
 
       <div className={cx("flex", "flex-col", "pb-x10")}>
@@ -39,6 +50,10 @@ export function AccountsCard() {
             {group.members.map((account, index) => (
               <AccountRow
                 key={index}
+                className={cx({
+                  "opacity-50":
+                    focusAccount != null && focusAccount !== account.name,
+                })}
                 color={account.color}
                 name={account.name}
                 number={account.number}
@@ -46,6 +61,8 @@ export function AccountsCard() {
                   minimumFractionDigits: 2,
                 })}
                 percentage={account.balance / totalBalance}
+                onMouseOver={() => setFocusAccount(account.name)}
+                onMouseLeave={() => setFocusAccount(undefined)}
               />
             ))}
           </>

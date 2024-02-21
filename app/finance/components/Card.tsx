@@ -1,21 +1,19 @@
 import cx from "classnames";
-import { CSSProperties, ReactNode } from "react";
+import { HTMLAttributes } from "react";
 
-export function Card({
-  className,
-  style,
-  children,
-}: {
-  className?: string;
-  style?: CSSProperties;
-  children?: ReactNode;
-}) {
+export function Card({ ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cx("rounded-x10", "bg-[#ffffff]", "shadow-x10", className)}
-      style={style}
+      {...props}
+      className={cx(
+        "rounded-x10",
+        "bg-[#ffffff]",
+        "shadow-x10",
+
+        props.className
+      )}
     >
-      {children}
+      {props.children}
     </div>
   );
 }

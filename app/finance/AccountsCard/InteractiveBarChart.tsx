@@ -1,32 +1,39 @@
 import cx from "classnames";
-import { useState } from "react";
 
 import { BarChart } from "../components/BarChart";
 
 export function InteractiveBarChart({
-  chartData,
+  bars,
   totalValue,
+  focus,
+  onFocusChange,
 }: {
-  chartData: { color: string; label: string; value: number }[];
+  bars: { color: string; label: string; value: number }[];
   totalValue: number;
+  focus?: number;
+  onFocusChange: (focus?: number) => void;
 }) {
-  const [mouseOverIndex, setMouseOverIndex] = useState<number>();
+  const reColoredBars = bars.map((bar, index) => ({
+    ...bar,
+    color:
+      `${bar.color.slice(0, 7)}` +
+      `${focus != null && focus !== index ? "40" : "FF"}`,
+  }));
 
-  const legend =
-    mouseOverIndex != null
-      ? chartData[mouseOverIndex]
-      : { color: "#00000020", label: "Total", value: totalValue };
+  const legend = focus
+    ? bars[focus]
+    : { color: `#00000020`, label: "Total", value: totalValue };
 
   return (
     <div className={cx("flex", "flex-col", "w-full")}>
       <BarChart
         className={cx("h-x20")}
-        bars={chartData.map((bar) => ({
+        bars={reColoredBars.map((bar) => ({
           color: bar.color,
           percentage: bar.value / totalValue,
         }))}
-        onMouseOver={setMouseOverIndex}
-        onMouseLeave={() => setMouseOverIndex(undefined)}
+        onMouseOver={onFocusChange}
+        onMouseLeave={() => onFocusChange(undefined)}
       />
 
       <Legend
