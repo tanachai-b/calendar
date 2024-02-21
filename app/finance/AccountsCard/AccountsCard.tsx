@@ -16,12 +16,14 @@ export function AccountsCard({
     balance: number;
   }[];
 }) {
-  const totalBalance = accounts.reduce(
+  const sortedAccounts = accounts.sort((a, b) => b.balance - a.balance);
+
+  const totalBalance = sortedAccounts.reduce(
     (total, account) => total + account.balance,
     0
   );
 
-  const accountGroups = group(accounts, (account) => account.bank);
+  const accountGroups = groups(sortedAccounts, (account) => account.bank);
 
   const chartBars = accountGroups
     .flatMap((group) => group.members)
@@ -81,7 +83,7 @@ export function AccountsCard({
   );
 }
 
-function group<T>(items: T[], groupBy: (item: T) => string) {
+function groups<T>(items: T[], groupBy: (item: T) => string) {
   return items.reduce<{ name: string; members: T[] }[]>((groups, item) => {
     const group = groups.find((group) => group.name === groupBy(item));
     if (!group) {
