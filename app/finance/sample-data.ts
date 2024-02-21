@@ -60,54 +60,62 @@ export const banks: Bank[] = [
   { color: "#4000C0", name: "Siam Commercial Bank", acronym: "SCB" },
 ];
 
-export type AccountTransaction =
-  | {
-      type: "Income/Expense";
-      date: string;
-      account: string;
-      amount: number;
-      balance: number;
-      category: string;
-      notes: string;
-    }
-  | {
-      type: "Internal Movement";
-      date: string;
-      accountFrom: string;
-      accountTo: string;
-      amount: number;
-      balanceFrom: number;
-      balanceTo: number;
-      notes: string;
-    };
+export type AccountTransaction = {
+  type: "Income/Expense" | "Internal Movement";
+  date: string;
+  sortOrder: number;
+  incomeExpense?: {
+    account: string;
+    amount: number;
+    balance: number;
+    category: string;
+  };
+  internalMovement?: {
+    accountFrom: string;
+    accountTo: string;
+    amount: number;
+    balanceFrom: number;
+    balanceTo: number;
+  };
+  notes: string;
+};
 
 export const accountTransactions: AccountTransaction[] = [
   {
     type: "Income/Expense",
     date: "2024-02-16",
-    account: "BBL Savings",
-    amount: 3000,
-    balance: 8500,
-    category: "Interest",
+    sortOrder: 0,
+    incomeExpense: {
+      account: "BBL Savings",
+      amount: 3000,
+      balance: 8500,
+      category: "Interest",
+    },
     notes: "savings interest",
   },
   {
     type: "Income/Expense",
     date: "2024-02-16",
-    account: "BBL Savings",
-    amount: -750,
-    balance: 7750,
-    category: "Food",
+    sortOrder: 1,
+    incomeExpense: {
+      account: "BBL Savings",
+      amount: -750,
+      balance: 7750,
+      category: "Food",
+    },
     notes: "ordering dinner",
   },
   {
     type: "Internal Movement",
     date: "2024-02-16",
-    accountFrom: "BBL Savings",
-    accountTo: "KTB Savings",
-    amount: 4500,
-    balanceFrom: 5500,
-    balanceTo: 5500,
+    sortOrder: 2,
+    internalMovement: {
+      accountFrom: "BBL Savings",
+      accountTo: "KTB Savings",
+      amount: 4500,
+      balanceFrom: 5500,
+      balanceTo: 5500,
+    },
     notes: "move to own account",
   },
 ];
