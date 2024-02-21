@@ -17,7 +17,7 @@ export function InteractiveBarChart({
     ...bar,
     color:
       `${bar.color.slice(0, 7)}` +
-      `${focus != null && focus !== index ? "40" : "FF"}`,
+      `${focus != null && focus !== index ? "40" : "ff"}`,
   }));
 
   const legend = focus

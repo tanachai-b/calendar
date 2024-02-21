@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useState } from "react";
+import { HTMLAttributes, useState } from "react";
 
 import { Card } from "../components/Card";
 import { AccountRow } from "./AccountRow";
@@ -7,6 +7,7 @@ import { InteractiveBarChart } from "./InteractiveBarChart";
 
 export function AccountsCard({
   accounts = [],
+  ...props
 }: {
   accounts?: {
     bank: string;
@@ -15,7 +16,7 @@ export function AccountsCard({
     number: string;
     balance: number;
   }[];
-}) {
+} & HTMLAttributes<HTMLDivElement>) {
   const sortedAccounts = accounts.sort((a, b) => b.balance - a.balance);
 
   const totalBalance = sortedAccounts.reduce(
@@ -37,7 +38,7 @@ export function AccountsCard({
   const focusIndex = chartBars.findIndex((bar) => bar.label === focusAccount);
 
   return (
-    <Card className={cx("max-w-x500", "flex", "flex-col")}>
+    <Card {...props} className={cx("flex", "flex-col", props.className)}>
       <div className={cx("p-x10", "pb-x0", "text-x20", "font-light")}>
         Accounts
       </div>
@@ -53,14 +54,14 @@ export function AccountsCard({
         />
       </div>
 
-      <div className={cx("flex", "flex-col", "pb-x10")}>
-        {accountGroups.map((group) => (
+      <div className={cx("flex", "flex-col", "pb-x10", "overflow-scroll")}>
+        {accountGroups.map((group, groupIndex) => (
           <>
-            <GroupName text={group.name} />
+            <GroupName key={groupIndex} text={group.name} />
 
             {group.members.map((account, index) => (
               <AccountRow
-                key={index}
+                key={`${groupIndex}-${index}`}
                 className={cx({
                   "opacity-50":
                     focusAccount != null && focusAccount !== account.name,
