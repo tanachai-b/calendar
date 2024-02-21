@@ -17,7 +17,9 @@ export function AccountsCard({
     balance: number;
   }[];
 } & HTMLAttributes<HTMLDivElement>) {
-  const sortedAccounts = accounts.sort((a, b) => b.balance - a.balance);
+  const sortedAccounts = accounts
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .sort((a, b) => b.balance - a.balance);
 
   const totalBalance = sortedAccounts.reduce(
     (total, account) => total + account.balance,
@@ -54,7 +56,9 @@ export function AccountsCard({
         />
       </div>
 
-      <div className={cx("flex", "flex-col", "pb-x10", "overflow-scroll")}>
+      <div
+        className={cx("grow", "flex", "flex-col", "pb-x10", "overflow-scroll")}
+      >
         {accountGroups.map((group, groupIndex) => (
           <>
             <GroupName key={groupIndex} text={group.name} />
@@ -113,9 +117,7 @@ function GroupName({ text }: { text: string }) {
     >
       {text}
 
-      <div
-        className={cx("grow", "h-full", "border-b-x1", "border-[#00000020]")}
-      />
+      <div className={cx("grow", "border-b-x1", "border-[#00000020]")} />
     </div>
   );
 }

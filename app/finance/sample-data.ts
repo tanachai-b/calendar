@@ -2,14 +2,14 @@ import { AccountsCard } from "./AccountsCard/AccountsCard";
 
 export const accounts: Parameters<typeof AccountsCard>[0]["accounts"] = [
   {
-    bank: "BBL",
+    bank: "Bangkok Bank",
     color: "#0000c0",
     name: "BBL e-Savings",
     number: "890-0-169434",
     balance: 1000000,
   },
   {
-    bank: "BBL",
+    bank: "Bangkok Bank",
     color: "#4040c0",
     name: "BBL Savings",
     number: "640-0-943872",
