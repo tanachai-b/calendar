@@ -6,6 +6,7 @@ import { NavBar } from "../components";
 import { AccountsCard } from "./AccountsCard/AccountsCard";
 import { BanksCard } from "./BanksCard";
 import { accounts } from "./sample-data";
+import { TransactionsCard } from "./TransactionsCard";
 
 import "./page.css";
 
@@ -45,12 +46,14 @@ export default function Finance() {
             "items-start"
           )}
         >
+          <BanksCard />
+
           <AccountsCard
             className={cx("max-h-full", "w-x500")}
             accounts={accounts}
           />
 
-          <BanksCard />
+          <TransactionsCard />
         </div>
       </div>
     </div>

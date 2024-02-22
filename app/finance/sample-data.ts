@@ -1,6 +1,23 @@
-import { AccountsCard } from "./AccountsCard/AccountsCard";
+export const banks: {
+  color: string;
+  name: string;
+  acronym: string;
+}[] = [
+  { color: "#0000c0", name: "Bangkok Bank", acronym: "BBL" },
+  { color: "#40c0ff", name: "Krungthai Bank", acronym: "KTB" },
+  { color: "#ff8040", name: "Government Housing Bank", acronym: "GHB" },
+  { color: "#008040", name: "Kasikorn Bank", acronym: "KBank" },
+  { color: "#ffc040", name: "Bank of Ayudhaya", acronym: "BAY" },
+  { color: "#4000c0", name: "Siam Commercial Bank", acronym: "SCB" },
+];
 
-export const accounts: Parameters<typeof AccountsCard>[0]["accounts"] = [
+export const accounts: {
+  bank: string;
+  color: string;
+  name: string;
+  number: string;
+  balance: number;
+}[] = [
   {
     bank: "Bangkok Bank",
     color: "#0000c0",
@@ -101,46 +118,36 @@ export const accounts: Parameters<typeof AccountsCard>[0]["accounts"] = [
   },
 ];
 
-export type Bank = {
-  color: string;
-  name: string;
-  acronym: string;
-};
-
-export const banks: Bank[] = [
-  { color: "#0000c0", name: "Bangkok Bank", acronym: "BBL" },
-  { color: "#40c0ff", name: "Krungthai Bank", acronym: "KTB" },
-  { color: "#ff8040", name: "Government Housing Bank", acronym: "GHB" },
-  { color: "#008040", name: "Kasikorn Bank", acronym: "KBank" },
-  { color: "#ffc040", name: "Bank of Ayudhaya", acronym: "BAY" },
-  { color: "#4000c0", name: "Siam Commercial Bank", acronym: "SCB" },
-];
-
-export type AccountTransaction = {
-  type: "Income/Expense" | "Internal Movement";
+export const transactions: ({
   date: string;
   sortOrder: number;
-  incomeExpense?: {
-    account: string;
-    amount: number;
-    balance: number;
-    category: string;
-  };
-  internalMovement?: {
-    accountFrom: string;
-    accountTo: string;
-    amount: number;
-    balanceFrom: number;
-    balanceTo: number;
-  };
-  notes: string;
-};
-
-export const accountTransactions: AccountTransaction[] = [
+} & (
+  | {
+      type: "Income/Expense";
+      incomeExpense: {
+        account: string;
+        amount: number;
+        balance: number;
+        category: string;
+      };
+    }
+  | {
+      type: "Internal Movement";
+      internalMovement: {
+        accountFrom: string;
+        accountTo: string;
+        amount: number;
+        balanceFrom: number;
+        balanceTo: number;
+      };
+    }
+) & {
+    notes: string;
+  })[] = [
   {
-    type: "Income/Expense",
     date: "2024-02-16",
     sortOrder: 0,
+    type: "Income/Expense",
     incomeExpense: {
       account: "BBL Savings",
       amount: 3000,
@@ -150,9 +157,9 @@ export const accountTransactions: AccountTransaction[] = [
     notes: "savings interest",
   },
   {
-    type: "Income/Expense",
     date: "2024-02-16",
     sortOrder: 1,
+    type: "Income/Expense",
     incomeExpense: {
       account: "BBL Savings",
       amount: -750,
@@ -162,9 +169,9 @@ export const accountTransactions: AccountTransaction[] = [
     notes: "ordering dinner",
   },
   {
-    type: "Internal Movement",
     date: "2024-02-16",
     sortOrder: 2,
+    type: "Internal Movement",
     internalMovement: {
       accountFrom: "BBL Savings",
       accountTo: "KTB Savings",

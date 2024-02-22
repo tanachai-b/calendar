@@ -34,7 +34,6 @@ export function AccountRow({
 
         props.className
       )}
-      style={props.style}
     >
       <div
         className={cx(
