@@ -7,23 +7,48 @@ import { AccountsCard } from "./AccountsCard/AccountsCard";
 import { BanksCard } from "./BanksCard";
 import { accounts } from "./sample-data";
 
+import "./page.css";
+
 export default function Finance() {
   return (
-    <div className={cx("h-full", "flex", "flex-col", "bg-black")}>
+    <div
+      className={cx(
+        "h-full",
+
+        "flex",
+        "flex-col",
+        "bg-black"
+      )}
+    >
       <NavBar className={cx("border-b", "border-highlight_yellow")} />
 
       <div
         className={cx(
           "grow",
-          "overflow-scroll",
 
           "bg-[#202020]",
           "text-x13",
-          "text-[#000000ff]"
+          "text-[#000000ff]",
+
+          "overflow-auto",
+          "light-scroll-bar"
         )}
       >
-        <div className={cx("h-full", "flex", "flex-row", "p-x20", "gap-x20")}>
-          <AccountsCard className={cx("w-x500")} accounts={accounts} />
+        <div
+          className={cx(
+            "size-full",
+
+            "flex",
+            "flex-row",
+            "p-x20",
+            "gap-x20",
+            "items-start"
+          )}
+        >
+          <AccountsCard
+            className={cx("max-h-full", "w-x500")}
+            accounts={accounts}
+          />
 
           <BanksCard />
         </div>

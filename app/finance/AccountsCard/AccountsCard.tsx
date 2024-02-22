@@ -5,6 +5,8 @@ import { Card } from "../components/Card";
 import { AccountRow } from "./AccountRow";
 import { InteractiveBarChart } from "./InteractiveBarChart";
 
+import "../page.css";
+
 export function AccountsCard({
   accounts = [],
   ...props
@@ -40,7 +42,10 @@ export function AccountsCard({
   const focusIndex = chartBars.findIndex((bar) => bar.label === focusAccount);
 
   return (
-    <Card {...props} className={cx("flex", "flex-col", props.className)}>
+    <Card
+      {...props}
+      className={cx("flex", "flex-col", "overflow-hidden", props.className)}
+    >
       <div className={cx("p-x10", "pb-x0", "text-x20", "font-light")}>
         Accounts
       </div>
@@ -57,7 +62,16 @@ export function AccountsCard({
       </div>
 
       <div
-        className={cx("grow", "flex", "flex-col", "pb-x10", "overflow-scroll")}
+        className={cx(
+          "grow",
+
+          "flex",
+          "flex-col",
+          "pb-x10",
+
+          "overflow-auto",
+          "dark-scroll-bar"
+        )}
       >
         {accountGroups.map((group, groupIndex) => (
           <>
@@ -66,10 +80,10 @@ export function AccountsCard({
             {group.members.map((account, index) => (
               <AccountRow
                 key={`${groupIndex}-${index}`}
-                className={cx({
-                  "opacity-50":
-                    focusAccount != null && focusAccount !== account.name,
-                })}
+                // className={cx({
+                //   "opacity-50":
+                //     focusAccount != null && focusAccount !== account.name,
+                // })}
                 color={account.color}
                 name={account.name}
                 number={account.number}
@@ -77,8 +91,8 @@ export function AccountsCard({
                   minimumFractionDigits: 2,
                 })}
                 percentage={account.balance / totalBalance}
-                onMouseOver={() => setFocusAccount(account.name)}
-                onMouseLeave={() => setFocusAccount(undefined)}
+                // onMouseOver={() => setFocusAccount(account.name)}
+                // onMouseLeave={() => setFocusAccount(undefined)}
               />
             ))}
           </>

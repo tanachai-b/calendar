@@ -11,7 +11,7 @@ export function InteractiveBarChart({
   bars: { color: string; label: string; value: number }[];
   totalValue: number;
   focus?: number;
-  onFocusChange: (focus?: number) => void;
+  onFocusChange?: (focus?: number) => void;
 }) {
   const reColoredBars = bars.map((bar, index) => ({
     ...bar,
@@ -20,9 +20,10 @@ export function InteractiveBarChart({
       `${focus != null && focus !== index ? "40" : "ff"}`,
   }));
 
-  const legend = focus
-    ? bars[focus]
-    : { color: `#00000020`, label: "Total", value: totalValue };
+  const legend =
+    focus != null
+      ? bars[focus]
+      : { color: `#00000020`, label: "Total", value: totalValue };
 
   return (
     <div className={cx("flex", "flex-col", "w-full")}>
@@ -33,7 +34,7 @@ export function InteractiveBarChart({
           percentage: bar.value / totalValue,
         }))}
         onMouseOver={onFocusChange}
-        onMouseLeave={() => onFocusChange(undefined)}
+        onMouseLeave={() => onFocusChange?.(undefined)}
       />
 
       <Legend
@@ -59,7 +60,7 @@ function Legend({
   return (
     <div className={cx("flex", "flex-row", "items-center", "gap-x5")}>
       <div
-        className={cx("rounded-full", "size-x15")}
+        className={cx("rounded-full", "size-x15", "transition-all")}
         style={{ backgroundColor: color }}
       />
 
