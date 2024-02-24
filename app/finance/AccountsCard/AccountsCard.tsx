@@ -28,9 +28,19 @@ export function AccountsCard({
     0
   );
 
-  const accountGroups = groups(sortedAccounts, (account) => account.bank);
+  const groups = group(sortedAccounts, (account) => account.bank);
 
-  const chartBars = accountGroups
+  const groupsWithTotal = groups.map((group) => ({
+    ...group,
+    total: group.members.reduce(
+      (total, account) => (total += account.balance),
+      0
+    ),
+  }));
+
+  const sortedGroups = groupsWithTotal.sort((a, b) => b.total - a.total);
+
+  const chartBars = sortedGroups
     .flatMap((group) => group.members)
     .map((account) => ({
       color: account.color,
@@ -73,7 +83,7 @@ export function AccountsCard({
           "dark-scroll-bar"
         )}
       >
-        {accountGroups.map((group, groupIndex) => (
+        {sortedGroups.map((group, groupIndex) => (
           <>
             <GroupName key={groupIndex} text={group.name} />
 
@@ -102,7 +112,7 @@ export function AccountsCard({
   );
 }
 
-function groups<T>(items: T[], groupBy: (item: T) => string) {
+function group<T>(items: T[], groupBy: (item: T) => string) {
   return items.reduce<{ name: string; members: T[] }[]>((groups, item) => {
     const group = groups.find((group) => group.name === groupBy(item));
     if (!group) {
@@ -118,8 +128,7 @@ function GroupName({ text }: { text: string }) {
   return (
     <div
       className={cx(
-        "p-x10",
-        "pb-x0",
+        "px-x10",
 
         "text-[#00000080]",
 

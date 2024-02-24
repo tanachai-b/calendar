@@ -27,7 +27,7 @@ export function AccountRow({
         "flex-wrap",
 
         "px-x20",
-        "py-x10",
+        "py-x5",
         "gap-x10",
 
         "transition-all",
@@ -50,7 +50,7 @@ export function AccountRow({
           style={{ backgroundColor: color }}
         />
 
-        <div className={cx("font-medium")}>{name}</div>
+        <div>{name}</div>
 
         <div />
 
@@ -59,9 +59,7 @@ export function AccountRow({
 
       <div className={cx("grow", "flex", "flex-col", "items-end", "gap-x5")}>
         <div>
-          <span className={cx("text-x20", "font-light", "leading-none")}>
-            {balance}
-          </span>
+          <span className={cx("text-x15")}>{balance}</span>
 
           <span className={cx("text-[#00000080]")}> THB</span>
         </div>
