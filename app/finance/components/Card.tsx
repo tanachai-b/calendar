@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { HTMLAttributes } from "react";
 
-export function Card({ ...props }: HTMLAttributes<HTMLDivElement>) {
+export function Card(props: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       {...props}
@@ -12,8 +12,6 @@ export function Card({ ...props }: HTMLAttributes<HTMLDivElement>) {
 
         props.className
       )}
-    >
-      {props.children}
-    </div>
+    />
   );
 }

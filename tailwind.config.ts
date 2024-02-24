@@ -137,6 +137,8 @@ const config: Config = {
       x1000: "1000px",
     },
     boxShadow: {
+      none: "none",
+      inner: "inset 0 0 5px 0 #00000080",
       x0: "none",
       x5: "0 2px 5px 0px #00000080",
       x7: "0 3px 7px 0px #00000080",

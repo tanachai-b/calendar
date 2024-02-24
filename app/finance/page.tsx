@@ -5,8 +5,9 @@ import cx from "classnames";
 import { NavBar } from "../components";
 import { AccountsCard } from "./AccountsCard/AccountsCard";
 import { BanksCard } from "./BanksCard";
-import { accounts } from "./sample-data";
+import { DataInputCard } from "./DataInput";
 import { TransactionsCard } from "./TransactionsCard";
+import { accounts } from "./sample-data";
 
 import "./page.css";
 
@@ -18,7 +19,9 @@ export default function Finance() {
 
         "flex",
         "flex-col",
-        "bg-black"
+        "bg-black",
+
+        "overflow-hidden"
       )}
     >
       <NavBar className={cx("border-b", "border-highlight_yellow")} />
@@ -37,13 +40,16 @@ export default function Finance() {
       >
         <div
           className={cx(
-            "size-full",
+            "w-fit",
+            "h-full",
 
             "flex",
             "flex-row",
             "p-x20",
             "gap-x20",
-            "items-start"
+            "items-start",
+
+            "overflow-hidden"
           )}
         >
           <BanksCard />
@@ -54,6 +60,8 @@ export default function Finance() {
           />
 
           <TransactionsCard />
+
+          <DataInputCard className={cx("w-x700", "h-x700", "max-h-full")} />
         </div>
       </div>
     </div>
