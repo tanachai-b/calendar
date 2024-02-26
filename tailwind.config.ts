@@ -65,6 +65,8 @@ const config: Config = {
       x500: "500px",
       x700: "700px",
       x1000: "1000px",
+      x1500: "1500px",
+      x2000: "2000px",
     },
     colors: {
       transparent: "transparent",

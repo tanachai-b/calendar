@@ -36,12 +36,13 @@ export function DataInputCard(props: HTMLAttributes<HTMLDivElement>) {
       {...props}
       className={cx("p-x10", "flex", "flex-row", "gap-x10", props.className)}
     >
-      <div className={cx("flex-1", "flex", "flex-col", "gap-x10")}>
+      <div className={cx("w-x500", "flex", "flex-col", "gap-x10")}>
         <TextArea
           ref={ref1}
           className={cx("flex-1")}
           value={excel}
           onChange={(ev) => handleExcelChange(ev.target.value)}
+          placeholder="Paste text copied from Excel here..."
         />
 
         <TextArea
@@ -49,42 +50,65 @@ export function DataInputCard(props: HTMLAttributes<HTMLDivElement>) {
           className={cx("flex-1")}
           value={json}
           onChange={(ev) => handleJsonChange(ev.target.value)}
+          placeholder="JSON output will be displayed here..."
         />
       </div>
 
       <div className={cx("flex-1", "overflow-auto", "dark-scroll-bar")}>
-        <table style={{ fontFamily: "Calibri", fontSize: 15 }}>
-          <tbody>
-            {table.map((row, index) => (
-              <tr
+        <table style={{ position: "relative" }}>
+          <thead>
+            {(table[0] ?? []).map((cell, index) => (
+              <th
                 key={index}
                 style={{
-                  ...(index === 0
-                    ? {
-                        fontWeight: "bold",
-                        background: "#f0f0f0",
-                        textAlign: "center",
-                      }
-                    : {}),
-                  color: "#ffffff",
-                  background: "#202020",
-                  ...(index > 0
-                    ? parseInt(row[5]) < 0
-                      ? { color: "#ff0080" }
-                      : { color: "#80ff00" }
-                    : {}),
+                  top: 0,
+                  position: "sticky",
+
+                  whiteSpace: "pre",
+                  padding: "5px",
+
+                  background: "#ffffff",
+                  color: "#808080",
+
+                  fontWeight: "normal",
+                  textAlign: "center",
                 }}
               >
+                {cell}
+              </th>
+            ))}
+          </thead>
+
+          <tbody>
+            {table.slice(1).map((row, index) => (
+              <tr key={index}>
                 {row.map((cell, index) => (
                   <td
                     key={index}
-                    style={
-                      {
-                        // border: "thin solid #e0e0e0",
-                      }
-                    }
+                    style={{
+                      whiteSpace: "pre",
+                      padding: "5px",
+                      verticalAlign: "text-top",
+
+                      ...(index === 7 ? { whiteSpace: "wrap" } : {}),
+                    }}
                   >
-                    {cell}
+                    <div
+                      style={{
+                        borderRadius: "5px",
+                        // textAlign: "center",
+
+                        ...(index === 2
+                          ? row[2] === "Expense"
+                            ? { color: "#ffffff", background: "#e00000" }
+                            : row[2] === "Income"
+                            ? { color: "#000000", background: "#00c080" }
+                            : { color: "#000000", background: "#ffe000" }
+                          : { background: "#ffffff", color: "#000000" }),
+                      }}
+                    >
+                      {cell}
+                    </div>
                   </td>
                 ))}
               </tr>

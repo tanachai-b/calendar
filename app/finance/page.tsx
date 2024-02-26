@@ -61,7 +61,7 @@ export default function Finance() {
 
           <TransactionsCard />
 
-          <DataInputCard className={cx("w-x1000", "h-x700", "max-h-full")} />
+          <DataInputCard className={cx("w-[1800px]", "max-h-full")} />
         </div>
       </div>
     </div>
