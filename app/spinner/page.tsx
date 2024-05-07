@@ -21,7 +21,8 @@ export default function SpinnerPage() {
           "justify-center"
         )}
       >
-        <Spinner xprogress={0.67} size={200} stroke={20} speed={3} />
+        {/* <Spinner progress={0.67} size={200} stroke={20} speed={3} /> */}
+        <Spinner size={200} stroke={20} speed={3} />
       </div>
     </div>
   );
