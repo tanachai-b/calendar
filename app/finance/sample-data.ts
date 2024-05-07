@@ -121,64 +121,52 @@ export const accounts: {
 export const transactions: ({
   date: string;
   sortOrder: number;
+  amount: number;
+  notes: string;
 } & (
   | {
       type: "Income/Expense";
-      incomeExpense: {
-        account: string;
-        amount: number;
-        balance: number;
-        category: string;
-      };
+      category: string;
+      account: string;
+      balance: number;
     }
   | {
-      type: "Internal Movement";
-      internalMovement: {
-        accountFrom: string;
-        accountTo: string;
-        amount: number;
-        balanceFrom: number;
-        balanceTo: number;
-      };
+      type: "Transfer";
+      accountFrom: string;
+      balanceFrom: number;
+      accountTo: string;
+      balanceTo: number;
     }
-) & {
-    notes: string;
-  })[] = [
+))[] = [
   {
     date: "2024-02-16",
     sortOrder: 0,
     type: "Income/Expense",
-    incomeExpense: {
-      account: "BBL Savings",
-      amount: 3000,
-      balance: 8500,
-      category: "Interest",
-    },
+    amount: 3000,
+    account: "BBL Savings",
+    balance: 8500,
+    category: "Interest",
     notes: "savings interest",
   },
   {
     date: "2024-02-16",
     sortOrder: 1,
     type: "Income/Expense",
-    incomeExpense: {
-      account: "BBL Savings",
-      amount: -750,
-      balance: 7750,
-      category: "Food",
-    },
+    amount: -750,
+    account: "BBL Savings",
+    balance: 7750,
+    category: "Food",
     notes: "ordering dinner",
   },
   {
     date: "2024-02-16",
     sortOrder: 2,
-    type: "Internal Movement",
-    internalMovement: {
-      accountFrom: "BBL Savings",
-      accountTo: "KTB Savings",
-      amount: 4500,
-      balanceFrom: 5500,
-      balanceTo: 5500,
-    },
+    type: "Transfer",
+    amount: 4500,
+    accountFrom: "BBL Savings",
+    balanceFrom: 5500,
+    accountTo: "KTB Savings",
+    balanceTo: 5500,
     notes: "move to own account",
   },
 ];
