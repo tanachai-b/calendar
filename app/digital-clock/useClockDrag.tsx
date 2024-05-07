@@ -36,7 +36,7 @@ export function useClockDrag() {
       document.removeEventListener("mousemove", handleDocumentMouseMove);
       document.removeEventListener("mouseup", handleDocumentMouseUp);
     };
-  }, [document, isMouseDown]);
+  }, [isMouseDown]);
 
   useEffect(() => {
     const timer = setInterval(() => {
